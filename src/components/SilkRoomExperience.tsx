@@ -540,7 +540,7 @@ export function SilkRoomExperience({
               ))}
             </p>
             <p className="manifesto-note">
-              Seven tones. One cut. silkroom.shop
+              Seven tones. One cut.
             </p>
           </section>
 

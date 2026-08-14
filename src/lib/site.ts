@@ -8,11 +8,13 @@ function resolvedSiteUrl() {
   return "http://localhost:3000";
 }
 
+const phone: string | null = null;
+
 export const site = {
   name: "Silk Room",
   url: resolvedSiteUrl(),
   email: "hello@silkroom.shop", // TODO: Replace with your support inbox if different.
-  phone: null, // TODO: Add a dedicated public business phone when available.
+  phone, // TODO: Add a dedicated public business phone when available.
   whatsappDisplay: "+91 75758 07403",
   instagramUrl: "https://instagram.com/silkroom.shop", // TODO: Replace with live Instagram URL.
   instagramHandle: "@silkroom.shop",

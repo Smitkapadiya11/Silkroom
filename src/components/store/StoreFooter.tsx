@@ -33,9 +33,6 @@ export function StoreFooter() {
           </ul>
         </nav>
         <address className="store-footer-contact">
-          {site.phone ? (
-            <a href={`tel:${site.phone.replace(/\D/g, "")}`}>{site.phone}</a>
-          ) : null}
           <a href={`mailto:${site.email}`}>{site.email}</a>
           <a href={site.instagramUrl} target="_blank" rel="noreferrer">
             {site.instagramHandle}

@@ -26,12 +26,6 @@ export default function ContactPage() {
             {site.whatsappDisplay}
           </WhatsAppOrderLink>
         </li>
-        {site.phone ? (
-          <li>
-            <strong>Phone</strong>
-            <a href={`tel:${site.phone.replace(/\D/g, "")}`}>{site.phone}</a>
-          </li>
-        ) : null}
         <li>
           <strong>Email</strong>
           <a href={`mailto:${site.email}`}>{site.email}</a>
