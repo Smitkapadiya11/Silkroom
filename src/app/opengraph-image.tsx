@@ -36,7 +36,7 @@ export default function OpenGraphImage() {
             The polo edit
           </div>
           <div style={{ marginTop: 24, fontSize: 32, color: "#928C7D" }}>
-            ₹399 each · Combo savings · silkroom.shop
+            ₹399 each · Combo savings
           </div>
         </div>
         <div
