@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   type KeyboardEvent,
   type PointerEvent,
@@ -518,6 +519,9 @@ export function SilkRoomExperience({
               See the combo sale
               <ArrowIcon />
             </a>
+            <Link className="button button-ghost hero-shop-link" href="/shop" data-enter>
+              Shop all tees
+            </Link>
             <div className="swipe-hint" aria-hidden="true">
               <span>Swipe up</span>
               <svg className="swipe-hint-chevron" viewBox="0 0 24 24">
