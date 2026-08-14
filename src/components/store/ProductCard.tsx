@@ -14,7 +14,7 @@ const BLUR =
 function upsellCopy(currentQty: number, lines: CartLine[]) {
   const pricing = calculateCartPricing(lines);
   if (pricing.nextRule && pricing.itemsToNext > 0) {
-    return `Add ${pricing.itemsToNext} more, save ${formatInr(pricing.nextSaving)}`;
+    return `Add ${pricing.itemsToNext} more — ${pricing.nextRule.label.replace("Any ", "")} for ${formatInr(pricing.nextRule.value)}, save ${formatInr(pricing.nextSaving)}`;
   }
   if (pricing.rule) return pricing.rule.blurb;
   return null;

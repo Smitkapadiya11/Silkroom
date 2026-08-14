@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Geist } from "next/font/google";
 import { CartProvider } from "@/context/CartProvider";
 import { organizationJsonLd } from "@/lib/metadata";
+import { site } from "@/lib/site";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({
@@ -18,19 +19,19 @@ const body = Geist({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://silkroom.shop"),
+  metadataBase: new URL(site.url),
   title: {
     default: "Silk Room — Ribbed Zip Polos",
     template: "%s — Silk Room",
   },
   description:
-    "Quietly structured ribbed polos. ₹399 each with combo savings. Order on WhatsApp at silkroom.shop.",
+    "Quietly structured ribbed polos. ₹399 each with combo savings. Order on WhatsApp.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Silk Room — The Polo Edit",
     description:
-      "Seven tones. One cut. ₹399, or mix a combo from silkroom.shop.",
-    url: "https://silkroom.shop",
+      "Seven tones. One cut. ₹399, or mix a combo.",
+    url: site.url,
     siteName: "Silk Room",
     type: "website",
     locale: "en_IN",

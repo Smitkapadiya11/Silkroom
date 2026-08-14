@@ -16,16 +16,15 @@ export function createPageMetadata({
   path,
   noIndex,
 }: PageMeta): Metadata {
-  const fullTitle = title.includes("Silk Room") ? title : `${title} — Silk Room`;
   const url = `${baseUrl}${path}`;
 
   return {
-    title: fullTitle,
+    title,
     description,
     alternates: { canonical: path },
     robots: noIndex ? { index: false, follow: false } : undefined,
     openGraph: {
-      title: fullTitle,
+      title: title.includes("Silk Room") ? title : `${title} — Silk Room`,
       description,
       url,
       siteName: site.name,
@@ -34,7 +33,7 @@ export function createPageMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: fullTitle,
+      title: title.includes("Silk Room") ? title : `${title} — Silk Room`,
       description,
     },
   };
@@ -71,7 +70,7 @@ export function organizationJsonLd() {
     name: site.name,
     url: baseUrl,
     email: site.email,
-    telephone: site.phone,
+    ...(site.phone ? { telephone: site.phone } : {}),
     address: {
       "@type": "PostalAddress",
       addressLocality: site.address,

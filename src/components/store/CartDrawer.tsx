@@ -11,7 +11,7 @@ import {
   type CheckoutDetails,
 } from "@/lib/cart";
 import { formatInr } from "@/lib/pricing";
-import { whatsappUrl } from "@/lib/order";
+import { isWhatsAppOrderingAvailable, whatsappUrl } from "@/lib/order";
 import { products } from "@/lib/products";
 
 const emptyDetails: CheckoutDetails = {
@@ -38,6 +38,9 @@ export function CartDrawer() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [details, setDetails] = useState<CheckoutDetails>(emptyDetails);
   const [errors, setErrors] = useState<Partial<Record<keyof CheckoutDetails, string>>>({});
+  const [isPaying, setIsPaying] = useState(false);
+  const whatsappAvailable = isWhatsAppOrderingAvailable();
+  const razorpayAvailable = Boolean(process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID);
 
   useEffect(() => {
     if (!isOpen) {
@@ -68,13 +71,82 @@ export function CartDrawer() {
     if (Object.keys(nextErrors).length) return;
 
     const message = buildWhatsAppOrderMessage(items, details, pricing);
-    window.open(whatsappUrl(message), "_blank", "noopener,noreferrer");
+    const href = whatsappUrl(message);
+    if (!href) return;
+    window.open(href, "_blank", "noopener,noreferrer");
     sessionStorage.setItem(
       "silk-last-order",
       JSON.stringify({ items, details, pricing, at: Date.now() }),
     );
     closeCart();
     router.push("/order-confirmed");
+  };
+
+  const handleRazorpay = async () => {
+    const nextErrors = validateCheckout(details);
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length || !razorpayAvailable) return;
+
+    setIsPaying(true);
+    try {
+      const response = await fetch("/api/payments/razorpay/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items, details }),
+      });
+      const order = (await response.json()) as
+        | { error: string }
+        | { id: string; amount: number; currency: string; keyId: string };
+      if (!response.ok || !("id" in order)) {
+        throw new Error("error" in order ? order.error : "Unable to start payment.");
+      }
+
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.async = true;
+      await new Promise<void>((resolve, reject) => {
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error("Could not load Razorpay."));
+        document.body.appendChild(script);
+      });
+
+      const RazorpayCheckout = window.Razorpay;
+      if (!RazorpayCheckout) throw new Error("Razorpay checkout unavailable.");
+      const checkout = new RazorpayCheckout({
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Silk Room",
+        description: "Silk Room polos",
+        order_id: order.id,
+        prefill: { name: details.name, contact: details.phone },
+        notes: { pincode: details.pincode },
+        handler: async (payment) => {
+          const verify = await fetch("/api/payments/razorpay/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payment),
+          });
+          if (!verify.ok) {
+            setErrors({ address: "Payment could not be verified. Please contact us." });
+            return;
+          }
+          sessionStorage.setItem(
+            "silk-last-order",
+            JSON.stringify({ items, details, pricing, at: Date.now(), payment: "razorpay" }),
+          );
+          closeCart();
+          router.push("/order-confirmed");
+        },
+      });
+      checkout.open();
+    } catch (error) {
+      setErrors({
+        address: error instanceof Error ? error.message : "Unable to start payment.",
+      });
+    } finally {
+      setIsPaying(false);
+    }
   };
 
   const suggestAdd = () => {
@@ -225,8 +297,20 @@ export function CartDrawer() {
                     {errors[key] ? <em>{errors[key]}</em> : null}
                   </label>
                 ))}
-                <button type="submit" className="button button-primary">
-                  Place order on WhatsApp
+                <button
+                  type="submit"
+                  className="button button-primary"
+                  disabled={!whatsappAvailable}
+                >
+                  {whatsappAvailable ? "Place order on WhatsApp" : "Ordering unavailable"}
+                </button>
+                <button
+                  type="button"
+                  className="button button-ghost"
+                  disabled={!razorpayAvailable || isPaying}
+                  onClick={handleRazorpay}
+                >
+                  {razorpayAvailable ? (isPaying ? "Opening Razorpay…" : "Pay securely with Razorpay") : "Razorpay unavailable"}
                 </button>
               </form>
             )}

@@ -112,7 +112,7 @@ export function buildWhatsAppOrderMessage(
       : "";
 
   return [
-    "Hello Silk Room, I'd like to place an order from silkroom.shop:",
+    "Hello Silk Room, I'd like to place an order:",
     "",
     ...lines,
     "",

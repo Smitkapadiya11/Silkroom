@@ -11,28 +11,20 @@ export const UNIT_PRICE = 399;
 
 export const comboRules: ComboRule[] = [
   {
-    id: "duo",
-    label: "Any 2 tees",
-    minQty: 2,
-    discountType: "flat",
-    value: 100, // TODO: Replace with the real 2-tee discount.
-    blurb: "Save ₹100",
-  },
-  {
     id: "trio",
-    label: "Any 3 tees",
+    label: "Any 3 polos",
     minQty: 3,
     discountType: "fixedPrice",
     value: 799, // TODO: Replace with the real 3-tee bundle price.
-    blurb: "Save ₹398",
+    blurb: "3 polos for ₹799 · save ₹398",
   },
   {
     id: "five",
-    label: "Any 5 tees",
+    label: "Any 5 polos",
     minQty: 5,
     discountType: "fixedPrice",
     value: 1299, // TODO: Replace with the real 5-tee bundle price.
-    blurb: "Save ₹696",
+    blurb: "5 polos for ₹1,299 · save ₹696",
   },
 ];
 
