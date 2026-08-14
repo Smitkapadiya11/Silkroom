@@ -4,6 +4,8 @@ import { site } from "@/lib/site";
 const footerLinks = [
   { href: "/shop", label: "Shop" },
   { href: "/combos", label: "Combos" },
+  { href: "/cart", label: "Cart" },
+  { href: "/track", label: "Track order" },
   { href: "/about", label: "About" },
   { href: "/how-to-order", label: "How to order" },
   { href: "/size-guide", label: "Size guide" },

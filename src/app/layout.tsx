@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Geist } from "next/font/google";
+import { Bricolage_Grotesque, Geist, JetBrains_Mono } from "next/font/google";
 import { CartProvider } from "@/context/CartProvider";
 import { organizationJsonLd } from "@/lib/metadata";
 import { site } from "@/lib/site";
@@ -18,6 +18,12 @@ const body = Geist({
   display: "swap",
 });
 
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
@@ -25,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s — Silk Room",
   },
   description:
-    "Quietly structured ribbed polos. ₹399 each with combo savings. Order on WhatsApp.",
+    "Ribbed zip polos from Surat. ₹399 each — 3 for ₹799, 5 for ₹1,299. Prepaid or COD.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Silk Room — The Polo Edit",
@@ -48,7 +54,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en-IN" className={`${display.variable} ${body.variable}`}>
+    <html lang="en-IN" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body>
         <script
           type="application/ld+json"

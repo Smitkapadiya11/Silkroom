@@ -2,29 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useCart } from "@/context/CartProvider";
-import {
-  buildWhatsAppOrderMessage,
-  validateCheckout,
-  type CheckoutDetails,
-} from "@/lib/cart";
 import { formatInr } from "@/lib/pricing";
-import { isWhatsAppOrderingAvailable, whatsappUrl } from "@/lib/order";
 import { products } from "@/lib/products";
 
-const emptyDetails: CheckoutDetails = {
-  name: "",
-  phone: "",
-  address: "",
-  pincode: "",
-  city: "",
-  state: "",
-};
-
 export function CartDrawer() {
-  const router = useRouter();
   const {
     items,
     pricing,
@@ -35,16 +18,9 @@ export function CartDrawer() {
     addProduct,
   } = useCart();
   const panel = useRef<HTMLDivElement>(null);
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [details, setDetails] = useState<CheckoutDetails>(emptyDetails);
-  const [errors, setErrors] = useState<Partial<Record<keyof CheckoutDetails, string>>>({});
-  const [isPaying, setIsPaying] = useState(false);
-  const whatsappAvailable = isWhatsAppOrderingAvailable();
-  const razorpayAvailable = Boolean(process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID);
 
   useEffect(() => {
     if (!isOpen) {
-      setCheckoutOpen(false);
       return;
     }
     const onKey = (event: KeyboardEvent) => {
@@ -64,90 +40,6 @@ export function CartDrawer() {
           ((pricing.nextRule.minQty - pricing.itemsToNext) / pricing.nextRule.minQty) * 100,
         )
       : 100;
-
-  const handlePlaceOrder = () => {
-    const nextErrors = validateCheckout(details);
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length) return;
-
-    const message = buildWhatsAppOrderMessage(items, details, pricing);
-    const href = whatsappUrl(message);
-    if (!href) return;
-    window.open(href, "_blank", "noopener,noreferrer");
-    sessionStorage.setItem(
-      "silk-last-order",
-      JSON.stringify({ items, details, pricing, at: Date.now() }),
-    );
-    closeCart();
-    router.push("/order-confirmed");
-  };
-
-  const handleRazorpay = async () => {
-    const nextErrors = validateCheckout(details);
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length || !razorpayAvailable) return;
-
-    setIsPaying(true);
-    try {
-      const response = await fetch("/api/payments/razorpay/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items, details }),
-      });
-      const order = (await response.json()) as
-        | { error: string }
-        | { id: string; amount: number; currency: string; keyId: string };
-      if (!response.ok || !("id" in order)) {
-        throw new Error("error" in order ? order.error : "Unable to start payment.");
-      }
-
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.async = true;
-      await new Promise<void>((resolve, reject) => {
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error("Could not load Razorpay."));
-        document.body.appendChild(script);
-      });
-
-      const RazorpayCheckout = window.Razorpay;
-      if (!RazorpayCheckout) throw new Error("Razorpay checkout unavailable.");
-      const checkout = new RazorpayCheckout({
-        key: order.keyId,
-        amount: order.amount,
-        currency: order.currency,
-        name: "Silk Room",
-        description: "Silk Room polos",
-        order_id: order.id,
-        prefill: { name: details.name, contact: details.phone },
-        notes: { pincode: details.pincode },
-        handler: async (payment) => {
-          const verify = await fetch("/api/payments/razorpay/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payment),
-          });
-          if (!verify.ok) {
-            setErrors({ address: "Payment could not be verified. Please contact us." });
-            return;
-          }
-          sessionStorage.setItem(
-            "silk-last-order",
-            JSON.stringify({ items, details, pricing, at: Date.now(), payment: "razorpay" }),
-          );
-          closeCart();
-          router.push("/order-confirmed");
-        },
-      });
-      checkout.open();
-    } catch (error) {
-      setErrors({
-        address: error instanceof Error ? error.message : "Unable to start payment.",
-      });
-    } finally {
-      setIsPaying(false);
-    }
-  };
 
   const suggestAdd = () => {
     const inCart = new Set(items.map((item) => item.slug));
@@ -254,66 +146,18 @@ export function CartDrawer() {
               </p>
             </div>
 
-            {!checkoutOpen ? (
-              <button
-                type="button"
+            <div className="cart-checkout-form">
+              <Link
+                href="/checkout"
                 className="button button-primary cart-checkout-button"
-                onClick={() => setCheckoutOpen(true)}
+                onClick={closeCart}
               >
-                Checkout on WhatsApp
-              </button>
-            ) : (
-              <form
-                className="cart-checkout-form"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  handlePlaceOrder();
-                }}
-              >
-                {(
-                  [
-                    ["name", "Full name"],
-                    ["phone", "Phone (10 digits)"],
-                    ["address", "Full address"],
-                    ["city", "City"],
-                    ["state", "State"],
-                    ["pincode", "Pincode"],
-                  ] as const
-                ).map(([key, label]) => (
-                  <label key={key} className="cart-field">
-                    <span>{label}</span>
-                    <input
-                      type={key === "phone" || key === "pincode" ? "tel" : "text"}
-                      inputMode={key === "phone" || key === "pincode" ? "numeric" : "text"}
-                      value={details[key]}
-                      onChange={(event) =>
-                        setDetails((current) => ({
-                          ...current,
-                          [key]: event.target.value,
-                        }))
-                      }
-                      aria-invalid={Boolean(errors[key])}
-                    />
-                    {errors[key] ? <em>{errors[key]}</em> : null}
-                  </label>
-                ))}
-                <button
-                  type="submit"
-                  className="button button-primary"
-                  disabled={!whatsappAvailable}
-                >
-                  {whatsappAvailable ? "Place order on WhatsApp" : "Ordering unavailable"}
-                </button>
-                <button
-                  type="button"
-                  className="button button-ghost"
-                  disabled={!razorpayAvailable || isPaying}
-                  onClick={handleRazorpay}
-                >
-                  {razorpayAvailable ? (isPaying ? "Opening Razorpay…" : "Pay securely with Razorpay") : "Razorpay unavailable"}
-                </button>
-              </form>
-            )}
+                Continue to secure checkout
+              </Link>
+              <Link href="/cart" className="button button-ghost" onClick={closeCart}>
+                View full cart
+              </Link>
+            </div>
           </>
         )}
       </aside>

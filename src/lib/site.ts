@@ -22,5 +22,5 @@ export const site = {
   responseHours: "Mon–Sat, 10am–7pm IST",
   codAvailable: true,
   exchangeWindowDays: 7,
-  freeShippingThreshold: 999, // TODO: Confirm free-shipping threshold.
+  freeShippingThreshold: 799, // Free delivery from the 3-polo combo tier.
 };

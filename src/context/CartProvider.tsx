@@ -1,24 +1,9 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
-import {
-  CART_STORAGE_KEY,
-  getCartPricing,
-  mergeCartItem,
-  removeCartItem,
-  updateCartQuantity,
-  type CartItem,
-} from "@/lib/cart";
+import { createContext, useContext, useMemo, type ReactNode } from "react";
+import { getCartPricing, type CartItem } from "@/lib/cart";
 import type { Product } from "@/lib/products";
-import { productToCartItem } from "@/lib/cart";
+import { useCartStore } from "@/store/cart";
 
 type CartContextValue = {
   items: CartItem[];
@@ -41,52 +26,16 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-function readStoredCart(): CartItem[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(CART_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as CartItem[];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
-  const [hydrated, setHydrated] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    setItems(readStoredCart());
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-  }, [items, hydrated]);
-
-  const addProduct = useCallback(
-    (product: Product, size: string, color: string, quantity = 1) => {
-      setItems((current) =>
-        mergeCartItem(current, productToCartItem(product, size, color, quantity)),
-      );
-      setIsOpen(true);
-    },
-    [],
-  );
-
-  const setQuantity = useCallback((id: string, quantity: number) => {
-    setItems((current) => updateCartQuantity(current, id, quantity));
-  }, []);
-
-  const removeItem = useCallback((id: string) => {
-    setItems((current) => removeCartItem(current, id));
-  }, []);
-
-  const clearCart = useCallback(() => setItems([]), []);
+  const items = useCartStore((state) => state.items);
+  const isOpen = useCartStore((state) => state.isOpen);
+  const openCart = useCartStore((state) => state.openCart);
+  const closeCart = useCartStore((state) => state.closeCart);
+  const toggleCart = useCartStore((state) => state.toggleCart);
+  const addProduct = useCartStore((state) => state.addProduct);
+  const setQuantity = useCartStore((state) => state.setQuantity);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   const value = useMemo(() => {
     const count = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -96,15 +45,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
       count,
       pricing,
       isOpen,
-      openCart: () => setIsOpen(true),
-      closeCart: () => setIsOpen(false),
-      toggleCart: () => setIsOpen((open) => !open),
+      openCart,
+      closeCart,
+      toggleCart,
       addProduct,
       setQuantity,
       removeItem,
       clearCart,
     };
-  }, [items, isOpen, addProduct, setQuantity, removeItem, clearCart]);
+  }, [
+    items,
+    isOpen,
+    openCart,
+    closeCart,
+    toggleCart,
+    addProduct,
+    setQuantity,
+    removeItem,
+    clearCart,
+  ]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

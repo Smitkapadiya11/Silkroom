@@ -6,14 +6,21 @@ type RazorpayPaymentResponse = {
 
 type RazorpayCheckoutOptions = {
   key: string;
-  amount: number;
+  amount: number | string;
   currency: string;
   name: string;
   description: string;
   order_id: string;
-  prefill: { name: string; contact: string };
-  notes: Record<string, string>;
+  prefill?: {
+    name?: string;
+    contact?: string;
+    email?: string;
+  };
+  notes?: Record<string, string>;
   handler: (payment: RazorpayPaymentResponse) => void | Promise<void>;
+  modal?: {
+    ondismiss?: () => void;
+  };
 };
 
 declare global {
