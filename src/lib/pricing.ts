@@ -114,5 +114,9 @@ export function calculateCartPricing(lines: CartLine[]): PricingResult {
 
 export function getBestOfferCopy() {
   const best = comboRules[comboRules.length - 1];
-  return `${best.label} for ${formatInr(best.value)} · ${best.blurb}`;
+  const saving =
+    best.discountType === "fixedPrice"
+      ? best.minQty * UNIT_PRICE - best.value
+      : best.value;
+  return `${best.label} for ${formatInr(best.value)} · save ${formatInr(saving)}`;
 }
