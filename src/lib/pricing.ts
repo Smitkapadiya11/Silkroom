@@ -51,7 +51,7 @@ export function formatInr(amount: number) {
 export function getApplicableRule(quantity: number) {
   return (
     [...comboRules]
-      .filter((rule) => quantity >= rule.minQty)
+      .filter((rule) => quantity === rule.minQty)
       .sort((a, b) => b.minQty - a.minQty)[0] ?? null
   );
 }
@@ -73,33 +73,31 @@ export function calculateCartPricing(lines: CartLine[]): PricingResult {
   const quantity = lines.reduce((sum, line) => sum + line.quantity, 0);
   const rule = getApplicableRule(quantity);
   const nextRule = getNextRule(quantity);
-
-  let discount = 0;
-  if (rule) {
-    if (rule.discountType === "percent") {
-      discount = Math.round(subtotal * (rule.value / 100));
-    } else if (rule.discountType === "flat") {
-      discount = rule.value;
-    } else {
-      discount = Math.max(0, subtotal - rule.value);
-    }
-  }
-
-  const total = Math.max(0, subtotal - discount);
-  const itemsToNext = nextRule ? nextRule.minQty - quantity : 0;
   const unitPrice = quantity > 0 ? Math.round(subtotal / quantity) : UNIT_PRICE;
-  const nextSubtotal = subtotal + itemsToNext * unitPrice;
-  let nextDiscount = 0;
-  if (nextRule) {
-    if (nextRule.discountType === "percent") {
-      nextDiscount = Math.round(nextSubtotal * (nextRule.value / 100));
-    } else if (nextRule.discountType === "flat") {
-      nextDiscount = nextRule.value;
-    } else {
-      nextDiscount = Math.max(0, nextSubtotal - nextRule.value);
+
+  const bundleTotal = (count: number) => {
+    const totals = Array.from({ length: count + 1 }, (_, index) => index * unitPrice);
+    for (let itemCount = 1; itemCount <= count; itemCount += 1) {
+      for (const combo of comboRules) {
+        if (combo.discountType !== "fixedPrice" || combo.minQty > itemCount) continue;
+        totals[itemCount] = Math.min(
+          totals[itemCount],
+          totals[itemCount - combo.minQty] + combo.value,
+        );
+      }
     }
-  }
-  const nextSaving = Math.max(0, nextDiscount - discount);
+    return totals[count];
+  };
+
+  const total = bundleTotal(quantity);
+  const discount = Math.max(0, subtotal - total);
+  const itemsToNext = nextRule ? nextRule.minQty - quantity : 0;
+  const nextSaving = nextRule
+    ? Math.max(
+        0,
+        (quantity + itemsToNext) * unitPrice - bundleTotal(quantity + itemsToNext) - discount,
+      )
+    : 0;
 
   return {
     subtotal,
