@@ -36,26 +36,36 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Delivery details are invalid." }, { status: 400 });
   }
 
-  const lines = items.map((item) => {
+  const validatedItems = items.map((item) => {
     const product = getProduct(item.slug);
-    const quantity = Math.floor(item.quantity);
-    if (!product || quantity < 1 || quantity > 10) return null;
-    return { slug: product.slug, price: product.price, quantity };
+    const quantity = item.quantity;
+    const validVariant =
+      product &&
+      product.sizes.includes(item.size) &&
+      product.colors.some((color) => color.name === item.color);
+    if (!validVariant || !Number.isInteger(quantity) || quantity < 1 || quantity > 10) {
+      return null;
+    }
+    return { product, quantity, size: item.size, color: item.color };
   });
-  if (lines.some((line) => !line)) {
+  if (validatedItems.some((item) => !item)) {
     return NextResponse.json({ error: "Your cart contains an invalid product." }, { status: 400 });
   }
 
-  const validLines = lines.filter((line): line is CartLine => line !== null);
+  const validItems = validatedItems.filter(
+    (
+      item,
+    ): item is { product: NonNullable<ReturnType<typeof getProduct>>; quantity: number; size: string; color: string } =>
+      item !== null,
+  );
+  const validLines: CartLine[] = validItems.map(({ product, quantity }) => ({
+    slug: product.slug,
+    price: product.price,
+    quantity,
+  }));
   const pricing = calculateCartPricing(validLines);
-  const orderItems = items
-    .map((item) => {
-      const product = getProduct(item.slug);
-      return product
-        ? `${product.name} / ${item.color} / ${item.size} x${item.quantity}`
-        : null;
-    })
-    .filter(Boolean)
+  const orderItems = validItems
+    .map((item) => `${item.product.name} / ${item.color} / ${item.size} x${item.quantity}`)
     .join(" | ")
     .slice(0, 240);
   const razorpay = new Razorpay({ key_id: keyId, key_secret: keySecret });
