@@ -769,6 +769,11 @@ a:focus-visible,
   transform: scale(1.8);
 }
 
+.fabric-card .fabric-image-fallback {
+  object-position: 50% 35%;
+  transform: scale(2.1);
+}
+
 .fabric-card:nth-child(even) img {
   object-position: 50% 22%;
   transform: scale(1.65);

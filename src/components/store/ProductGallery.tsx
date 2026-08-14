@@ -10,7 +10,7 @@ const BLUR =
 export function ProductGallery({ product }: { product: Product }) {
   const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
-  const images = product.detailImages.length ? product.detailImages : [product.image];
+  const images = product.detailImages?.length ? product.detailImages : [product.image];
 
   const scrollTo = (next: number) => {
     const node = track.current;
