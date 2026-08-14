@@ -526,6 +526,13 @@ a:focus-visible,
   width: min(100%, 25rem);
 }
 
+.hero-shop-link {
+  z-index: 4;
+  width: min(100%, 25rem);
+  margin-top: 0.65rem;
+  justify-content: center;
+}
+
 .swipe-hint {
   position: absolute;
   right: 1.25rem;
