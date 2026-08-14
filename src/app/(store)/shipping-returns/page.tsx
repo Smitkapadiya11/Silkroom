@@ -31,7 +31,7 @@ export default function ShippingReturnsPage() {
       <section aria-labelledby="charges-title">
         <h2 id="charges-title">Shipping charges</h2>
         <p>
-          Standard shipping applies on single-tee orders. Free shipping on orders above{" "}
+          Standard shipping applies on single-polo orders. Free shipping on orders above{" "}
           {formatInr(site.freeShippingThreshold)} {/* TODO: confirm threshold */}.
         </p>
       </section>
@@ -39,7 +39,7 @@ export default function ShippingReturnsPage() {
       <section aria-labelledby="returns-title">
         <h2 id="returns-title">Exchange window</h2>
         <p>
-          {site.exchangeWindowDays}-day exchange on unworn tees with tags intact. Raise a
+          {site.exchangeWindowDays}-day exchange on unworn polos with tags intact. Raise a
           request on <Link href="/contact">Contact</Link> with your order phone number.
         </p>
       </section>

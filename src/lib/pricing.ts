@@ -15,7 +15,7 @@ export const comboRules: ComboRule[] = [
     label: "Any 3 polos",
     minQty: 3,
     discountType: "fixedPrice",
-    value: 799, // TODO: Replace with the real 3-tee bundle price.
+    value: 799, // TODO: Confirm the real 3-polo bundle price.
     blurb: "3 polos for ₹799 · save ₹398",
   },
   {
@@ -23,7 +23,7 @@ export const comboRules: ComboRule[] = [
     label: "Any 5 polos",
     minQty: 5,
     discountType: "fixedPrice",
-    value: 1299, // TODO: Replace with the real 5-tee bundle price.
+    value: 1299, // TODO: Confirm the real 5-polo bundle price.
     blurb: "5 polos for ₹1,299 · save ₹696",
   },
 ];

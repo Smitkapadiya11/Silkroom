@@ -141,7 +141,7 @@ export function ComboBuilder({ products }: { products: Product[] }) {
         disabled={picked.length === 0}
         onClick={addBundleToCart}
       >
-        Add {picked.length} tee{picked.length === 1 ? "" : "s"} to cart
+        Add {picked.length} polo{picked.length === 1 ? "" : "s"} to cart
       </button>
     </div>
   );

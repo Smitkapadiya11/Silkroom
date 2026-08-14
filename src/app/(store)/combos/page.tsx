@@ -8,7 +8,7 @@ import Image from "next/image";
 export const metadata = createPageMetadata({
   title: "Combo offers",
   description:
-    "Build your Silk Room bundle — any 2, 3, or 5 tees with automatic combo savings.",
+    "Build your Silk Room bundle — any 3 or 5 polos with automatic combo savings.",
   path: "/combos",
 });
 
@@ -51,7 +51,7 @@ export default function CombosPage() {
                 <h3>{combo.name}</h3>
                 <p>{combo.blurb}</p>
                 <p className="combo-card-price">
-                  {combo.count} tees · {formatInr(price)}
+                  {combo.count} polos · {formatInr(price)}
                 </p>
                 <Link href="/shop" className="button button-ghost">
                   Shop to build

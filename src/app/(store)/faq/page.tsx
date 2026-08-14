@@ -14,7 +14,7 @@ const faqs = [
       "220 GSM ribbed knit — 95% cotton, 5% elastane. Pre-shrunk. Specs are on every product page.",
   },
   {
-    question: "Will the tee shrink after washing?",
+    question: "Will the polo shrink after washing?",
     answer:
       "Fabric is pre-shrunk. Wash cold, inside out, low tumble or line dry — expect minimal change.",
   },
@@ -26,11 +26,11 @@ const faqs = [
   {
     question: "How do combo discounts work?",
     answer:
-      "Add 2, 3, or 5 tees to cart — the best applicable bundle price applies automatically.",
+      "Add 3 or 5 polos to cart — the best applicable bundle price applies automatically.",
   },
   {
     question: "Can I mix colours in a combo?",
-    answer: "Yes. Any tees in the catalog count toward combo pricing.",
+    answer: "Yes. Any polos in the catalog count toward combo pricing.",
   },
   {
     question: "Do you offer COD?",
@@ -56,7 +56,7 @@ const faqs = [
     answer: "Cold machine wash inside out. No bleach. Low tumble or line dry.",
   },
   {
-    question: "Where are the tees made?",
+    question: "Where are the polos made?",
     answer: "Cut and finished in Surat, Gujarat — Made in India.",
   },
   {

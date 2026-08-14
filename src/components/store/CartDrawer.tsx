@@ -177,14 +177,14 @@ export function CartDrawer() {
         {pricing.nextRule && pricing.itemsToNext > 0 ? (
           <div className="cart-upsell">
             <p>
-              You&apos;re {pricing.itemsToNext} tee{pricing.itemsToNext > 1 ? "s" : ""} away from{" "}
+              You&apos;re {pricing.itemsToNext} polo{pricing.itemsToNext > 1 ? "s" : ""} away from{" "}
               {pricing.nextRule.blurb}
             </p>
             <div className="cart-progress" aria-hidden="true">
               <span style={{ transform: `scaleX(${progress / 100})` }} />
             </div>
             <button type="button" className="button button-ghost" onClick={suggestAdd}>
-              Add a tee
+              Add a polo
             </button>
           </div>
         ) : null}

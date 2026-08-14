@@ -35,7 +35,7 @@ export function ShopClient({ catalog }: { catalog: Product[] }) {
     <div className="shop-page">
       <header className="store-page-header">
         <p className="eyebrow">Shop</p>
-        <h1>Every tee in the room</h1>
+        <h1>Every polo in the room</h1>
         <p>{formatInr(products[0]?.price ?? 399)} each · mix combos on the Combos page</p>
       </header>
 

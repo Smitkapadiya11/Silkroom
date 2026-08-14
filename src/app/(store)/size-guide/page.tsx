@@ -4,7 +4,7 @@ import { createPageMetadata } from "@/lib/metadata";
 export const metadata = createPageMetadata({
   title: "Size guide",
   description:
-    "Silk Room polo measurements in inches and centimetres, plus how to measure a tee you already own.",
+    "Silk Room polo measurements in inches and centimetres, plus how to measure a polo you already own.",
   path: "/size-guide",
 });
 
@@ -21,7 +21,7 @@ export default function SizeGuidePage() {
       <header className="store-page-header">
         <p className="eyebrow">Fit</p>
         <h1>Size guide</h1>
-        <p>Relaxed regular fit · measure a tee that already fits you well.</p>
+        <p>Relaxed regular fit · measure a polo that already fits you well.</p>
       </header>
 
       <div className="size-table-wrap">
@@ -50,7 +50,7 @@ export default function SizeGuidePage() {
       </div>
 
       <section aria-labelledby="measure-title">
-        <h2 id="measure-title">How to measure your tee</h2>
+        <h2 id="measure-title">How to measure your polo</h2>
         <ol className="policy-list">
           <li>Lay the polo flat on a table.</li>
           <li>

@@ -28,7 +28,7 @@ export default function AboutPage() {
             India.
           </p>
           <p>
-            Every tee is 220 GSM cotton-elastane, pre-shrunk, and priced honestly at
+            Every polo is 220 GSM cotton-elastane, pre-shrunk, and priced honestly at
             ₹399. Combos exist because most people don&apos;t stop at one colour once they
             feel the rib.
           </p>

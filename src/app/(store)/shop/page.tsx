@@ -3,7 +3,7 @@ import { createPageMetadata } from "@/lib/metadata";
 import { products } from "@/lib/products";
 
 export const metadata = createPageMetadata({
-  title: "Shop all tees",
+  title: "Shop all polos",
   description:
     "Browse every Silk Room ribbed zip polo. Filter by colour and size. ₹399 each with combo savings.",
   path: "/shop",
