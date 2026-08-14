@@ -1,6 +1,6 @@
 import Razorpay from "razorpay";
 import { NextResponse } from "next/server";
-import { calculateCartPricing } from "@/lib/pricing";
+import { calculateCartPricing, type CartLine } from "@/lib/pricing";
 import { getProduct } from "@/lib/products";
 
 export const runtime = "nodejs";
@@ -36,7 +36,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Your cart contains an invalid product." }, { status: 400 });
   }
 
-  const pricing = calculateCartPricing(lines.filter(Boolean));
+  const validLines = lines.filter((line): line is CartLine => line !== null);
+  const pricing = calculateCartPricing(validLines);
   const razorpay = new Razorpay({ key_id: keyId, key_secret: keySecret });
   const order = await razorpay.orders.create({
     amount: pricing.total * 100,
