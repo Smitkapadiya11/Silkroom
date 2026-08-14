@@ -14,7 +14,9 @@ import {
 } from "react";
 import { createScope, createTimeline } from "animejs";
 import { ComboOffers } from "@/components/ComboOffers";
+import { StoreFooter } from "@/components/store/StoreFooter";
 import { TrustStrip } from "@/components/store/TrustStrip";
+import { WhatsAppOrderLink } from "@/components/store/WhatsAppOrderLink";
 import { useReelMotion } from "@/hooks/useReelMotion";
 import {
   type Combo,
@@ -25,9 +27,7 @@ import {
 import {
   formatInr,
   orderBrowseMessage,
-  orderComboMessage,
   orderSingleMessage,
-  whatsappUrl,
 } from "@/lib/order";
 import { site } from "@/lib/site";
 import { scrollShellTo } from "@/lib/scroll";
@@ -205,16 +205,14 @@ function ProductPanel({
             <SizeRow value={size} onChange={setSize} />
           </div>
 
-          <a
+          <WhatsAppOrderLink
             className="button button-primary product-button"
-            href={whatsappUrl(orderSingleMessage(product.name, size))}
-            target="_blank"
-            rel="noreferrer"
             data-enter
+            message={orderSingleMessage(product.name, size)}
           >
             Order on WhatsApp
             <ArrowIcon />
-          </a>
+          </WhatsAppOrderLink>
           <p className="combo-note" data-enter>
             Or three tones for {formatInr(PRICE.trio)} · five for {formatInr(PRICE.five)}
           </p>
@@ -324,15 +322,13 @@ function DetailSheet({
           <span>{product.colors[0].name}</span>
           <span className="price">{formatInr(product.price)}</span>
         </div>
-        <a
+        <WhatsAppOrderLink
           className="button button-primary"
-          href={whatsappUrl(orderSingleMessage(product.name, size))}
-          target="_blank"
-          rel="noreferrer"
+          message={orderSingleMessage(product.name, size)}
         >
           Order on WhatsApp
           <ArrowIcon />
-        </a>
+        </WhatsAppOrderLink>
         <a
           className="sheet-combo-link"
           href="#combos"
@@ -520,7 +516,7 @@ export function SilkRoomExperience({
               <ArrowIcon />
             </a>
             <Link className="button button-ghost hero-shop-link" href="/shop" data-enter>
-              Shop all tees
+              Shop all polos
             </Link>
             <div className="swipe-hint" aria-hidden="true">
               <span>Swipe up</span>
@@ -598,10 +594,13 @@ export function SilkRoomExperience({
                 onPointerCancel={endDrag}
                 onLostPointerCapture={cancelDrag}
               >
-                {products.slice(0, 5).map((product, index) => (
+                {products.slice(0, 5).map((product, index) => {
+                  const detailImage = product.detailImages?.[0];
+                  return (
                   <figure className="fabric-card" key={product.slug}>
                     <Image
-                      src={product.image}
+                      className={detailImage ? "" : "fabric-image-fallback"}
+                      src={detailImage ?? product.image}
                       alt={`${product.name} ${index % 2 ? "collar and zip" : "ribbed fabric"} detail`}
                       fill
                       sizes="(min-width: 1024px) 34vw, 78vw"
@@ -612,7 +611,8 @@ export function SilkRoomExperience({
                       {index % 2 ? "Collar / metal / line" : "Rib / weight / touch"}
                     </figcaption>
                   </figure>
-                ))}
+                  );
+                })}
               </div>
               {showDragHint ? (
                 <p className="drag-hint" aria-hidden="true">
@@ -675,9 +675,11 @@ export function SilkRoomExperience({
                 <div>
                   <p className="eyebrow">From the room</p>
                   <h2 id="instagram-title">{site.instagramHandle}</h2>
-                  <p className="instagram-followers">
-                    {site.instagramFollowers} followers · follow for drops
-                  </p>
+                  {site.instagramFollowers ? (
+                    <p className="instagram-followers">
+                      {site.instagramFollowers} followers · follow for drops
+                    </p>
+                  ) : null}
                 </div>
                 <a href={site.instagramUrl} target="_blank" rel="noreferrer">
                   Follow on Instagram <ArrowIcon />
@@ -708,54 +710,19 @@ export function SilkRoomExperience({
               </div>
             </section>
 
-            <footer className="footer section-pad">
-              <div className="footer-top">
-                <p>Enter quietly. silkroom.shop</p>
-                <a
-                  className="button button-primary"
-                  href={whatsappUrl(
-                    orderComboMessage(
-                      "Night Trio",
-                      ["Ink", "Silver", "Chalk"],
-                      PRICE.trio,
-                      "M",
-                    ),
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Order a trio
-                  <ArrowIcon />
-                </a>
-              </div>
-              <p className="footer-wordmark" aria-label="Silk Room">
-                SILK ROOM
-              </p>
-              <div className="footer-links">
-                <a href={whatsappUrl(orderBrowseMessage())} target="_blank" rel="noreferrer">
-                  WhatsApp
-                </a>
-                <a href={site.instagramUrl} target="_blank" rel="noreferrer">
-                  Instagram
-                </a>
-                <a href={`mailto:${site.email}`}>{site.email}</a>
-                <address>{site.address}</address>
-              </div>
-            </footer>
+            <StoreFooter />
           </div>
         </div>
 
         {heroPassed ? (
-          <a
+          <WhatsAppOrderLink
             className="sticky-whatsapp"
-            href={whatsappUrl(orderBrowseMessage())}
-            target="_blank"
-            rel="noreferrer"
             aria-label="Order on WhatsApp"
+            message={orderBrowseMessage()}
           >
             <span>WA</span>
             <span className="sticky-label">Order</span>
-          </a>
+          </WhatsAppOrderLink>
         ) : null}
       </main>
 

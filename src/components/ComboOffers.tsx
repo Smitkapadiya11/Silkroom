@@ -13,8 +13,8 @@ import {
 import {
   formatInr,
   orderComboMessage,
-  whatsappUrl,
 } from "@/lib/order";
+import { WhatsAppOrderLink } from "@/components/store/WhatsAppOrderLink";
 
 const BLUR_DATA_URL =
   "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjgiIGhlaWdodD0iMTAiPjxyZWN0IHdpZHRoPSI4IiBoZWlnaHQ9IjEwIiBmaWxsPSIjN0I3NjY4Ii8+PC9zdmc+";
@@ -111,22 +111,18 @@ export function ComboOffers({
               </div>
               <div className="combo-card-foot">
                 <p className="price">{formatInr(combo.price)}</p>
-                <a
+                <WhatsAppOrderLink
                   className="button button-primary"
-                  href={whatsappUrl(
-                    orderComboMessage(
-                      combo.name,
-                      items.map((item) => item.colors[0].name),
-                      combo.price,
-                      size,
-                    ),
+                  message={orderComboMessage(
+                    combo.name,
+                    items.map((item) => item.colors[0].name),
+                    combo.price,
+                    size,
                   )}
-                  target="_blank"
-                  rel="noreferrer"
                 >
                   Order this mix
                   <ArrowIcon />
-                </a>
+                </WhatsAppOrderLink>
               </div>
             </article>
           );
@@ -207,22 +203,18 @@ export function ComboOffers({
               : `Select ${count - picked.length} more colour${count - picked.length === 1 ? "" : "s"}`}
           </p>
           {ready ? (
-            <a
+            <WhatsAppOrderLink
               className="button button-primary"
-              href={whatsappUrl(
-                orderComboMessage(
-                  `Custom ${count}`,
-                  selectedProducts.map((item) => item.colors[0].name),
-                  price,
-                  size,
-                ),
+              message={orderComboMessage(
+                `Custom ${count}`,
+                selectedProducts.map((item) => item.colors[0].name),
+                price,
+                size,
               )}
-              target="_blank"
-              rel="noreferrer"
             >
               Order {formatInr(price)} mix
               <ArrowIcon />
-            </a>
+            </WhatsAppOrderLink>
           ) : (
             <span className="button button-ghost" aria-disabled="true">
               Pick {count} colours

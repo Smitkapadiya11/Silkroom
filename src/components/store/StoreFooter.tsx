@@ -33,7 +33,9 @@ export function StoreFooter() {
           </ul>
         </nav>
         <address className="store-footer-contact">
-          <a href={`tel:${site.phone.replace(/\D/g, "")}`}>{site.phone}</a>
+          {site.phone ? (
+            <a href={`tel:${site.phone.replace(/\D/g, "")}`}>{site.phone}</a>
+          ) : null}
           <a href={`mailto:${site.email}`}>{site.email}</a>
           <a href={site.instagramUrl} target="_blank" rel="noreferrer">
             {site.instagramHandle}
@@ -42,7 +44,7 @@ export function StoreFooter() {
           <span>Response: {site.responseHours}</span>
         </address>
       </div>
-      <p className="store-footer-legal">© {new Date().getFullYear()} Silk Room · silkroom.shop</p>
+      <p className="store-footer-legal">© {new Date().getFullYear()} Silk Room</p>
     </footer>
   );
 }

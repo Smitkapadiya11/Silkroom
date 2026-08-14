@@ -1,5 +1,6 @@
 import { createPageMetadata } from "@/lib/metadata";
-import { orderBrowseMessage, whatsappUrl } from "@/lib/order";
+import { WhatsAppOrderLink } from "@/components/store/WhatsAppOrderLink";
+import { orderBrowseMessage } from "@/lib/order";
 import { site } from "@/lib/site";
 
 export const metadata = createPageMetadata({
@@ -21,14 +22,16 @@ export default function ContactPage() {
       <ul className="contact-list">
         <li>
           <strong>WhatsApp</strong>
-          <a href={whatsappUrl(orderBrowseMessage())} target="_blank" rel="noreferrer">
+          <WhatsAppOrderLink message={orderBrowseMessage()}>
             {site.whatsappDisplay}
-          </a>
+          </WhatsAppOrderLink>
         </li>
-        <li>
-          <strong>Phone</strong>
-          <a href={`tel:${site.phone.replace(/\D/g, "")}`}>{site.phone}</a>
-        </li>
+        {site.phone ? (
+          <li>
+            <strong>Phone</strong>
+            <a href={`tel:${site.phone.replace(/\D/g, "")}`}>{site.phone}</a>
+          </li>
+        ) : null}
         <li>
           <strong>Email</strong>
           <a href={`mailto:${site.email}`}>{site.email}</a>
