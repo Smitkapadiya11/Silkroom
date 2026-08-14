@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { site } from "@/lib/site";
 
 function TrustIcon({ children }: { children: React.ReactNode }) {
@@ -10,6 +11,7 @@ function TrustIcon({ children }: { children: React.ReactNode }) {
 
 const items = [
   {
+    href: "/how-to-order",
     label: "COD available",
     icon: (
       <TrustIcon>
@@ -19,6 +21,7 @@ const items = [
     ),
   },
   {
+    href: "/guarantee",
     label: `Easy ${site.exchangeWindowDays}-day exchange`,
     icon: (
       <TrustIcon>
@@ -28,6 +31,7 @@ const items = [
     ),
   },
   {
+    href: "/shipping-returns",
     label: "Delivered across India",
     icon: (
       <TrustIcon>
@@ -36,6 +40,7 @@ const items = [
     ),
   },
   {
+    href: "/about",
     label: "Made in India",
     icon: (
       <TrustIcon>
@@ -52,8 +57,10 @@ export function TrustStrip({ className = "" }: { className?: string }) {
       <ul>
         {items.map((item) => (
           <li key={item.label}>
-            {item.icon}
-            <span>{item.label}</span>
+            <Link href={item.href} className="trust-strip-link">
+              {item.icon}
+              <span>{item.label}</span>
+            </Link>
           </li>
         ))}
       </ul>

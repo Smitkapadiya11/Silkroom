@@ -9,8 +9,11 @@ const links = [
   { href: "/shop", label: "Shop" },
   { href: "/combos", label: "Combos" },
   { href: "/about", label: "About" },
+  { href: "/how-to-order", label: "How to order" },
   { href: "/size-guide", label: "Size guide" },
+  { href: "/care", label: "Fabric care" },
   { href: "/shipping-returns", label: "Shipping" },
+  { href: "/guarantee", label: "Guarantee" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
 ];

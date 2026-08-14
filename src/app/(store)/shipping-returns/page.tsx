@@ -16,14 +16,16 @@ export default function ShippingReturnsPage() {
       <header className="store-page-header">
         <p className="eyebrow">Delivery</p>
         <h1>Shipping & returns</h1>
+        <p>Cut in Surat, couriered across India, tracked on WhatsApp.</p>
       </header>
 
       <section aria-labelledby="delivery-title">
         <h2 id="delivery-title">Delivery timelines</h2>
         <ul className="policy-list">
+          <li>Orders usually dispatch within 1–2 business days after confirmation</li>
           <li>Metro cities: 3–6 business days after dispatch</li>
           <li>Rest of India: 5–8 business days after dispatch</li>
-          <li>Remote / NE regions: up to 10 business days</li>
+          <li>Remote / North-East regions: up to 10 business days</li>
         </ul>
         <p>You&apos;ll receive tracking on WhatsApp once the order ships.</p>
       </section>
@@ -32,7 +34,11 @@ export default function ShippingReturnsPage() {
         <h2 id="charges-title">Shipping charges</h2>
         <p>
           Standard shipping applies on single-polo orders. Free shipping on orders above{" "}
-          {formatInr(site.freeShippingThreshold)} {/* TODO: confirm threshold */}.
+          {formatInr(site.freeShippingThreshold)}.
+        </p>
+        <p>
+          Combo carts of 3 or 5 almost always clear free shipping. Exact charge is
+          confirmed on WhatsApp before you pay.
         </p>
       </section>
 
@@ -42,6 +48,11 @@ export default function ShippingReturnsPage() {
           {site.exchangeWindowDays}-day exchange on unworn polos with tags intact. Raise a
           request on <Link href="/contact">Contact</Link> with your order phone number.
         </p>
+        <ul className="policy-list">
+          <li>Item must be unused, unwashed, and in original condition</li>
+          <li>Size exchanges are prioritised when stock allows</li>
+          <li>Return shipping for exchanges is shared case by case</li>
+        </ul>
       </section>
 
       <section aria-labelledby="cod-title">
@@ -52,6 +63,12 @@ export default function ShippingReturnsPage() {
             : "COD availability varies by pincode — ask us before ordering."}
         </p>
       </section>
+
+      <p>
+        See also: <Link href="/guarantee">Our guarantee</Link> ·{" "}
+        <Link href="/how-to-order">How to order</Link> ·{" "}
+        <Link href="/faq">FAQ</Link>
+      </p>
     </article>
   );
 }

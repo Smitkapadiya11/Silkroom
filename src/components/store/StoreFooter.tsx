@@ -5,8 +5,11 @@ const footerLinks = [
   { href: "/shop", label: "Shop" },
   { href: "/combos", label: "Combos" },
   { href: "/about", label: "About" },
+  { href: "/how-to-order", label: "How to order" },
   { href: "/size-guide", label: "Size guide" },
+  { href: "/care", label: "Fabric care" },
   { href: "/shipping-returns", label: "Shipping & returns" },
+  { href: "/guarantee", label: "Our guarantee" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
   { href: "/privacy", label: "Privacy" },
@@ -34,6 +37,9 @@ export function StoreFooter() {
         </nav>
         <address className="store-footer-contact">
           <a href={`mailto:${site.email}`}>{site.email}</a>
+          {site.phone ? (
+            <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
+          ) : null}
           <a href={site.instagramUrl} target="_blank" rel="noreferrer">
             {site.instagramHandle}
           </a>

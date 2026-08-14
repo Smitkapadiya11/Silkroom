@@ -1509,6 +1509,19 @@ a:focus-visible,
   text-transform: uppercase;
 }
 
+.trust-strip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.trust-strip-link:hover span {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 .trust-strip li {
   display: inline-flex;
   align-items: center;

@@ -26,6 +26,12 @@ export default function ContactPage() {
             {site.whatsappDisplay}
           </WhatsAppOrderLink>
         </li>
+        {site.phone ? (
+          <li>
+            <strong>Phone</strong>
+            <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
+          </li>
+        ) : null}
         <li>
           <strong>Email</strong>
           <a href={`mailto:${site.email}`}>{site.email}</a>
@@ -41,6 +47,15 @@ export default function ContactPage() {
           </a>
         </li>
       </ul>
+
+      <section aria-labelledby="expect-title">
+        <h2 id="expect-title">What to expect</h2>
+        <ul className="policy-list">
+          <li>We confirm stock, size, and total before you pay.</li>
+          <li>COD and prepaid both available on most pincodes.</li>
+          <li>Tracking is shared on the same WhatsApp thread when we ship.</li>
+        </ul>
+      </section>
     </article>
   );
 }

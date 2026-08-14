@@ -1,5 +1,9 @@
+/** Digits-only fallback so production never ships dead order buttons. */
+const DEFAULT_WHATSAPP = "917575807403";
+
 export function whatsappOrderNumber() {
-  const number = process.env.NEXT_PUBLIC_WHATSAPP?.replace(/\D/g, "") ?? "";
+  const configured = process.env.NEXT_PUBLIC_WHATSAPP?.replace(/\D/g, "") ?? "";
+  const number = configured.length >= 10 ? configured : DEFAULT_WHATSAPP;
   return number.length >= 10 ? number : null;
 }
 

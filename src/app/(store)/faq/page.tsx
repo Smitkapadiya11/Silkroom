@@ -62,7 +62,17 @@ const faqs = [
   {
     question: "How do I place an order?",
     answer:
-      "Add to cart, checkout on WhatsApp with your address — we confirm stock and payment.",
+      "Add to cart, then checkout on WhatsApp with your address — we confirm stock and payment. The How to order page walks through each step.",
+  },
+  {
+    question: "What if the fabric feels different than expected?",
+    answer:
+      "Every polo is 220 GSM cotton-elastane rib. Follow Fabric care for wash instructions, or message us within the exchange window.",
+  },
+  {
+    question: "Is there a quality guarantee?",
+    answer:
+      "Yes — Made in India construction, COD on most pincodes, and a 7-day exchange. See Our guarantee for the full promise.",
   },
 ];
 
