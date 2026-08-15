@@ -27,7 +27,15 @@ const deliverySteps = [
   ["04", "Delivered", "Metro 3–6 days with tracking. Wrong size? 7-day easy exchange."],
 ] as const;
 
-export function V2Landing({ products }: { products: Product[] }) {
+export function V2Landing({
+  products,
+  announcementEnabled = true,
+  announcementText,
+}: {
+  products: Product[];
+  announcementEnabled?: boolean;
+  announcementText?: string;
+}) {
   const heroProduct = products[0];
   const detailShots = [
     {
@@ -51,7 +59,7 @@ export function V2Landing({ products }: { products: Product[] }) {
   return (
     <div className="v2-landing">
       <div className="store-sticky-stack">
-        <ComboOfferBar />
+        {announcementEnabled ? <ComboOfferBar text={announcementText} /> : null}
         <StoreHeader variant="landing" />
       </div>
       <main>
