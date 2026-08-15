@@ -10,12 +10,23 @@ export async function middleware(request: NextRequest) {
   const isLoginApi = pathname === "/api/admin/login";
   const isAuthRoute = pathname.startsWith("/api/auth");
 
-  if (!isAdminPage && !isAdminApi) {
+  if (!isAdminPage && !isAdminApi && !isAuthRoute) {
     return NextResponse.next();
   }
 
   const response = NextResponse.next();
-  response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  if (isAdminPage || isAdminApi) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
+
+  // All credential logins must pass through /api/admin/login, which applies
+  // the Upstash/DB rate limit before calling Auth.js server-side.
+  if (
+    pathname === "/api/auth/callback/credentials" &&
+    request.method === "POST"
+  ) {
+    return NextResponse.json({ error: "Not found." }, { status: 404 });
+  }
 
   if (isLogin || isLoginApi || isAuthRoute) {
     return response;
@@ -25,9 +36,11 @@ export async function middleware(request: NextRequest) {
     req: request,
     secret: process.env.AUTH_SECRET,
   });
-  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const adminUsername =
+    process.env.ADMIN_USERNAME?.trim().toLowerCase() ??
+    process.env.ADMIN_EMAIL?.trim().toLowerCase();
   const email = typeof token?.email === "string" ? token.email.toLowerCase() : "";
-  const authed = Boolean(email && adminEmail && email === adminEmail);
+  const authed = Boolean(email && adminUsername && email === adminUsername);
 
   if (!authed) {
     if (isAdminApi) {
@@ -42,5 +55,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/admin/:path*", "/api/auth/:path*"],
 };

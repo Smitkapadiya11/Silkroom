@@ -2,7 +2,7 @@ import { AuthError } from "next-auth";
 import { NextResponse } from "next/server";
 import { signIn } from "@/auth";
 import { clientIp } from "@/lib/admin/session";
-import { getLoginRateLimiter } from "@/lib/admin/rate-limit";
+import { allowDatabaseLoginAttempt, getLoginRateLimiter } from "@/lib/admin/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -23,26 +23,27 @@ function safeAdminCallbackUrl(callbackUrl: unknown, request: Request) {
 }
 
 export async function POST(request: Request) {
+  const ipAddress = clientIp(request);
   const limiter = getLoginRateLimiter();
   if (limiter) {
-    const result = await limiter.limit(clientIp(request));
+    const result = await limiter.limit(ipAddress);
     if (!result.success) {
       return NextResponse.json({ error: "Unable to sign in." }, { status: 429 });
     }
-  } else {
-    console.warn("Admin login rate limiting unavailable: Upstash is not configured.");
+  } else if (!(await allowDatabaseLoginAttempt(ipAddress))) {
+    return NextResponse.json({ error: "Unable to sign in." }, { status: 429 });
   }
 
   try {
     const body = await request.json();
-    const email = typeof body.email === "string" ? body.email : "";
+    const username = typeof body.username === "string" ? body.username : "";
     const password = typeof body.password === "string" ? body.password : "";
-    if (!email || !password) {
+    if (!username || !password) {
       return NextResponse.json({ error: "Unable to sign in." }, { status: 401 });
     }
 
     await signIn("credentials", {
-      email,
+      username,
       password,
       redirect: false,
     });
