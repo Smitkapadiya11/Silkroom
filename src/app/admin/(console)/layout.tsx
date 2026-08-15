@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { signOut } from "@/auth";
 
+export const preferredRegion = "icn1";
+
 const links = [
   ["Overview", "/admin"],
   ["Orders", "/admin/orders"],
