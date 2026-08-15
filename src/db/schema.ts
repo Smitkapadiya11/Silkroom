@@ -58,3 +58,15 @@ export const orderItems = pgTable("order_items", {
   quantity: integer("quantity").notNull(),
   lineTotalInr: integer("line_total_inr").notNull(),
 });
+
+export const reviews = pgTable("reviews", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  orderId: uuid("order_id")
+    .notNull()
+    .references(() => orders.id, { onDelete: "cascade" }),
+  productSlug: text("product_slug").notNull(),
+  rating: integer("rating").notNull(),
+  body: text("body").notNull(),
+  verifiedPurchase: boolean("verified_purchase").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});

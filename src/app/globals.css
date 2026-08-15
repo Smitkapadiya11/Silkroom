@@ -2557,6 +2557,78 @@ a:focus-visible,
   font-family: var(--font-mono), monospace;
 }
 
+.combo-pick {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.45rem;
+  background: var(--paper);
+}
+
+.combo-pick-select {
+  display: grid;
+  gap: 0.4rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.combo-pick-sizes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+.combo-pick-sizes button,
+.combo-upgrade {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+}
+
+.combo-pick-sizes button.is-active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.combo-upgrade {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--flame);
+}
+
+.combo-savings-stamp {
+  display: inline-flex;
+  width: fit-content;
+  transform: rotate(-2deg);
+  animation: combo-stamp 350ms ease-out;
+}
+
+@keyframes combo-stamp {
+  from { opacity: 0; transform: rotate(-10deg) scale(0.84); }
+  to { opacity: 1; transform: rotate(-2deg) scale(1); }
+}
+
+@media (max-width: 699px) {
+  .v2-landing .combo-builder-cta {
+    position: sticky;
+    z-index: 30;
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    width: 100%;
+    box-shadow: 0 0 0 1px var(--line), 0 8px 24px rgb(20 19 26 / 0.16);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .combo-savings-stamp {
+    animation: none;
+  }
+}
+
 .v2-landing .button-primary {
   border: 0;
   background: var(--peacock);
