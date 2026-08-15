@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { writeAdminAudit } from "@/lib/admin/audit";
+import { allowDatabaseLoginAttempt, getLoginRateLimiter } from "@/lib/admin/rate-limit";
 
 const credentialsSchema = z.object({
   username: z.string().trim().min(3).max(100),
@@ -26,6 +27,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           request?.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
           request?.headers.get("x-real-ip") ||
           "unknown";
+
+        const limiter = getLoginRateLimiter();
+        const allowed = limiter
+          ? (await limiter.limit(ip)).success
+          : await allowDatabaseLoginAttempt(ip);
+        if (!allowed) {
+          await writeAdminAudit({
+            actorEmail: parsed.success ? parsed.data.username.toLowerCase() : "unknown",
+            action: "login_rate_limited",
+            ipAddress: ip,
+          });
+          return null;
+        }
 
         if (!parsed.success || !adminUsername || !passwordHash) {
           await writeAdminAudit({

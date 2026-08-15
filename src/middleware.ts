@@ -19,15 +19,6 @@ export async function middleware(request: NextRequest) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow");
   }
 
-  // All credential logins must pass through /api/admin/login, which applies
-  // the Upstash/DB rate limit before calling Auth.js server-side.
-  if (
-    pathname === "/api/auth/callback/credentials" &&
-    request.method === "POST"
-  ) {
-    return NextResponse.json({ error: "Not found." }, { status: 404 });
-  }
-
   if (isLogin || isLoginApi || isAuthRoute) {
     return response;
   }
