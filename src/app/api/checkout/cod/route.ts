@@ -6,6 +6,7 @@ import {
   requireDatabase,
   validateCheckoutItems,
 } from "@/lib/checkout";
+import { grantOrderAccess } from "@/lib/order-access";
 
 export const runtime = "nodejs";
 
@@ -19,15 +20,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Delivery details are invalid." }, { status: 400 });
   }
 
-  const validated = validateCheckoutItems(body.items ?? []);
+  const validated = await validateCheckoutItems(body.items ?? []);
   if ("error" in validated) {
     return NextResponse.json({ error: validated.error }, { status: 400 });
   }
 
-  const payable = computePayableTotal(validated.pricing.total, "cod");
+  const codFee =
+    "codFeeInr" in validated.settings ? Number(validated.settings.codFeeInr) : undefined;
+  const payable = computePayableTotal(
+    validated.pricing.total,
+    "cod",
+    Number.isFinite(codFee) ? codFee : undefined,
+  );
   const order = await insertOrder({
     paymentMethod: "cod",
-    status: "cod_pending",
+    status: "pending",
     address: address.data,
     items: validated.items,
     subtotalInr: validated.pricing.subtotal,
@@ -36,6 +43,8 @@ export async function POST(request: Request) {
     prepaidDiscountInr: payable.prepaidDiscountInr,
     totalInr: payable.totalInr,
   });
+
+  await grantOrderAccess(order.orderNumber);
 
   return NextResponse.json({
     orderNumber: order.orderNumber,

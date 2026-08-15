@@ -7,6 +7,7 @@ import {
   requireDatabase,
   validateCheckoutItems,
 } from "@/lib/checkout";
+import { grantOrderAccess } from "@/lib/order-access";
 
 export const runtime = "nodejs";
 
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Delivery details are invalid." }, { status: 400 });
   }
 
-  const validated = validateCheckoutItems(body.items ?? []);
+  const validated = await validateCheckoutItems(body.items ?? []);
   if ("error" in validated) {
     return NextResponse.json({ error: validated.error }, { status: 400 });
   }
@@ -56,6 +57,8 @@ export async function POST(request: Request) {
     totalInr: payable.totalInr,
     razorpayOrderId: rzOrder.id,
   });
+
+  await grantOrderAccess(order.orderNumber);
 
   return NextResponse.json({
     orderNumber: order.orderNumber,

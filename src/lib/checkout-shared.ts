@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const COD_FEE_INR = 49;
-export const PREPAID_DISCOUNT_INR = 50;
 export const CHECKOUT_ADDRESS_KEY = "silk-room-checkout-address-v1";
 
 export const checkoutAddressSchema = z.object({

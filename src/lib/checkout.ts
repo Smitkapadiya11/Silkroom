@@ -1,21 +1,21 @@
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { getDb, isDatabaseConfigured } from "@/db";
 import { orderCounters, orderItems, orders } from "@/db/schema";
 import {
   checkoutItemSchema,
   COD_FEE_INR,
-  PREPAID_DISCOUNT_INR,
   type CheckoutAddress,
   type CheckoutItemInput,
 } from "@/lib/checkout-shared";
-import { calculateCartPricing, type CartLine } from "@/lib/pricing";
+import { decrementInventoryForOrder, upsertCustomerFromOrder } from "@/lib/admin/orders";
+import { calculateCartPricing, type CartLine, type ComboRule } from "@/lib/pricing";
 import { getProduct } from "@/lib/products";
+import { getStoreSettings } from "@/lib/store-settings";
 
 export {
   checkoutAddressSchema,
   checkoutItemSchema,
   COD_FEE_INR,
-  PREPAID_DISCOUNT_INR,
   type CheckoutAddress,
   type CheckoutItemInput,
 } from "@/lib/checkout-shared";
@@ -43,10 +43,34 @@ export function requireDatabase() {
   return { ok: true as const, db: getDb() };
 }
 
-export function validateCheckoutItems(items: CheckoutItemInput[]) {
+export async function validateCheckoutItems(items: CheckoutItemInput[]) {
   if (!Array.isArray(items) || items.length === 0 || items.length > 12) {
     return { error: "Your cart is empty or too large." as const };
   }
+
+  const settings = await getStoreSettings();
+  const unitPrice = "unitPriceInr" in settings ? Number(settings.unitPriceInr) : undefined;
+  const comboOverrides: ComboRule[] | undefined =
+    "combo3PriceInr" in settings
+      ? [
+          {
+            id: "trio",
+            label: "Any 3 polos",
+            minQty: 3,
+            discountType: "fixedPrice",
+            value: Number(settings.combo3PriceInr),
+            blurb: `3 polos for ₹${Number(settings.combo3PriceInr).toLocaleString("en-IN")}`,
+          },
+          {
+            id: "five",
+            label: "Any 5 polos",
+            minQty: 5,
+            discountType: "fixedPrice",
+            value: Number(settings.combo5PriceInr),
+            blurb: `5 polos for ₹${Number(settings.combo5PriceInr).toLocaleString("en-IN")}`,
+          },
+        ]
+      : undefined;
 
   const validated: ValidatedCheckoutItem[] = [];
   for (const item of items) {
@@ -60,14 +84,15 @@ export function validateCheckoutItems(items: CheckoutItemInput[]) {
     ) {
       return { error: "Your cart contains an invalid product." as const };
     }
+    const price = unitPrice && Number.isFinite(unitPrice) ? unitPrice : product.price;
     validated.push({
       slug: product.slug,
       name: product.name,
       size: parsed.data.size,
       color: parsed.data.color,
       quantity: parsed.data.quantity,
-      unitPrice: product.price,
-      lineTotal: product.price * parsed.data.quantity,
+      unitPrice: price,
+      lineTotal: price * parsed.data.quantity,
     });
   }
 
@@ -76,22 +101,26 @@ export function validateCheckoutItems(items: CheckoutItemInput[]) {
     price: item.unitPrice,
     quantity: item.quantity,
   }));
-  const pricing = calculateCartPricing(lines);
-  return { items: validated, pricing };
+  const pricing = calculateCartPricing(lines, { rules: comboOverrides, unitPrice });
+  return { items: validated, pricing, settings };
 }
 
-export function computePayableTotal(pricingTotal: number, method: "prepaid" | "cod") {
+export function computePayableTotal(
+  pricingTotal: number,
+  method: "prepaid" | "cod",
+  codFeeInr = COD_FEE_INR,
+) {
   if (method === "cod") {
     return {
-      feeInr: COD_FEE_INR,
+      feeInr: codFeeInr,
       prepaidDiscountInr: 0,
-      totalInr: pricingTotal + COD_FEE_INR,
+      totalInr: pricingTotal + codFeeInr,
     };
   }
   return {
     feeInr: 0,
-    prepaidDiscountInr: PREPAID_DISCOUNT_INR,
-    totalInr: Math.max(0, pricingTotal - PREPAID_DISCOUNT_INR),
+    prepaidDiscountInr: 0,
+    totalInr: pricingTotal,
   };
 }
 
@@ -177,18 +206,53 @@ export async function markOrderPaid(input: {
     .limit(1);
 
   if (!existing) return null;
-  if (existing.status === "paid") return existing;
+  if (existing.status === "confirmed" || existing.status === "paid") {
+    return existing.razorpayPaymentId === input.razorpayPaymentId ? existing : null;
+  }
+  if (existing.paymentMethod !== "prepaid" || existing.status !== "pending") {
+    return null;
+  }
 
   const [updated] = await db
     .update(orders)
     .set({
-      status: "paid",
+      status: "confirmed",
+      confirmedAt: new Date(),
       razorpayPaymentId: input.razorpayPaymentId,
       razorpaySignature: input.razorpaySignature ?? existing.razorpaySignature,
       updatedAt: new Date(),
     })
-    .where(eq(orders.id, existing.id))
+    .where(
+      and(
+        eq(orders.id, existing.id),
+        eq(orders.status, "pending"),
+        eq(orders.paymentMethod, "prepaid"),
+      ),
+    )
     .returning();
 
-  return updated;
+  if (updated) {
+    await decrementInventoryForOrder(updated.id, "system:razorpay");
+    await upsertCustomerFromOrder({
+      phone: updated.phone,
+      customerName: updated.customerName,
+      email: updated.email,
+      paymentMethod: updated.paymentMethod,
+      totalInr: updated.totalInr,
+      createdAt: updated.createdAt,
+      status: updated.status,
+    });
+    return updated;
+  }
+
+  const [current] = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.id, existing.id))
+    .limit(1);
+  return current &&
+    (current.status === "confirmed" || current.status === "paid") &&
+    current.razorpayPaymentId === input.razorpayPaymentId
+    ? current
+    : null;
 }

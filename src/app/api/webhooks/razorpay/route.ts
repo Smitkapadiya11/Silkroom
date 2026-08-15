@@ -1,5 +1,8 @@
 import crypto from "node:crypto";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { getDb } from "@/db";
+import { orders } from "@/db/schema";
 import { markOrderPaid, requireDatabase } from "@/lib/checkout";
 
 export const runtime = "nodejs";
@@ -34,6 +37,7 @@ export async function POST(request: Request) {
           id?: string;
           order_id?: string;
           status?: string;
+          amount?: number;
         };
       };
     };
@@ -44,12 +48,29 @@ export async function POST(request: Request) {
     payload.event === "payment.captured" &&
     payment?.id &&
     payment.order_id &&
+    typeof payment.amount === "number" &&
     payment.status === "captured"
   ) {
-    await markOrderPaid({
-      razorpayOrderId: payment.order_id,
-      razorpayPaymentId: payment.id,
-    });
+    const db = getDb();
+    const [storedOrder] = await db
+      .select({
+        totalInr: orders.totalInr,
+        paymentMethod: orders.paymentMethod,
+        status: orders.status,
+      })
+      .from(orders)
+      .where(eq(orders.razorpayOrderId, payment.order_id))
+      .limit(1);
+    if (
+      storedOrder &&
+      storedOrder.paymentMethod === "prepaid" &&
+      payment.amount === storedOrder.totalInr * 100
+    ) {
+      await markOrderPaid({
+        razorpayOrderId: payment.order_id,
+        razorpayPaymentId: payment.id,
+      });
+    }
   }
 
   return NextResponse.json({ received: true });

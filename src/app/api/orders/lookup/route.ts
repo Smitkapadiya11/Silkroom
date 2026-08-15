@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { orderItems, orders } from "@/db/schema";
 import { requireDatabase } from "@/lib/checkout";
+import { grantOrderAccess } from "@/lib/order-access";
 
 export const runtime = "nodejs";
 
@@ -28,6 +29,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "No order found for that number and phone." }, { status: 404 });
   }
 
+  await grantOrderAccess(order.orderNumber);
   const items = await db.select().from(orderItems).where(eq(orderItems.orderId, order.id));
 
   return NextResponse.json({

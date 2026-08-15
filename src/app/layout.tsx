@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     "Ribbed zip polos from Surat. ₹399 each — 3 for ₹799, 5 for ₹1,299. Prepaid or COD.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Silk Room — The Polo Edit",
+    title: "Silk Room — 3 FOR ₹799",
     description:
-      "Seven tones. One cut. ₹399, or mix a combo.",
+      "Eleven zip polos from Surat. ₹399 each — 3 for ₹799, 5 for ₹1,299. Solids and waffle designs.",
     url: site.url,
     siteName: "Silk Room",
     type: "website",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#12121A",
+  themeColor: "#f6f2ea",
   width: "device-width",
   initialScale: 1,
 };

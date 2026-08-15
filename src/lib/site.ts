@@ -11,7 +11,7 @@ function resolvedSiteUrl() {
 export const site = {
   name: "Silk Room",
   url: resolvedSiteUrl(),
-  email: "smitkapadiya.work@gmail.com",
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@silkroom.shop",
   phone: "+91 75758 07403",
   phoneTel: "+917575807403",
   whatsappDisplay: "+91 75758 07403",

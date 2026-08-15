@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { getDb, isDatabaseConfigured } from "@/db";
 import { orderItems, orders } from "@/db/schema";
 import { createPageMetadata } from "@/lib/metadata";
+import { hasOrderAccess } from "@/lib/order-access";
 import { formatInr } from "@/lib/pricing";
 import { whatsappUrl } from "@/lib/order";
 import { site } from "@/lib/site";
@@ -14,18 +15,42 @@ export async function generateMetadata({ params }: Props) {
   const { orderNumber } = await params;
   return createPageMetadata({
     title: `Order ${orderNumber}`,
-    description: `Silk Room order ${orderNumber} confirmation and status.`,
+    description: `Silk Room order confirmation.`,
     path: `/order/${orderNumber}`,
+    noIndex: true,
   });
 }
 
 export default async function OrderPage({ params }: Props) {
   const { orderNumber } = await params;
+  const normalised = orderNumber.toUpperCase();
+
   if (!isDatabaseConfigured()) {
     return (
       <article className="policy-page">
-        <h1>Order {orderNumber}</h1>
+        <h1>Order {normalised}</h1>
         <p>Order lookup needs DATABASE_URL. Message us on WhatsApp with your order number.</p>
+      </article>
+    );
+  }
+
+  const allowed = await hasOrderAccess(normalised);
+  if (!allowed) {
+    return (
+      <article className="policy-page">
+        <header className="store-page-header">
+          <p className="eyebrow">Protected</p>
+          <h1>Verify to view this order</h1>
+        </header>
+        <p>
+          For your privacy, order details open only after checkout or after you confirm the
+          order number with the phone used at purchase.
+        </p>
+        <p>
+          <Link className="v2-button v2-button--ink" href="/track">
+            Track with order number + phone
+          </Link>
+        </p>
       </article>
     );
   }
@@ -34,7 +59,7 @@ export default async function OrderPage({ params }: Props) {
   const [order] = await db
     .select()
     .from(orders)
-    .where(eq(orders.orderNumber, orderNumber.toUpperCase()))
+    .where(eq(orders.orderNumber, normalised))
     .limit(1);
   if (!order) notFound();
 

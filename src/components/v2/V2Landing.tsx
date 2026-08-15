@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ComboBuilder } from "@/components/store/ComboBuilder";
 import { ComboOfferBar } from "@/components/store/ComboOfferBar";
-import { PlaceholderFrame } from "@/components/store/PlaceholderFrame";
+import { UgcVideo } from "@/components/store/UgcVideo";
 import { StoreFooter } from "@/components/store/StoreFooter";
 import { StoreHeader } from "@/components/store/StoreHeader";
 import { TrustStrip } from "@/components/store/TrustStrip";
@@ -22,14 +22,30 @@ const faqs = [
 
 const deliverySteps = [
   ["01", "Pick", "Build any 3 or 5 colours in the combo builder, or shop singles."],
-  ["02", "Order", "Checkout prepaid (save ₹50) or COD (+₹49). WhatsApp stays available."],
+  ["02", "Order", "Pay securely with Razorpay or choose COD (+₹49). WhatsApp stays available."],
   ["03", "Dispatch", "We pack from Surat in 24–48 hours after confirmation."],
   ["04", "Delivered", "Metro 3–6 days with tracking. Wrong size? 7-day easy exchange."],
 ] as const;
 
 export function V2Landing({ products }: { products: Product[] }) {
   const heroProduct = products[0];
-  const detailProducts = products.slice(0, 3);
+  const detailShots = [
+    {
+      src: "/products/new/fern-waffle-zip-polo-rib.jpg",
+      caption: "Waffle rib texture",
+      alt: "Close-up of fern waffle rib knit",
+    },
+    {
+      src: "/products/new/harbour-waffle-zip-polo-collar.jpg",
+      caption: "Collar and zip",
+      alt: "Close-up of harbour waffle collar and zip",
+    },
+    {
+      src: "/products/new/slate-waffle-zip-polo-rib.jpg",
+      caption: "Knit finish",
+      alt: "Close-up of slate waffle knit finish",
+    },
+  ];
   const fabric = heroProduct.fabric;
 
   return (
@@ -80,9 +96,22 @@ export function V2Landing({ products }: { products: Product[] }) {
             <p className="v2-kicker">On camera</p>
             <h2 id="ugc-title">See the rib move.</h2>
           </div>
-          <PlaceholderFrame className="v2-ugc-frame" ratio="16 / 9" label="UGC AD VIDEO — 16:9" />
+          <div className="v2-ugc-grid">
+            <UgcVideo
+              className="v2-ugc-frame"
+              srcMp4="/media/silkroom-street-ad.mp4"
+              poster="/media/silkroom-street-ad-poster.jpg"
+              label="Silk Room polo on the street"
+            />
+            <UgcVideo
+              className="v2-ugc-frame"
+              srcMp4="/media/silkroom-cafe-ad.mp4"
+              poster="/media/silkroom-cafe-ad-poster.jpg"
+              label="Silk Room polo worn at a cafe"
+            />
+          </div>
           <p className="v2-ugc-caption">
-            Product footage will appear here once the final Silk Room video is ready.
+            Plays muted when you scroll into view. Tap unmute for sound.
           </p>
           <a className="v2-button v2-button--ghost" href="#build">
             Build your combo
@@ -119,15 +148,15 @@ export function V2Landing({ products }: { products: Product[] }) {
             <h2 id="detail-title">The details earn their place.</h2>
           </div>
           <div className="v2-detail-gallery">
-            {detailProducts.map((product, index) => (
-              <figure key={product.slug} className={`v2-detail-card v2-detail-card--crop-${index}`}>
+            {detailShots.map((shot, index) => (
+              <figure key={shot.src} className={`v2-detail-card v2-detail-card--crop-${index}`}>
                 <Image
-                  src={product.detailImages?.[0] ?? product.image}
-                  alt={`${product.name} fabric and zip detail`}
+                  src={shot.src}
+                  alt={shot.alt}
                   fill
                   sizes="(min-width: 900px) 30vw, 78vw"
                 />
-                <figcaption>{index === 0 ? "Rib texture" : index === 1 ? "Collar and zip" : "Knit finish"}</figcaption>
+                <figcaption>{shot.caption}</figcaption>
               </figure>
             ))}
           </div>

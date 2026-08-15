@@ -48,17 +48,17 @@ export function formatInr(amount: number) {
   return `₹${amount.toLocaleString("en-IN")}`;
 }
 
-export function getApplicableRule(quantity: number) {
+export function getApplicableRule(quantity: number, rules: ComboRule[] = comboRules) {
   return (
-    [...comboRules]
+    [...rules]
       .filter((rule) => quantity === rule.minQty)
       .sort((a, b) => b.minQty - a.minQty)[0] ?? null
   );
 }
 
-export function getNextRule(quantity: number) {
+export function getNextRule(quantity: number, rules: ComboRule[] = comboRules) {
   return (
-    comboRules
+    rules
       .filter((rule) => quantity < rule.minQty)
       .sort((a, b) => a.minQty - b.minQty)[0] ?? null
   );
@@ -68,17 +68,26 @@ export function calculateLineTotal(line: CartLine) {
   return line.price * line.quantity;
 }
 
-export function calculateCartPricing(lines: CartLine[]): PricingResult {
+export function calculateCartPricing(
+  lines: CartLine[],
+  options?: { rules?: ComboRule[]; unitPrice?: number },
+): PricingResult {
+  const rules = options?.rules?.length ? options.rules : comboRules;
   const subtotal = lines.reduce((sum, line) => sum + calculateLineTotal(line), 0);
   const quantity = lines.reduce((sum, line) => sum + line.quantity, 0);
-  const rule = getApplicableRule(quantity);
-  const nextRule = getNextRule(quantity);
-  const unitPrice = quantity > 0 ? Math.round(subtotal / quantity) : UNIT_PRICE;
+  const rule = getApplicableRule(quantity, rules);
+  const nextRule = getNextRule(quantity, rules);
+  const unitPrice =
+    quantity > 0
+      ? Math.round(subtotal / quantity)
+      : options?.unitPrice && Number.isFinite(options.unitPrice)
+        ? options.unitPrice
+        : UNIT_PRICE;
 
   const bundleTotal = (count: number) => {
     const totals = Array.from({ length: count + 1 }, (_, index) => index * unitPrice);
     for (let itemCount = 1; itemCount <= count; itemCount += 1) {
-      for (const combo of comboRules) {
+      for (const combo of rules) {
         if (combo.discountType !== "fixedPrice" || combo.minQty > itemCount) continue;
         totals[itemCount] = Math.min(
           totals[itemCount],

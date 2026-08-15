@@ -7,7 +7,6 @@ import { useCart } from "@/context/CartProvider";
 import {
   CHECKOUT_ADDRESS_KEY,
   COD_FEE_INR,
-  PREPAID_DISCOUNT_INR,
   type CheckoutAddress,
 } from "@/lib/checkout-shared";
 import { formatInr } from "@/lib/pricing";
@@ -42,10 +41,7 @@ export default function PaymentPage() {
     }
   }, []);
 
-  const prepaidTotal = useMemo(
-    () => Math.max(0, pricing.total - PREPAID_DISCOUNT_INR),
-    [pricing.total],
-  );
+  const prepaidTotal = pricing.total;
   const codTotal = useMemo(() => pricing.total + COD_FEE_INR, [pricing.total]);
 
   if (items.length === 0) {
@@ -173,9 +169,8 @@ export default function PaymentPage() {
 
       <div className="payment-options">
         <button type="button" className="payment-card" disabled={busy !== null} onClick={payPrepaid}>
-          <span className="v2-kicker">Prepaid · better deal</span>
+          <span className="v2-kicker">Prepaid</span>
           <strong>{formatInr(prepaidTotal)}</strong>
-          <span className="is-flame">Save {formatInr(PREPAID_DISCOUNT_INR)} vs cart total</span>
           <span>{busy === "prepaid" ? "Opening Razorpay…" : "Pay securely with Razorpay"}</span>
         </button>
         <button type="button" className="payment-card" disabled={busy !== null} onClick={payCod}>

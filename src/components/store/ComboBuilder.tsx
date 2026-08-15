@@ -132,7 +132,21 @@ export function ComboBuilder({ products }: { products: Product[] }) {
     ]);
   };
 
+  const helperCopy =
+    picked.length === 0
+      ? "Choose any 3 polos to unlock ₹799."
+      : picked.length < 3
+        ? `${3 - picked.length} more to unlock 3 for ₹799.`
+        : picked.length === 3
+          ? "Your 3-polo combo is ready — add to cart or upgrade to 5."
+          : picked.length === 4
+            ? "Add 1 more to unlock 5 for ₹1,299."
+            : "Your 5-polo combo is ready.";
+
+  const canAddBundle = picked.length === 3 || picked.length === 5;
+
   const addBundleToCart = () => {
+    if (!canAddBundle) return;
     picked.forEach((selection) => {
       const product = products.find((item) => item.slug === selection.slug);
       if (!product) return;
@@ -152,9 +166,7 @@ export function ComboBuilder({ products }: { products: Product[] }) {
             Saving {formatInr(pricing.discount)} · {pricing.rule?.label}
           </p>
         ) : (
-          <p className="combo-builder-saving">
-            {picked.length} of 3 chosen — add {Math.max(0, 3 - picked.length)} more to save ₹398.
-          </p>
+          <p className="combo-builder-saving">{helperCopy}</p>
         )}
       </div>
 
@@ -214,10 +226,12 @@ export function ComboBuilder({ products }: { products: Product[] }) {
       <button
         type="button"
         className="button button-primary combo-builder-cta"
-        disabled={picked.length === 0}
+        disabled={!canAddBundle}
         onClick={addBundleToCart}
       >
-        Add {picked.length} polo{picked.length === 1 ? "" : "s"} to cart · {formatInr(displayTotal)}
+        {canAddBundle
+          ? `Add ${picked.length} polos to cart · ${formatInr(displayTotal)}`
+          : helperCopy}
       </button>
     </div>
   );

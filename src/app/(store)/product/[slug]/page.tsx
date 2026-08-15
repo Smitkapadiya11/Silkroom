@@ -2,6 +2,9 @@ import { notFound } from "next/navigation";
 import { ProductDetailClient } from "@/components/store/ProductDetailClient";
 import { createPageMetadata, productJsonLd, organizationJsonLd } from "@/lib/metadata";
 import { getProduct, getRelatedProducts, products } from "@/lib/products";
+import { getDb, isDatabaseConfigured } from "@/db";
+import { inventory } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -26,6 +29,15 @@ export default async function ProductPage({ params }: Props) {
   if (!product) notFound();
 
   const related = getRelatedProducts(slug);
+  const inventoryMap: Record<string, number> = {};
+  if (isDatabaseConfigured()) {
+    try {
+      const rows = await getDb().select().from(inventory).where(eq(inventory.productSlug, slug));
+      for (const row of rows) inventoryMap[row.size] = row.quantity;
+    } catch {
+      // Keep purchasing available if inventory is temporarily unavailable.
+    }
+  }
   const jsonLd = [productJsonLd({
     slug: product.slug,
     name: product.name,
@@ -41,7 +53,7 @@ export default async function ProductPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ProductDetailClient product={product} related={related} />
+      <ProductDetailClient product={product} related={related} inventoryMap={inventoryMap} />
     </>
   );
 }

@@ -12,9 +12,11 @@ import { site } from "@/lib/site";
 export function ProductDetailClient({
   product,
   related,
+  inventoryMap = {},
 }: {
   product: Product;
   related: Product[];
+  inventoryMap?: Record<string, number>;
 }) {
   const { addProduct, items } = useCart();
   const [size, setSize] = useState<string>("M");
@@ -147,6 +149,7 @@ export function ProductDetailClient({
               className={size === item ? "size-chip is-active" : "size-chip"}
               onClick={() => setSize(item)}
               aria-pressed={size === item}
+              disabled={inventoryMap[item] === 0}
             >
               {item}
             </button>
