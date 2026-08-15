@@ -5,14 +5,18 @@ export type ProductFabric = {
   composition: string;
   fit: string;
   preShrunk: boolean;
+  zipHardware: string;
+  collar: string;
+  sleeve: string;
+  countryOfOrigin: string;
 };
 
 export type ProductReview = {
   id: string;
   author: string;
-  rating: number | null;
+  rating: number;
   body: string;
-  isPlaceholder: true;
+  verifiedPurchase: boolean;
 };
 
 export type Product = {
@@ -43,28 +47,17 @@ export type ComboPreset = {
 export const UNIT_PRICE = 399;
 export const SIZES = ["S", "M", "L", "XL"] as const;
 
-const PLACEHOLDER_REVIEWS: ProductReview[] = [
-  {
-    id: "review-1",
-    author: "TODO: customer name",
-    rating: null,
-    body: "TODO: replace with real review — fit, fabric feel, delivery experience.",
-    isPlaceholder: true,
-  },
-  {
-    id: "review-2",
-    author: "TODO: customer name",
-    rating: null,
-    body: "TODO: replace with real review — sizing accuracy and wash behaviour.",
-    isPlaceholder: true,
-  },
-];
+const PLACEHOLDER_REVIEWS: ProductReview[] = [];
 
 const sharedFabric: ProductFabric = {
   gsm: 220,
   composition: "95% cotton, 5% elastane",
   fit: "Relaxed regular — sits clean on the shoulder, easy through the chest",
   preShrunk: true,
+  zipHardware: "Brass quarter-zip",
+  collar: "Ribbed stand collar",
+  sleeve: "Short sleeve with rib cuff",
+  countryOfOrigin: "India",
 };
 
 const sharedCare = [

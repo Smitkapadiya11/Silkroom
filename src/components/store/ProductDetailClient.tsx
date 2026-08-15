@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ProductGallery } from "@/components/store/ProductGallery";
+import { ProductReviews } from "@/components/store/ProductReviews";
 import { useCart } from "@/context/CartProvider";
 import { formatInr, calculateCartPricing } from "@/lib/pricing";
 import { SIZES, type Product } from "@/lib/products";
@@ -101,6 +102,22 @@ export function ProductDetailClient({
             <dt>Pre-shrunk</dt>
             <dd>{product.fabric.preShrunk ? "Yes" : "No"}</dd>
           </div>
+          <div>
+            <dt>Zip</dt>
+            <dd>{product.fabric.zipHardware}</dd>
+          </div>
+          <div>
+            <dt>Collar</dt>
+            <dd>{product.fabric.collar}</dd>
+          </div>
+          <div>
+            <dt>Sleeve</dt>
+            <dd>{product.fabric.sleeve}</dd>
+          </div>
+          <div>
+            <dt>Origin</dt>
+            <dd>{product.fabric.countryOfOrigin}</dd>
+          </div>
         </dl>
 
         <p className="product-delivery">
@@ -185,6 +202,7 @@ export function ProductDetailClient({
           </p>
           <p>— Silk Room, {site.whatsappDisplay}</p>
         </section>
+        <ProductReviews reviews={product.reviews} />
       </div>
 
       {sizeChartOpen ? (
@@ -197,13 +215,13 @@ export function ProductDetailClient({
             <h2>Measure a polo you already own</h2>
             <table>
               <thead>
-                <tr><th>Size</th><th>Chest</th><th>Length</th></tr>
+                <tr><th>Size</th><th>Chest</th><th>Length</th><th>Shoulder</th></tr>
               </thead>
               <tbody>
-                <tr><td>S</td><td>38 in / 96 cm</td><td>27 in / 68 cm</td></tr>
-                <tr><td>M</td><td>40 in / 102 cm</td><td>28 in / 71 cm</td></tr>
-                <tr><td>L</td><td>42 in / 107 cm</td><td>29 in / 74 cm</td></tr>
-                <tr><td>XL</td><td>44 in / 112 cm</td><td>30 in / 76 cm</td></tr>
+                <tr><td>S</td><td>38 in / 96 cm</td><td>27 in / 68 cm</td><td>16.5 in / 42 cm</td></tr>
+                <tr><td>M</td><td>40 in / 102 cm</td><td>28 in / 71 cm</td><td>17 in / 43 cm</td></tr>
+                <tr><td>L</td><td>42 in / 107 cm</td><td>29 in / 74 cm</td><td>17.5 in / 44 cm</td></tr>
+                <tr><td>XL</td><td>44 in / 112 cm</td><td>30 in / 76 cm</td><td>18 in / 46 cm</td></tr>
               </tbody>
             </table>
             <p>Lay it flat. Measure chest armpit to armpit, then double; measure length from shoulder seam to hem.</p>
@@ -214,7 +232,7 @@ export function ProductDetailClient({
       {related.length ? (
         <section className="product-related" aria-labelledby="related-title">
           <h2 id="related-title">More from the room</h2>
-          <div className="store-grid">
+          <div className="product-related-rail">
             {related.map((item) => (
               <ProductCard key={item.slug} product={item} />
             ))}

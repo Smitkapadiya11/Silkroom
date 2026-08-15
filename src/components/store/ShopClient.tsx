@@ -93,9 +93,14 @@ export function ShopClient({ catalog }: { catalog: Product[] }) {
       </div>
 
       {filtered.length ? (
-        <div className="store-grid">
-          {filtered.map((product) => (
-            <ProductCard key={product.slug} product={product} />
+        <div className="store-grid shop-grid-animated" key={`${filter}-${color}-${size}`}>
+          {filtered.map((product, index) => (
+            <ProductCard
+              key={product.slug}
+              product={product}
+              priority={index < 6}
+              className="shop-card-enter"
+            />
           ))}
         </div>
       ) : (

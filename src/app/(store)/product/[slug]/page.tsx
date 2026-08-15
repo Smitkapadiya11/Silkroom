@@ -26,7 +26,14 @@ export default async function ProductPage({ params }: Props) {
   if (!product) notFound();
 
   const related = getRelatedProducts(slug);
-  const jsonLd = [productJsonLd(product), organizationJsonLd()];
+  const jsonLd = [productJsonLd({
+    slug: product.slug,
+    name: product.name,
+    blurb: product.blurb,
+    price: product.price,
+    image: product.image,
+    reviews: product.reviews,
+  }), organizationJsonLd()];
 
   return (
     <>

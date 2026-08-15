@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ComboBuilder } from "@/components/store/ComboBuilder";
 import { ComboOfferBar } from "@/components/store/ComboOfferBar";
+import { PlaceholderFrame } from "@/components/store/PlaceholderFrame";
 import { StoreFooter } from "@/components/store/StoreFooter";
 import { StoreHeader } from "@/components/store/StoreHeader";
 import { TrustStrip } from "@/components/store/TrustStrip";
@@ -72,6 +73,24 @@ export function V2Landing({ products }: { products: Product[] }) {
             <p>One fit, one price, a wardrobe that works harder.</p>
           </div>
           <ComboBuilder products={products} />
+        </section>
+
+        <section className="v2-section v2-ugc" aria-labelledby="ugc-title">
+          <div className="v2-section-heading">
+            <p className="v2-kicker">On camera</p>
+            <h2 id="ugc-title">See the rib move.</h2>
+          </div>
+          <PlaceholderFrame
+            className="v2-ugc-frame"
+            ratio="16 / 9"
+            label="UGC AD VIDEO — 16:9 · drop files at public/video/silkroom-ugc.mp4, silkroom-ugc.webm, silkroom-ugc-poster.jpg"
+          />
+          <p className="v2-ugc-caption">
+            Real wear, real light. Until the clip is ready, build your three below.
+          </p>
+          <a className="v2-button v2-button--ghost" href="#build">
+            Build your combo
+          </a>
         </section>
 
         <section className="v2-section v2-low-price" aria-labelledby="low-price-title">

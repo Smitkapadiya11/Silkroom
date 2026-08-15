@@ -44,28 +44,35 @@ export function StoreFooter() {
           </p>
         </div>
         {footerColumns.map((column) => (
-          <nav key={column.title} aria-label={column.title}>
-            <p className="store-footer-heading">{column.title}</p>
-            <ul className="store-footer-links">
-              {column.links.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href}>{link.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <details key={column.title} className="store-footer-accordion" open>
+            <summary className="store-footer-heading">{column.title}</summary>
+            <nav aria-label={column.title}>
+              <ul className="store-footer-links">
+                {column.links.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href}>{link.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </details>
         ))}
-        <address className="store-footer-contact">
-          <p className="store-footer-heading">Reach us</p>
-          <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
-          <a href={site.instagramUrl} target="_blank" rel="noreferrer">{site.instagramHandle}</a>
-          <span>{site.address}</span>
-          <span>Response: {site.responseHours}</span>
-        </address>
+        <details className="store-footer-accordion" open>
+          <summary className="store-footer-heading">Reach us</summary>
+          <address className="store-footer-contact">
+            <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+            <a href={site.instagramUrl} target="_blank" rel="noreferrer">
+              {site.instagramHandle}
+            </a>
+            <span>{site.address}</span>
+            <span>Response: {site.responseHours}</span>
+          </address>
+        </details>
       </div>
       <p className="store-footer-legal">
-        UPI · Cards · Netbanking · COD · Cut in Surat, shipped across India · © {new Date().getFullYear()} Silk Room
+        UPI · Cards · Netbanking · COD · Cut in Surat, shipped across India · ©{" "}
+        {new Date().getFullYear()} Silk Room
       </p>
     </footer>
   );

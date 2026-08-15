@@ -45,7 +45,14 @@ export function productJsonLd(product: {
   blurb: string;
   price: number;
   image: string;
+  reviews?: { author: string; rating: number; body: string }[];
 }) {
+  const reviews = product.reviews ?? [];
+  const average =
+    reviews.length > 0
+      ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+      : null;
+
   return {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -60,6 +67,24 @@ export function productJsonLd(product: {
       availability: "https://schema.org/InStock",
       url: `${baseUrl}/product/${product.slug}`,
     },
+    ...(average
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: Number(average.toFixed(1)),
+            reviewCount: reviews.length,
+          },
+          review: reviews.map((review) => ({
+            "@type": "Review",
+            reviewRating: {
+              "@type": "Rating",
+              ratingValue: review.rating,
+            },
+            author: { "@type": "Person", name: review.author },
+            reviewBody: review.body,
+          })),
+        }
+      : {}),
   };
 }
 

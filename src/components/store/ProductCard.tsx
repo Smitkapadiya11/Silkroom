@@ -24,9 +24,11 @@ function upsellCopy(currentQty: number, lines: CartLine[]) {
 export function ProductCard({
   product,
   className = "",
+  priority = false,
 }: {
   product: Product;
   className?: string;
+  priority?: boolean;
 }) {
   const { items, addProduct } = useCart();
   const [quickAddOpen, setQuickAddOpen] = useState(false);
@@ -50,6 +52,8 @@ export function ProductCard({
             sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
             placeholder="blur"
             blurDataURL={BLUR}
+            priority={priority}
+            loading={priority ? "eager" : "lazy"}
           />
         </span>
         <span className="store-product-meta">
