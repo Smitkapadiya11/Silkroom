@@ -80,13 +80,9 @@ export function V2Landing({ products }: { products: Product[] }) {
             <p className="v2-kicker">On camera</p>
             <h2 id="ugc-title">See the rib move.</h2>
           </div>
-          <PlaceholderFrame
-            className="v2-ugc-frame"
-            ratio="16 / 9"
-            label="UGC AD VIDEO — 16:9 · drop files at public/video/silkroom-ugc.mp4, silkroom-ugc.webm, silkroom-ugc-poster.jpg"
-          />
+          <PlaceholderFrame className="v2-ugc-frame" ratio="16 / 9" label="UGC AD VIDEO — 16:9" />
           <p className="v2-ugc-caption">
-            Real wear, real light. Until the clip is ready, build your three below.
+            Product footage will appear here once the final Silk Room video is ready.
           </p>
           <a className="v2-button v2-button--ghost" href="#build">
             Build your combo

@@ -1,4 +1,3 @@
-import { PlaceholderFrame } from "@/components/store/PlaceholderFrame";
 import { createPageMetadata } from "@/lib/metadata";
 import { site } from "@/lib/site";
 
@@ -18,10 +17,8 @@ export default function AboutPage() {
       </header>
 
       <div className="about-grid">
-        <PlaceholderFrame label="PHOTO: founder portrait, 4:5" ratio="4 / 5" />
         <div className="about-copy">
           <p>
-            {/* TODO: Replace with the founder&apos;s own words. */}
             I started Silk Room because I wanted a polo that felt considered — not loud,
             not disposable. We cut ribbed quarter-zips in Surat, work with a small team
             that cares about collar shape and zip weight, and ship directly to you across

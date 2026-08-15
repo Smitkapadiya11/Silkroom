@@ -11,7 +11,7 @@ function resolvedSiteUrl() {
 export const site = {
   name: "Silk Room",
   url: resolvedSiteUrl(),
-  email: "hello@silkroom.shop", // TODO: Replace with your support inbox if different.
+  email: "smitkapadiya.work@gmail.com",
   phone: "+91 75758 07403",
   phoneTel: "+917575807403",
   whatsappDisplay: "+91 75758 07403",

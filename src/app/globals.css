@@ -2282,8 +2282,9 @@ a:focus-visible,
 
 .v2-ugc-frame {
   width: 100%;
+  aspect-ratio: 16 / 9;
   border-radius: 0.75rem;
-  border-color: var(--line);
+  border: 1px solid var(--line);
   background: var(--paper-2);
   color: var(--ash);
 }
