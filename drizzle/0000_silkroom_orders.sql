@@ -66,6 +66,10 @@ INSERT INTO products (slug, name, price_inr) VALUES
   ('sage-zip-polo', 'Sage Zip Polo', 399),
   ('rose-zip-polo', 'Rose Zip Polo', 399),
   ('silver-zip-polo', 'Silver Zip Polo', 399),
-  ('chalk-zip-polo', 'Chalk Zip Polo', 399)
+  ('chalk-zip-polo', 'Chalk Zip Polo', 399),
+  ('fern-waffle-zip-polo', 'Fern Waffle Zip Polo', 399),
+  ('harbour-waffle-zip-polo', 'Harbour Waffle Zip Polo', 399),
+  ('slate-waffle-zip-polo', 'Slate Waffle Zip Polo', 399),
+  ('porcelain-waffle-zip-polo', 'Porcelain Waffle Zip Polo', 399)
 ON CONFLICT (slug) DO UPDATE
   SET name = EXCLUDED.name, price_inr = EXCLUDED.price_inr, active = true;

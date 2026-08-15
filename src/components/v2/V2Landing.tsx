@@ -157,8 +157,8 @@ export function V2Landing({ products }: { products: Product[] }) {
         </section>
 
         <section className="v2-section v2-colours" aria-labelledby="colours-title">
-          <p className="v2-kicker">Seven quiet tones</p>
-          <h2 id="colours-title">Find your rotation.</h2>
+          <p className="v2-kicker">The full edit</p>
+          <h2 id="colours-title">Solids and new waffle designs.</h2>
           <div className="v2-colour-row">
             {products.map((product) => (
               <Link key={product.slug} href={`/product/${product.slug}`} className="v2-colour">
