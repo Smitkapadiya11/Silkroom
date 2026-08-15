@@ -2,6 +2,8 @@ import { sql } from "drizzle-orm";
 import { getDb } from "@/db";
 import { inventory, orders } from "@/db/schema";
 
+export const preferredRegion = "icn1";
+
 const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
 export default async function AdminOverview() {
   const db = getDb(); const now = new Date(); const ago = (days: number) => new Date(now.getTime() - days * 86400000);
