@@ -6,7 +6,7 @@ export const preferredRegion = "icn1";
 
 const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
 export default async function AdminOverview() {
-  const db = getDb(); const now = new Date(); const ago = (days: number) => new Date(now.getTime() - days * 86400000);
+  const db = getDb(); const now = new Date(); const ago = (days: number) => new Date(now.getTime() - days * 86400000).toISOString();
   const [statusRows, lowStock, today, week, month, previousWeek] = await Promise.all([
     db.select({ status: orders.status, count: sql<number>`count(*)::int` }).from(orders).groupBy(orders.status),
     db.select({ count: sql<number>`count(*)::int` }).from(inventory).where(sql`${inventory.quantity} <= ${inventory.lowStockThreshold}`),
