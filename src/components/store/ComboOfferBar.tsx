@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getBestOfferCopy } from "@/lib/pricing";
 
 export function ComboOfferBar() {
   const [dismissed, setDismissed] = useState(true);
 
   useEffect(() => {
-    setDismissed(sessionStorage.getItem("silk-combo-bar-dismissed") === "1");
+    setDismissed(localStorage.getItem("silk-combo-bar-dismissed") === "1");
   }, []);
 
   if (dismissed) return null;
@@ -16,14 +15,16 @@ export function ComboOfferBar() {
   return (
     <div className="combo-offer-bar" role="region" aria-label="Current offer">
       <p>
-        <Link href="/combos">{getBestOfferCopy()}</Link>
+        <Link href="/combos">
+          3 polos ₹799 · 5 for ₹1,299 · Free delivery over ₹799 · COD available
+        </Link>
       </p>
       <button
         type="button"
         className="combo-offer-dismiss"
         aria-label="Dismiss offer bar"
         onClick={() => {
-          sessionStorage.setItem("silk-combo-bar-dismissed", "1");
+          localStorage.setItem("silk-combo-bar-dismissed", "1");
           setDismissed(true);
         }}
       >

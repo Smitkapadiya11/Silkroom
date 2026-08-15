@@ -1,21 +1,36 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
 
-const footerLinks = [
-  { href: "/shop", label: "Shop" },
-  { href: "/combos", label: "Combos" },
-  { href: "/cart", label: "Cart" },
-  { href: "/track", label: "Track order" },
-  { href: "/about", label: "About" },
-  { href: "/how-to-order", label: "How to order" },
-  { href: "/size-guide", label: "Size guide" },
-  { href: "/care", label: "Fabric care" },
-  { href: "/shipping-returns", label: "Shipping & returns" },
-  { href: "/guarantee", label: "Our guarantee" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/contact", label: "Contact" },
-  { href: "/privacy", label: "Privacy" },
-  { href: "/terms", label: "Terms" },
+const footerColumns = [
+  {
+    title: "Shop",
+    links: [
+      { href: "/shop", label: "All polos" },
+      { href: "/shop?filter=new", label: "New designs" },
+      { href: "/combos", label: "Combos" },
+      { href: "/track", label: "Track order" },
+    ],
+  },
+  {
+    title: "Help",
+    links: [
+      { href: "/size-guide", label: "Size guide" },
+      { href: "/shipping-returns", label: "Shipping & returns" },
+      { href: "/guarantee", label: "Our guarantee" },
+      { href: "/how-to-order", label: "How to order" },
+      { href: "/faq", label: "FAQ" },
+      { href: "/contact", label: "Contact" },
+    ],
+  },
+  {
+    title: "Silk Room",
+    links: [
+      { href: "/about", label: "About" },
+      { href: "/care", label: "Fabric care" },
+      { href: "/privacy", label: "Privacy" },
+      { href: "/terms", label: "Terms" },
+    ],
+  },
 ];
 
 export function StoreFooter() {
@@ -28,28 +43,30 @@ export function StoreFooter() {
             Ribbed zip polos — cut in Surat, shipped across India.
           </p>
         </div>
-        <nav aria-label="Footer">
-          <ul className="store-footer-links">
-            {footerLinks.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href}>{link.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {footerColumns.map((column) => (
+          <nav key={column.title} aria-label={column.title}>
+            <p className="store-footer-heading">{column.title}</p>
+            <ul className="store-footer-links">
+              {column.links.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href}>{link.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
         <address className="store-footer-contact">
+          <p className="store-footer-heading">Reach us</p>
+          <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
           <a href={`mailto:${site.email}`}>{site.email}</a>
-          {site.phone ? (
-            <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
-          ) : null}
-          <a href={site.instagramUrl} target="_blank" rel="noreferrer">
-            {site.instagramHandle}
-          </a>
+          <a href={site.instagramUrl} target="_blank" rel="noreferrer">{site.instagramHandle}</a>
           <span>{site.address}</span>
           <span>Response: {site.responseHours}</span>
         </address>
       </div>
-      <p className="store-footer-legal">© {new Date().getFullYear()} Silk Room</p>
+      <p className="store-footer-legal">
+        UPI · Cards · Netbanking · COD · Cut in Surat, shipped across India · © {new Date().getFullYear()} Silk Room
+      </p>
     </footer>
   );
 }

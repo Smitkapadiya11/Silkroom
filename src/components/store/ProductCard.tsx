@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { formatInr } from "@/lib/pricing";
 import { calculateCartPricing, type CartLine } from "@/lib/pricing";
 import { cartLinesFromItems } from "@/lib/cart";
-import type { Product } from "@/lib/products";
+import { SIZES, type Product } from "@/lib/products";
 import { useCart } from "@/context/CartProvider";
 
 const BLUR =
@@ -27,7 +28,9 @@ export function ProductCard({
   product: Product;
   className?: string;
 }) {
-  const { items } = useCart();
+  const { items, addProduct } = useCart();
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
+  const [size, setSize] = useState<string>("M");
   const cartQty = items.reduce((sum, item) => sum + item.quantity, 0);
   const hypothetical: CartLine[] = [
     ...cartLinesFromItems(items),
@@ -39,6 +42,7 @@ export function ProductCard({
     <article className={`store-product-card ${className}`.trim()}>
       <Link href={`/product/${product.slug}`} className="store-product-link">
         <span className="store-product-image aspect-product">
+          {product.isNew ? <span className="product-new-tag">New</span> : null}
           <Image
             src={product.image}
             alt={`${product.name} ribbed quarter-zip polo in ${product.colors[0]?.name ?? "colour"}`}
@@ -55,6 +59,35 @@ export function ProductCard({
         </span>
       </Link>
       {upsell ? <p className="store-product-upsell">{upsell}</p> : null}
+      <div className="product-card-quick-add">
+        {quickAddOpen ? (
+          <>
+            <div role="group" aria-label={`Select ${product.name} size`}>
+              {SIZES.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={size === item ? "is-active" : ""}
+                  aria-pressed={size === item}
+                  onClick={() => setSize(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => addProduct(product, size, product.colors[0]?.name ?? "Default")}
+            >
+              Add {size}
+            </button>
+          </>
+        ) : (
+          <button type="button" onClick={() => setQuickAddOpen(true)}>
+            Quick add
+          </button>
+        )}
+      </div>
     </article>
   );
 }

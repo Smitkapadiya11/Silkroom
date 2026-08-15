@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ShopClient } from "@/components/store/ShopClient";
 import { createPageMetadata } from "@/lib/metadata";
 import { products } from "@/lib/products";
@@ -10,5 +11,9 @@ export const metadata = createPageMetadata({
 });
 
 export default function ShopPage() {
-  return <ShopClient catalog={products} />;
+  return (
+    <Suspense fallback={<div className="shop-page" aria-busy="true" />}>
+      <ShopClient catalog={products} />
+    </Suspense>
+  );
 }

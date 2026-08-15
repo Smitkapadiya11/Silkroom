@@ -4,17 +4,15 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { animate, createScope, stagger } from "animejs";
 import { useCart } from "@/context/CartProvider";
+import { site } from "@/lib/site";
 
 const links = [
   { href: "/shop", label: "Shop" },
   { href: "/combos", label: "Combos" },
   { href: "/about", label: "About" },
-  { href: "/how-to-order", label: "How to order" },
+  { href: "/track", label: "Track order" },
   { href: "/size-guide", label: "Size guide" },
-  { href: "/care", label: "Fabric care" },
   { href: "/shipping-returns", label: "Shipping" },
-  { href: "/guarantee", label: "Guarantee" },
-  { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -78,17 +76,31 @@ export function MobileNav({
           ))}
         </ul>
       </nav>
+      <div className="mobile-nav-contact">
+        <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
+        <a href={`https://wa.me/${site.phoneTel.replace("+", "")}`} target="_blank" rel="noreferrer">
+          WhatsApp us
+        </a>
+      </div>
     </div>
   );
 }
 
 export function StoreHeader({ variant = "store" }: { variant?: "store" | "landing" }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { count, openCart } = useCart();
+
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 8);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
 
   return (
     <>
-      <header className={`store-header store-header--${variant}`}>
+      <header className={`store-header store-header--${variant}${scrolled ? " is-scrolled" : ""}`}>
         <Link href="/" className="store-logo" aria-label="Silk Room home">
           Silk Room
         </Link>

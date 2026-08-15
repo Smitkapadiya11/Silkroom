@@ -20,6 +20,8 @@ export type Product = {
   name: string;
   price: number;
   image: string;
+  category: "solid" | "design";
+  isNew?: boolean;
   detailImages?: string[];
   colors: ProductColor[];
   sizes: string[];
@@ -78,6 +80,7 @@ export const products: Product[] = [
     name: "Nocturne Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Black_polo_shirt_displayed_2K_202608071858.jpeg",
+    category: "solid",
     colors: [{ name: "Ink", hex: "#17171B" }],
     sizes: [...SIZES],
     blurb: "Ribbed weight, clean collar, a flash of brass.",
@@ -91,6 +94,7 @@ export const products: Product[] = [
     name: "Umber Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Brown_ribbed_polo_shirt_2K_202608071857.jpeg",
+    category: "solid",
     colors: [{ name: "Umber", hex: "#674942" }],
     sizes: [...SIZES],
     blurb: "A warm neutral cut with quiet structure.",
@@ -104,6 +108,7 @@ export const products: Product[] = [
     name: "Reed Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Green_polo_shirt_displayed_2K_202608071856.jpeg",
+    category: "solid",
     colors: [{ name: "Reed", hex: "#9B9280" }],
     sizes: [...SIZES],
     blurb: "Soft earth colour, precise rib, easy shape.",
@@ -117,6 +122,7 @@ export const products: Product[] = [
     name: "Sage Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Green_polo_shirt_displayed_2K_202608071858.jpeg",
+    category: "solid",
     colors: [{ name: "Sage", hex: "#B1B5A3" }],
     sizes: [...SIZES],
     blurb: "Pale green with a cool, considered finish.",
@@ -130,6 +136,7 @@ export const products: Product[] = [
     name: "Rose Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Pink_ribbed_polo_shirt_2K_202608071858.jpeg",
+    category: "solid",
     colors: [{ name: "Dust Rose", hex: "#D6A1A7" }],
     sizes: [...SIZES],
     blurb: "Dusty rose, softened rib, never overstated.",
@@ -143,6 +150,7 @@ export const products: Product[] = [
     name: "Silver Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Ribbed_grey_polo_shirt_displayed_202608071857.jpeg",
+    category: "solid",
     colors: [{ name: "Silver", hex: "#A9ADAB" }],
     sizes: [...SIZES],
     blurb: "Cool grey made tactile by fine vertical rib.",
@@ -156,6 +164,7 @@ export const products: Product[] = [
     name: "Chalk Zip Polo",
     price: UNIT_PRICE,
     image: "/products/White_polo_shirt_flat_lay_202608071858.jpeg",
+    category: "solid",
     colors: [{ name: "Chalk", hex: "#F0EFEB" }],
     sizes: [...SIZES],
     blurb: "A clear white surface with visible depth.",

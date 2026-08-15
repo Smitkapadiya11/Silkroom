@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ComboBuilder } from "@/components/store/ComboBuilder";
 import { ComboOfferBar } from "@/components/store/ComboOfferBar";
-import { PlaceholderFrame } from "@/components/store/PlaceholderFrame";
 import { StoreFooter } from "@/components/store/StoreFooter";
 import { StoreHeader } from "@/components/store/StoreHeader";
 import { TrustStrip } from "@/components/store/TrustStrip";
 import type { Product } from "@/lib/products";
+import { site } from "@/lib/site";
 
 const faqs = [
   ["What comes in the 3 for ₹799 offer?", "Choose any three polos from the colour edit, select a size, then add the bundle to your cart."],
@@ -33,8 +33,10 @@ export function V2Landing({ products }: { products: Product[] }) {
 
   return (
     <div className="v2-landing">
-      <ComboOfferBar />
-      <StoreHeader variant="landing" />
+      <div className="store-sticky-stack">
+        <ComboOfferBar />
+        <StoreHeader variant="landing" />
+      </div>
       <main>
         <section className="v2-hero" aria-labelledby="hero-title">
           <div className="v2-hero-copy">
@@ -102,26 +104,29 @@ export function V2Landing({ products }: { products: Product[] }) {
             <h2 id="detail-title">The details earn their place.</h2>
           </div>
           <div className="v2-detail-gallery">
-            {detailProducts.map((product) =>
-              product.detailImages?.length ? (
-                <figure key={product.slug} className="v2-detail-card">
-                  <Image src={product.detailImages[0]} alt={`${product.name} detail`} fill sizes="(min-width: 900px) 30vw, 78vw" />
-                  <figcaption>{product.name}</figcaption>
-                </figure>
-              ) : (
-                <PlaceholderFrame key={product.slug} className="v2-detail-card" label={`Detail photo coming soon: ${product.name}`} />
-              ),
-            )}
+            {detailProducts.map((product, index) => (
+              <figure key={product.slug} className={`v2-detail-card v2-detail-card--crop-${index}`}>
+                <Image
+                  src={product.detailImages?.[0] ?? product.image}
+                  alt={`${product.name} fabric and zip detail`}
+                  fill
+                  sizes="(min-width: 900px) 30vw, 78vw"
+                />
+                <figcaption>{index === 0 ? "Rib texture" : index === 1 ? "Collar and zip" : "Knit finish"}</figcaption>
+              </figure>
+            ))}
           </div>
         </section>
 
-        <section className="v2-section v2-reviews" aria-labelledby="reviews-title">
-          <p className="v2-kicker">Worn, not written yet</p>
-          <h2 id="reviews-title">Customer reviews are coming soon.</h2>
-          <div className="v2-review-placeholders" aria-label="Customer review placeholders">
-            <PlaceholderFrame label="Review placeholder — verified customer feedback coming soon" ratio="3 / 2" />
-            <PlaceholderFrame label="Review placeholder — verified customer feedback coming soon" ratio="3 / 2" />
-          </div>
+        <section className="v2-section v2-founder-guarantee" aria-labelledby="guarantee-title">
+          <p className="v2-kicker">A note from Silk Room</p>
+          <h2 id="guarantee-title">A new label should earn your first order.</h2>
+          <p>
+            These polos are cut for an easy everyday fit, checked before dispatch, and backed
+            by a {site.exchangeWindowDays}-day size exchange. If something is not right, message
+            us and a person will reply during {site.responseHours}.
+          </p>
+          <p>— Silk Room · {site.whatsappDisplay}</p>
         </section>
 
         <section className="v2-section" aria-labelledby="delivery-title">
