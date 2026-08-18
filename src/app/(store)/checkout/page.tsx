@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CheckoutStepper } from "@/components/store/CheckoutStepper";
 import { useCart } from "@/context/CartProvider";
 import {
   CHECKOUT_ADDRESS_KEY,
@@ -42,10 +43,11 @@ export default function CheckoutPage() {
 
   return (
     <article className="policy-page checkout-page">
+      <CheckoutStepper step={2} />
       <header className="store-page-header">
         <p className="eyebrow">Checkout</p>
-        <h1>Where should it go?</h1>
-        <p>Cart total {formatInr(pricing.total)} before payment choice.</p>
+        <h1>Delivery address</h1>
+        <p>Cart total {formatInr(pricing.total)}. Payment is next — UPI, card, or cash on delivery.</p>
       </header>
 
       <form
@@ -97,6 +99,7 @@ export default function CheckoutPage() {
         <button type="submit" className="v2-button v2-button--ink">
           Continue to payment
         </button>
+        <p className="pay-legal">Your address is used only to pack and ship this order from Surat.</p>
       </form>
     </article>
   );

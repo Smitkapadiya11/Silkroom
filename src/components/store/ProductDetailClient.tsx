@@ -95,15 +95,22 @@ export function ProductDetailClient({
           {quantity > 1 ? <span>{formatInr(lineTotal)} for {quantity}</span> : null}
         </p>
         <p className="meesho-offer-badge">
-          {formatInr(unitPriceInr)} each · 3 for {formatInr(combo3PriceInr)} · COD available
+          {formatInr(unitPriceInr)} each · 3 for {formatInr(combo3PriceInr)} auto-applied in cart
         </p>
         <p>{product.blurb}</p>
 
+        <ul className="product-highlights">
+          <li>220 GSM {product.category === "design" ? "waffle knit" : "cotton-elastane rib"}</li>
+          <li>{product.fabric.zipHardware}</li>
+          <li>{product.fabric.fit.split("—")[0].trim()}</li>
+          <li>Packed in Surat · dispatch in 24–48 hrs</li>
+        </ul>
+
         <div className="product-trust-row" aria-label="Why buy here">
-          <span>COD available</span>
+          <span>Cash on delivery</span>
           <span>{site.exchangeWindowDays}-day exchange</span>
-          <span>Packed in Surat</span>
-          <span>Secure Razorpay pay</span>
+          <span>Free delivery on 3+</span>
+          <span>Razorpay secure</span>
         </div>
 
         <div className="product-color-row" aria-label="Available colours">
@@ -115,10 +122,14 @@ export function ProductDetailClient({
                 href={`/product/${item.slug}`}
                 className={item.slug === product.slug ? "is-active" : undefined}
                 aria-label={item.colors[0]?.name}
+                title={item.colors[0]?.name}
                 style={{ backgroundColor: item.colors[0]?.hex }}
               />
             ))}
           </div>
+          <p className="product-color-names">
+            {products.map((item) => item.colors[0]?.name).filter(Boolean).join(" · ")}
+          </p>
         </div>
 
         <label className="product-pincode">

@@ -47,6 +47,14 @@ export type ComboPreset = {
 export const UNIT_PRICE = 399;
 export const SIZES = ["S", "M", "L", "XL"] as const;
 
+function gallery(hero: string, extras: string[], closeups: string[] = []) {
+  return [...new Set([hero, ...extras, ...closeups])];
+}
+
+function lookbook(color: string, count: number) {
+  return Array.from({ length: count }, (_, index) => `/products/gallery/${color}-${String(index + 1).padStart(2, "0")}.jpg`);
+}
+
 const PLACEHOLDER_REVIEWS: ProductReview[] = [
   {
     id: "tmp-1",
@@ -106,6 +114,7 @@ export const products: Product[] = [
     name: "Nocturne Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Black_polo_shirt_displayed_2K_202608071858.jpeg",
+    detailImages: gallery("/products/Black_polo_shirt_displayed_2K_202608071858.jpeg", lookbook("nocturne", 5)),
     category: "solid",
     colors: [{ name: "Ink", hex: "#17171B" }],
     sizes: [...SIZES],
@@ -120,6 +129,7 @@ export const products: Product[] = [
     name: "Umber Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Brown_ribbed_polo_shirt_2K_202608071857.jpeg",
+    detailImages: gallery("/products/Brown_ribbed_polo_shirt_2K_202608071857.jpeg", lookbook("umber", 5)),
     category: "solid",
     colors: [{ name: "Umber", hex: "#674942" }],
     sizes: [...SIZES],
@@ -134,6 +144,7 @@ export const products: Product[] = [
     name: "Reed Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Green_polo_shirt_displayed_2K_202608071856.jpeg",
+    detailImages: gallery("/products/Green_polo_shirt_displayed_2K_202608071856.jpeg", lookbook("reed", 2)),
     category: "solid",
     colors: [{ name: "Reed", hex: "#9B9280" }],
     sizes: [...SIZES],
@@ -148,6 +159,7 @@ export const products: Product[] = [
     name: "Sage Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Green_polo_shirt_displayed_2K_202608071858.jpeg",
+    detailImages: gallery("/products/Green_polo_shirt_displayed_2K_202608071858.jpeg", lookbook("sage", 5)),
     category: "solid",
     colors: [{ name: "Sage", hex: "#B1B5A3" }],
     sizes: [...SIZES],
@@ -162,6 +174,7 @@ export const products: Product[] = [
     name: "Rose Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Pink_ribbed_polo_shirt_2K_202608071858.jpeg",
+    detailImages: gallery("/products/Pink_ribbed_polo_shirt_2K_202608071858.jpeg", lookbook("rose", 5)),
     category: "solid",
     colors: [{ name: "Dust Rose", hex: "#D6A1A7" }],
     sizes: [...SIZES],
@@ -176,6 +189,7 @@ export const products: Product[] = [
     name: "Silver Zip Polo",
     price: UNIT_PRICE,
     image: "/products/Ribbed_grey_polo_shirt_displayed_202608071857.jpeg",
+    detailImages: gallery("/products/Ribbed_grey_polo_shirt_displayed_202608071857.jpeg", lookbook("silver", 5)),
     category: "solid",
     colors: [{ name: "Silver", hex: "#A9ADAB" }],
     sizes: [...SIZES],
@@ -190,6 +204,7 @@ export const products: Product[] = [
     name: "Chalk Zip Polo",
     price: UNIT_PRICE,
     image: "/products/White_polo_shirt_flat_lay_202608071858.jpeg",
+    detailImages: gallery("/products/White_polo_shirt_flat_lay_202608071858.jpeg", lookbook("chalk", 5)),
     category: "solid",
     colors: [{ name: "Chalk", hex: "#F0EFEB" }],
     sizes: [...SIZES],
@@ -204,11 +219,11 @@ export const products: Product[] = [
     name: "Fern Waffle Zip Polo",
     price: UNIT_PRICE,
     image: "/products/new/fern-waffle-zip-polo.jpg",
-    detailImages: [
+    detailImages: gallery(
       "/products/new/fern-waffle-zip-polo.jpg",
-      "/products/new/fern-waffle-zip-polo-collar.jpg",
-      "/products/new/fern-waffle-zip-polo-rib.jpg",
-    ],
+      lookbook("fern", 5),
+      ["/products/new/fern-waffle-zip-polo-collar.jpg", "/products/new/fern-waffle-zip-polo-rib.jpg"],
+    ),
     category: "design",
     isNew: true,
     colors: [{ name: "Fern", hex: "#8B9278" }],
@@ -224,11 +239,11 @@ export const products: Product[] = [
     name: "Harbour Waffle Zip Polo",
     price: UNIT_PRICE,
     image: "/products/new/harbour-waffle-zip-polo.jpg",
-    detailImages: [
+    detailImages: gallery(
       "/products/new/harbour-waffle-zip-polo.jpg",
-      "/products/new/harbour-waffle-zip-polo-collar.jpg",
-      "/products/new/harbour-waffle-zip-polo-rib.jpg",
-    ],
+      lookbook("harbour", 5),
+      ["/products/new/harbour-waffle-zip-polo-collar.jpg", "/products/new/harbour-waffle-zip-polo-rib.jpg"],
+    ),
     category: "design",
     isNew: true,
     colors: [{ name: "Harbour", hex: "#1B2433" }],
@@ -244,11 +259,11 @@ export const products: Product[] = [
     name: "Slate Waffle Zip Polo",
     price: UNIT_PRICE,
     image: "/products/new/slate-waffle-zip-polo.jpg",
-    detailImages: [
+    detailImages: gallery(
       "/products/new/slate-waffle-zip-polo.jpg",
-      "/products/new/slate-waffle-zip-polo-collar.jpg",
-      "/products/new/slate-waffle-zip-polo-rib.jpg",
-    ],
+      lookbook("slate", 5),
+      ["/products/new/slate-waffle-zip-polo-collar.jpg", "/products/new/slate-waffle-zip-polo-rib.jpg"],
+    ),
     category: "design",
     isNew: true,
     colors: [{ name: "Slate", hex: "#6F7478" }],
@@ -264,11 +279,11 @@ export const products: Product[] = [
     name: "Porcelain Waffle Zip Polo",
     price: UNIT_PRICE,
     image: "/products/new/porcelain-waffle-zip-polo.jpg",
-    detailImages: [
+    detailImages: gallery(
       "/products/new/porcelain-waffle-zip-polo.jpg",
-      "/products/new/porcelain-waffle-zip-polo-collar.jpg",
-      "/products/new/porcelain-waffle-zip-polo-rib.jpg",
-    ],
+      lookbook("porcelain", 5),
+      ["/products/new/porcelain-waffle-zip-polo-collar.jpg", "/products/new/porcelain-waffle-zip-polo-rib.jpg"],
+    ),
     category: "design",
     isNew: true,
     colors: [{ name: "Porcelain", hex: "#F4F4F2" }],

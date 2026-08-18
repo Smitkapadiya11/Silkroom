@@ -7,7 +7,7 @@ export function FloatingWhatsApp() {
   const pathname = usePathname();
   const href = whatsappUrl(orderBrowseMessage());
 
-  if (!href || pathname.startsWith("/checkout")) return null;
+  if (!href || pathname.startsWith("/checkout") || pathname.startsWith("/product/")) return null;
 
   return (
     <a
