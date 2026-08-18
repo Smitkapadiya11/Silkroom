@@ -33,7 +33,7 @@ export default function OrderConfirmedPage() {
         <li>
           We typically confirm within a few hours during {site.responseHours}.
         </li>
-        <li>We&apos;ll verify stock, COD availability, and your pincode.</li>
+        <li>We&apos;ll verify stock and your pincode, then dispatch from Surat.</li>
         <li>Once shipped, tracking goes to the same WhatsApp thread.</li>
       </ol>
 

@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     template: "%s — Silk Room",
   },
   description:
-    "Ribbed zip polos from Surat. ₹399 each — 3 for ₹799, 5 for ₹1,299. Prepaid or COD.",
+    "Ribbed zip polos from Surat. ₹399 each — 3 for ₹799, 5 for ₹1,299. Secure prepaid checkout.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Silk Room — 3 FOR ₹799",

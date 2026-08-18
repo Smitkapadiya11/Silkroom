@@ -16,14 +16,14 @@ const faqs = [
   ["What comes in the 3 for ₹799 offer?", "Add any three polos to cart — the discount applies automatically at checkout."],
   ["Can I choose different colours?", "Yes. Pick any three colours and sizes from the shop."],
   ["What size should I order?", "Use the size guide for measurements. The fit is relaxed regular, and exchanges are available within seven days."],
-  ["Is cash on delivery available?", "Yes. Cash on delivery is available across India."],
+  ["How do I pay?", "Secure prepaid checkout via Razorpay — UPI, cards, netbanking, and wallets."],
   ["How long does delivery take?", "Metro deliveries usually take 3–6 business days. Other locations can take 5–8 business days."],
   ["How do I start an exchange?", "Send us your order details on WhatsApp within seven days of delivery and we will help with the next step."],
 ] as const;
 
 const deliverySteps = [
   ["01", "Pick", "Choose your colour and size from the shop."],
-  ["02", "Order", "Add to cart or buy now. Pay with UPI/card or choose COD."],
+  ["02", "Order", "Add to cart or buy now. Pay securely with UPI, card, or netbanking."],
   ["03", "Dispatch", "We pack from Surat in 24–48 hours after confirmation."],
   ["04", "Delivered", "Metro 3–6 days with tracking. Wrong size? 7-day easy exchange."],
 ] as const;
@@ -72,7 +72,7 @@ export function V2Landing({
             </h1>
             <p className="v2-hero-lede">
               Ribbed zip polos with a real price. ₹399 each, or three colours for ₹799.
-              Pay by UPI or cash on delivery.
+              Pay securely with UPI, card, or netbanking.
             </p>
             <div className="v2-hero-actions">
               <Link className="v2-button v2-button--flame" href="/shop">
@@ -93,7 +93,7 @@ export function V2Landing({
         <section className="v2-section v2-proof" aria-label="Why people order">
           <ul>
             <li><strong>₹799</strong><span>for any 3 polos</span></li>
-            <li><strong>COD</strong><span>pay at your door</span></li>
+            <li><strong>Secure</strong><span>Razorpay checkout</span></li>
             <li><strong>7 days</strong><span>easy size exchange</span></li>
             <li><strong>24–48 hrs</strong><span>pack from Surat</span></li>
           </ul>

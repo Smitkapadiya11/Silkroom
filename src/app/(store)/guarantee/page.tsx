@@ -8,7 +8,7 @@ import { formatInr } from "@/lib/pricing";
 export const metadata = createPageMetadata({
   title: "Our guarantee",
   description:
-    "Silk Room quality promise — honest fabric, Made in India, COD, and a 7-day exchange.",
+    "Silk Room quality promise — honest fabric, Made in India, secure checkout, and a 7-day exchange.",
   path: "/guarantee",
 });
 
@@ -35,13 +35,9 @@ export default async function GuaranteePage() {
       <section aria-labelledby="pay-title">
         <h2 id="pay-title">Payment you can trust</h2>
         <ul className="policy-list">
-          <li>
-            {site.codAvailable
-              ? "Cash on delivery on most serviceable pincodes — confirmed on WhatsApp."
-              : "Payment options confirmed on WhatsApp before dispatch."}
-          </li>
-          <li>UPI / bank transfer when you prefer prepaid.</li>
-          <li>Razorpay checkout when online payment is enabled on the cart.</li>
+          <li>Secure prepaid checkout via Razorpay — UPI, cards, netbanking, and wallets.</li>
+          <li>256-bit encryption. Your card and UPI details never touch our servers.</li>
+          <li>Instant order confirmation once payment succeeds.</li>
         </ul>
       </section>
 

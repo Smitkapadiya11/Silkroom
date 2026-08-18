@@ -41,11 +41,11 @@ export function StoreFooter() {
   return (
     <footer className="store-footer">
       <div className="store-footer-trust">
-        <p>Cash on delivery</p>
+        <p>Razorpay secure checkout</p>
         <p>UPI · Cards · Netbanking</p>
         <p>Packed in Surat</p>
         <p>{site.exchangeWindowDays}-day size exchange</p>
-        <p>Razorpay secure checkout</p>
+        <p>256-bit encrypted payment</p>
       </div>
       <div className="store-footer-grid">
         <div>
@@ -90,7 +90,7 @@ export function StoreFooter() {
         </details>
       </div>
       <p className="store-footer-legal">
-        Prepaid or COD · GST invoice on request · © {new Date().getFullYear()} Silk Room, Surat
+        Secure prepaid checkout · GST invoice on request · © {new Date().getFullYear()} Silk Room, Surat
       </p>
     </footer>
   );

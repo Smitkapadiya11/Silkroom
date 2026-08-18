@@ -20,7 +20,7 @@ export const site = {
   instagramFollowers: null, // TODO: Replace with live follower count, e.g. "2.4K".
   address: "Surat, Gujarat, India", // TODO: Replace with full business address for footer/contact.
   responseHours: "Mon–Sat, 10am–7pm IST",
-  codAvailable: true,
+  prepaidOnly: true,
   exchangeWindowDays: 7,
   freeShippingThreshold: 799, // Free delivery from the 3-polo combo tier.
 };

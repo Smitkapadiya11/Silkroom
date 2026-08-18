@@ -19,7 +19,7 @@ export const fallbackStoreSettings = {
   packageWidthCm: 25,
   packageHeightCm: 4,
   announcementEnabled: true,
-  announcementText: "3 polos ₹799 · 5 for ₹1,299 · Free delivery over ₹799 · COD available",
+  announcementText: "3 polos ₹799 · 5 for ₹1,299 · Free delivery over ₹799 · Secure prepaid checkout",
   updatedAt: null as Date | null,
 };
 

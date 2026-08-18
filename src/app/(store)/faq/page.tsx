@@ -3,7 +3,7 @@ import { createPageMetadata, faqJsonLd } from "@/lib/metadata";
 export const metadata = createPageMetadata({
   title: "FAQ",
   description:
-    "Fabric, fit, wash care, COD, exchanges, delivery, and order tracking for Silk Room polos.",
+    "Fabric, fit, wash care, secure checkout, exchanges, delivery, and order tracking for Silk Room polos.",
   path: "/faq",
 });
 
@@ -33,9 +33,9 @@ const faqs = [
     answer: "Yes. Any polos in the catalog count toward combo pricing.",
   },
   {
-    question: "Do you offer COD?",
+    question: "How do I pay?",
     answer:
-      "Yes on most serviceable pincodes. We confirm COD when you place the order on WhatsApp.",
+      "Secure prepaid checkout via Razorpay — UPI, Visa, Mastercard, RuPay, netbanking, and wallets. Your payment details never touch our servers.",
   },
   {
     question: "How long is delivery?",
@@ -72,7 +72,7 @@ const faqs = [
   {
     question: "Is there a quality guarantee?",
     answer:
-      "Yes — Made in India construction, COD on most pincodes, and a 7-day exchange. See Our guarantee for the full promise.",
+      "Yes — Made in India construction, secure Razorpay checkout, and a 7-day exchange. See Our guarantee for the full promise.",
   },
 ];
 

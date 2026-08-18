@@ -82,7 +82,7 @@ export default function CartPage() {
           <div className="meesho-cart-bar meesho-cart-bar--page">
             <div>
               <span>{formatInr(pricing.total)}</span>
-              <small>incl. offers · COD available</small>
+              <small>incl. offers · secure checkout</small>
             </div>
             <Link href="/checkout" className="meesho-place-order">
               Place order

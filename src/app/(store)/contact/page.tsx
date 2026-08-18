@@ -57,7 +57,7 @@ export default async function ContactPage() {
         <h2 id="expect-title">What to expect</h2>
         <ul className="policy-list">
           <li>We confirm stock, size, and total before you pay.</li>
-          <li>COD and prepaid both available on most pincodes.</li>
+          <li>Secure prepaid checkout on every order — UPI, cards, and netbanking.</li>
           <li>Tracking is shared on the same WhatsApp thread when we ship.</li>
         </ul>
       </section>

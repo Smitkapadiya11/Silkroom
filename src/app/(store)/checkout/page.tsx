@@ -47,7 +47,7 @@ export default function CheckoutPage() {
       <header className="store-page-header">
         <p className="eyebrow">Checkout</p>
         <h1>Delivery address</h1>
-        <p>Cart total {formatInr(pricing.total)}. Payment is next — UPI, card, or cash on delivery.</p>
+        <p>Cart total {formatInr(pricing.total)}. Next step — secure payment via Razorpay.</p>
       </header>
 
       <form
@@ -96,8 +96,8 @@ export default function CheckoutPage() {
             <input {...form.register("pincode")} inputMode="numeric" autoComplete="postal-code" />
           </label>
         </div>
-        <button type="submit" className="v2-button v2-button--ink">
-          Continue to payment
+        <button type="submit" className="v2-button v2-button--ink checkout-continue-btn">
+          Continue to secure payment
         </button>
         <p className="pay-legal">Your address is used only to pack and ship this order from Surat.</p>
       </form>

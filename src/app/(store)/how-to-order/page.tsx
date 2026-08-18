@@ -4,13 +4,12 @@ import { WhatsAppOrderLink } from "@/components/store/WhatsAppOrderLink";
 import { orderBrowseMessage } from "@/lib/order";
 import { resolveStoreContact } from "@/lib/store-contact";
 import { getStoreSettings } from "@/lib/store-settings";
-import { site } from "@/lib/site";
 import { formatInr } from "@/lib/pricing";
 
 export const metadata = createPageMetadata({
   title: "How to order",
   description:
-    "How to buy Silk Room polos — cart, checkout, COD, and combo pricing.",
+    "How to buy Silk Room polos — cart, secure checkout, and combo pricing.",
   path: "/how-to-order",
 });
 
@@ -38,8 +37,8 @@ export default async function HowToOrderPage() {
           The cart shows how many more you need for the offer.
         </li>
         <li>
-          <strong>Checkout online.</strong> Enter your address, then pay with UPI/card or
-          choose COD ({site.codAvailable ? "available on most pincodes" : "where offered"}).
+          <strong>Checkout online.</strong> Enter your address, then pay securely with UPI,
+          card, or netbanking via Razorpay.
         </li>
         <li>
           <strong>Track your order.</strong> Use the order number on{" "}

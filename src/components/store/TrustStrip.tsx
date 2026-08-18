@@ -11,12 +11,16 @@ function TrustIcon({ children }: { children: React.ReactNode }) {
 
 const items = [
   {
-    href: "/how-to-order",
-    label: "COD available",
+    href: "/checkout/payment",
+    label: "Secure prepaid checkout",
     icon: (
       <TrustIcon>
-        <path d="M4 7h16v10H4z" fill="none" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M8 11h8" stroke="currentColor" strokeWidth="1.5" />
+        <path
+          d="M12 3 5 6v6c0 4.2 3 7.9 7 9 4-1.1 7-4.8 7-9V6l-7-3Z"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
       </TrustIcon>
     ),
   },

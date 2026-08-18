@@ -107,7 +107,7 @@ export function ProductDetailClient({
         </ul>
 
         <div className="product-trust-row" aria-label="Why buy here">
-          <span>Cash on delivery</span>
+          <span>Secure prepaid</span>
           <span>{site.exchangeWindowDays}-day exchange</span>
           <span>Free delivery on 3+</span>
           <span>Razorpay secure</span>
@@ -236,7 +236,7 @@ export function ProductDetailClient({
             <ol>
               <li>Pick your colour and size.</li>
               <li>Add to cart, or tap Buy now.</li>
-              <li>Enter your address. Pay with UPI/card or choose COD.</li>
+              <li>Enter your address. Pay securely with UPI, card, or netbanking.</li>
               <li>We pack from Surat in 24–48 hours after confirmation.</li>
             </ol>
           </details>

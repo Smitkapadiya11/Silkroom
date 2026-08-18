@@ -55,12 +55,11 @@ export default function ShippingReturnsPage() {
         </ul>
       </section>
 
-      <section aria-labelledby="cod-title">
-        <h2 id="cod-title">Cash on delivery</h2>
+      <section aria-labelledby="payment-title">
+        <h2 id="payment-title">Secure payment</h2>
         <p>
-          {site.codAvailable
-            ? "COD is available on most pincodes. We'll confirm when you order on WhatsApp."
-            : "COD availability varies by pincode — ask us before ordering."}
+          All orders are prepaid via Razorpay — UPI, Visa, Mastercard, RuPay, netbanking, and
+          wallets. Payment is encrypted end-to-end. GST invoice available on request.
         </p>
       </section>
 

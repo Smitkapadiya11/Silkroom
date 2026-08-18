@@ -144,7 +144,7 @@ export const storeSettings = pgTable("store_settings", {
   announcementEnabled: boolean("announcement_enabled").notNull().default(true),
   announcementText: text("announcement_text")
     .notNull()
-    .default("3 polos ₹799 · 5 for ₹1,299 · Free delivery over ₹799 · COD available"),
+    .default("3 polos ₹799 · 5 for ₹1,299 · Free delivery over ₹799 · Secure prepaid checkout"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

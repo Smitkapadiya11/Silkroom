@@ -125,7 +125,7 @@ export function buildWhatsAppOrderMessage(
     `${details.address}`,
     `${details.city}, ${details.state} — ${details.pincode}`,
     "",
-    "Please confirm availability and payment (COD/UPI). Thank you.",
+    "Please confirm availability. Payment via secure Razorpay checkout. Thank you.",
   ].join("\n");
 }
 

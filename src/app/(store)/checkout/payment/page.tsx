@@ -3,14 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckoutStepper } from "@/components/store/CheckoutStepper";
+import { PrepaidTrustBar } from "@/components/store/PrepaidTrustBar";
 import { useCart } from "@/context/CartProvider";
-import {
-  CHECKOUT_ADDRESS_KEY,
-  COD_FEE_INR,
-  type CheckoutAddress,
-} from "@/lib/checkout-shared";
+import { CHECKOUT_ADDRESS_KEY, type CheckoutAddress } from "@/lib/checkout-shared";
 import { formatInr } from "@/lib/pricing";
 
 function loadRazorpay() {
@@ -31,8 +28,7 @@ export default function PaymentPage() {
   const router = useRouter();
   const { items, pricing, clearCart } = useCart();
   const [address, setAddress] = useState<CheckoutAddress | null>(null);
-  const [method, setMethod] = useState<"prepaid" | "cod">("prepaid");
-  const [busy, setBusy] = useState<"prepaid" | "cod" | null>(null);
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -45,9 +41,7 @@ export default function PaymentPage() {
   }, []);
 
   const prepaidTotal = pricing.total;
-  const codTotal = useMemo(() => pricing.total + COD_FEE_INR, [pricing.total]);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const payTotal = method === "cod" ? codTotal : prepaidTotal;
 
   if (items.length === 0) {
     return (
@@ -79,7 +73,7 @@ export default function PaymentPage() {
   }));
 
   async function payPrepaid() {
-    setBusy("prepaid");
+    setBusy(true);
     setError(null);
     try {
       const ready = await loadRazorpay();
@@ -140,97 +134,63 @@ export default function PaymentPage() {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Payment failed.");
     } finally {
-      setBusy(null);
-    }
-  }
-
-  async function payCod() {
-    setBusy("cod");
-    setError(null);
-    try {
-      const response = await fetch("/api/checkout/cod", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: payloadItems, address }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error ?? "Could not place COD order.");
-      clearCart();
-      window.sessionStorage.removeItem(CHECKOUT_ADDRESS_KEY);
-      router.push(`/order/${data.orderNumber}`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "COD failed.");
-    } finally {
-      setBusy(null);
+      setBusy(false);
     }
   }
 
   return (
-    <article className="checkout-secure">
+    <article className="checkout-secure checkout-secure--premium">
       <CheckoutStepper step={3} />
-      <header className="store-page-header">
+      <header className="store-page-header checkout-secure-header">
         <p className="eyebrow">Secure checkout</p>
-        <h1>Choose payment</h1>
-        <p>Pay online and save the COD fee, or pay cash when the parcel arrives.</p>
+        <h1>Complete your order</h1>
+        <p>
+          Pay once, securely — powered by Razorpay. Your card and UPI details never touch our
+          servers.
+        </p>
       </header>
+
+      <PrepaidTrustBar className="prepaid-trust-bar--checkout" />
 
       <div className="checkout-secure-grid">
         <section className="checkout-secure-main">
-          <fieldset className="pay-methods" disabled={busy !== null}>
-            <legend>Payment method</legend>
-            <label className={`pay-method${method === "prepaid" ? " is-selected" : ""}`}>
-              <input
-                type="radio"
-                name="pay"
-                checked={method === "prepaid"}
-                onChange={() => setMethod("prepaid")}
-              />
-              <span>
-                <strong>Pay now · UPI / Card / Netbanking</strong>
-                <em>Recommended · Razorpay secure checkout</em>
-              </span>
-              <b>{formatInr(prepaidTotal)}</b>
-            </label>
-            <label className={`pay-method${method === "cod" ? " is-selected" : ""}`}>
-              <input type="radio" name="pay" checked={method === "cod"} onChange={() => setMethod("cod")} />
-              <span>
-                <strong>Cash on delivery</strong>
-                <em>Pay at your door · {formatInr(COD_FEE_INR)} handling fee</em>
-              </span>
-              <b>{formatInr(codTotal)}</b>
-            </label>
-          </fieldset>
-
-          <div className="pay-trust-grid" aria-label="Why this checkout is safe">
-            <p>Razorpay encrypted pay</p>
-            <p>UPI · Cards · Netbanking</p>
-            <p>7-day size exchange</p>
-            <p>Packed in Surat</p>
+          <div className="pay-premium-card" aria-label="Payment method">
+            <div className="pay-premium-badge">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+                <path
+                  d="M12 3 5 6v6c0 4.2 3 7.9 7 9 4-1.1 7-4.8 7-9V6l-7-3Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                />
+              </svg>
+              Razorpay secure payment
+            </div>
+            <h2>Pay {formatInr(prepaidTotal)}</h2>
+            <p className="pay-premium-lede">
+              UPI · Visa · Mastercard · RuPay · Netbanking · Wallets
+            </p>
+            <ul className="pay-premium-features">
+              <li>Instant order confirmation</li>
+              <li>Bank-grade encryption</li>
+              <li>Dispatch from Surat in 24–48 hours</li>
+              <li>{itemCount} item{itemCount === 1 ? "" : "s"} in this order</li>
+            </ul>
           </div>
 
           {error ? <p className="checkout-error">{error}</p> : null}
 
-          <button
-            type="button"
-            className="pay-cta"
-            disabled={busy !== null}
-            onClick={() => (method === "prepaid" ? payPrepaid() : payCod())}
-          >
-            {busy
-              ? busy === "prepaid"
-                ? "Opening Razorpay…"
-                : "Placing COD order…"
-              : method === "prepaid"
-                ? `Pay ${formatInr(payTotal)} securely`
-                : `Place COD order · ${formatInr(payTotal)}`}
+          <button type="button" className="pay-cta pay-cta--premium" disabled={busy} onClick={payPrepaid}>
+            {busy ? "Opening secure checkout…" : `Pay ${formatInr(prepaidTotal)} securely`}
           </button>
           <p className="pay-legal">
             By placing this order you agree to our <Link href="/terms">terms</Link> and{" "}
-            <Link href="/shipping-returns">shipping & returns</Link>.
+            <Link href="/shipping-returns">shipping & returns</Link>. GST invoice available on
+            request.
           </p>
         </section>
 
-        <aside className="checkout-summary" aria-label="Order summary">
+        <aside className="checkout-summary checkout-summary--premium" aria-label="Order summary">
           <h2>Order summary</h2>
           <ul>
             {items.map((item) => (
@@ -266,15 +226,9 @@ export default function PaymentPage() {
                 <dd>Add more for 3 @ ₹799</dd>
               </div>
             )}
-            {method === "cod" ? (
-              <div>
-                <dt>COD fee</dt>
-                <dd>{formatInr(COD_FEE_INR)}</dd>
-              </div>
-            ) : null}
             <div className="is-total">
               <dt>To pay</dt>
-              <dd>{formatInr(payTotal)}</dd>
+              <dd>{formatInr(prepaidTotal)}</dd>
             </div>
           </dl>
           <p className="checkout-ship-to">

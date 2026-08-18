@@ -36,7 +36,7 @@ export default function OpenGraphImage() {
             3 FOR ₹799
           </div>
           <div style={{ marginTop: 24, fontSize: 32, color: "#6e6a62" }}>
-            ₹399 each · 5 for ₹1,299 · Prepaid or COD
+            ₹399 each · 5 for ₹1,299 · Secure prepaid checkout
           </div>
         </div>
         <div
