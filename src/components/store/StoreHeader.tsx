@@ -8,10 +8,8 @@ import { useStoreSettings } from "@/context/StoreSettingsProvider";
 
 const links = [
   { href: "/shop", label: "Shop" },
-  { href: "/shop#build-combo", label: "3 for ₹799" },
-  { href: "/track", label: "Track" },
+  { href: "/track", label: "Track order" },
   { href: "/size-guide", label: "Size guide" },
-  { href: "/shipping-returns", label: "Shipping" },
   { href: "/contact", label: "Help" },
 ];
 
@@ -74,8 +72,8 @@ export function MobileNav({
         </ul>
       </nav>
       <div className="mobile-nav-contact">
-        <Link className="mobile-nav-link" href="/shop#build-combo" onClick={onClose}>
-          Build 3 for ₹799
+        <Link className="mobile-nav-link" href="/shop" onClick={onClose}>
+          Shop all polos
         </Link>
         <a href={`tel:${contact.phoneTel}`}>{contact.phone}</a>
         <a
@@ -110,7 +108,7 @@ export function StoreHeader({ variant = "store" }: { variant?: "store" | "landin
           Silk Room
         </Link>
         <nav className="store-nav" aria-label="Primary">
-          {links.slice(0, 4).map((link) => (
+          {links.map((link) => (
             <Link key={link.href} href={link.href}>
               {link.label}
             </Link>
@@ -120,8 +118,8 @@ export function StoreHeader({ variant = "store" }: { variant?: "store" | "landin
           <a className="store-header-phone" href={`tel:${contact.phoneTel}`}>
             {contact.phone}
           </a>
-          <Link className="store-header-cta" href="/shop#build-combo">
-            3 for ₹799
+          <Link className="store-header-cta" href="/shop">
+            Shop now
           </Link>
           <button type="button" className="store-cart-button" onClick={openCart}>
             Cart

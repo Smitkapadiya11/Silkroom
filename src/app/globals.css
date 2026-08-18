@@ -3720,16 +3720,340 @@ a:focus-visible,
 }
 
 @media (max-width: 699px) {
-  .product-buy-row {
-    position: sticky;
-    z-index: 10;
-    bottom: max(0.5rem, env(safe-area-inset-bottom));
-    background: var(--paper);
-    padding-top: 0.5rem;
+  .product-buy-row--desktop {
+    display: none;
   }
 
-  .product-buy-button,
-  .product-buy-now {
-    flex: 1;
+  .meesho-product {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
   }
+
+  .meesho-cart-page {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 700px) {
+  .meesho-sticky-buy {
+    display: none;
+  }
+}
+
+/* Meesho-style commerce */
+.meesho-card {
+  position: relative;
+}
+
+.meesho-card-add {
+  position: absolute;
+  right: 0.45rem;
+  bottom: 0.45rem;
+  min-width: 3rem;
+  min-height: 2rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
+}
+
+.meesho-card--compact .store-product-meta {
+  font-size: 0.62rem;
+}
+
+.store-product-price-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.store-product-rating {
+  color: var(--ink);
+  font-size: 0.62rem;
+}
+
+.store-product-mrp {
+  color: var(--gold);
+  font-size: 0.58rem;
+}
+
+.size-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgb(0 0 0 / 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.size-sheet {
+  width: min(100%, 520px);
+  max-height: 85dvh;
+  overflow: auto;
+  border-radius: 1rem 1rem 0 0;
+  background: var(--paper);
+  padding: 0.75rem 1rem calc(1rem + env(safe-area-inset-bottom));
+}
+
+.size-sheet-handle {
+  width: 2.5rem;
+  height: 4px;
+  margin: 0 auto 0.75rem;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.size-sheet-head {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 0.75rem;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+.size-sheet-thumb {
+  position: relative;
+  width: 64px;
+  border: 1px solid var(--line);
+}
+
+.size-sheet-name {
+  margin: 0;
+  font-weight: 600;
+}
+
+.size-sheet-price {
+  margin: 0.15rem 0 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.size-sheet-view {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  text-decoration: underline;
+}
+
+.size-sheet-close {
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  font-size: 1.4rem;
+}
+
+.size-sheet-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.size-sheet-sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.size-sheet-sizes button {
+  min-width: 3rem;
+  min-height: 2.75rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.size-sheet-sizes button.is-active {
+  border-color: var(--peacock);
+  background: rgb(15 94 92 / 0.1);
+  color: var(--peacock);
+  font-weight: 700;
+}
+
+.size-sheet-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.size-sheet-add,
+.size-sheet-buy {
+  min-height: 48px;
+  border: 1px solid var(--ink);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.size-sheet-add {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.size-sheet-buy {
+  background: var(--peacock);
+  border-color: var(--peacock);
+  color: var(--paper);
+}
+
+.meesho-sticky-buy {
+  position: fixed;
+  z-index: 55;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.45rem;
+  align-items: center;
+  padding: 0.65rem max(0.75rem, env(safe-area-inset-right)) calc(0.65rem + env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left));
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  box-shadow: 0 -4px 20px rgb(0 0 0 / 0.08);
+}
+
+.meesho-sticky-buy-price {
+  display: grid;
+  gap: 0.1rem;
+  font-size: 0.72rem;
+}
+
+.meesho-sticky-buy-price strong {
+  font-size: 1.05rem;
+}
+
+.meesho-sticky-add,
+.meesho-sticky-buy-now {
+  min-height: 44px;
+  padding: 0 0.85rem;
+  border: 1px solid var(--ink);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.meesho-sticky-add {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.meesho-sticky-buy-now {
+  background: var(--peacock);
+  border-color: var(--peacock);
+  color: var(--paper);
+}
+
+.meesho-sticky-add:disabled,
+.meesho-sticky-buy-now:disabled {
+  opacity: 0.5;
+}
+
+.meesho-offer-badge {
+  display: inline-block;
+  margin: 0.35rem 0 0.75rem;
+  padding: 0.35rem 0.55rem;
+  background: rgb(15 94 92 / 0.1);
+  color: var(--peacock);
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.meesho-cart-summary {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: rgb(255 255 255 / 0.5);
+}
+
+.meesho-cart-summary p {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.35rem 0;
+}
+
+.meesho-cart-line {
+  align-items: flex-start;
+}
+
+.meesho-cart-line .cart-line-price {
+  margin: 0.15rem 0;
+  font-weight: 700;
+}
+
+.cart-line-remove {
+  margin-left: 0.35rem;
+  color: var(--flame);
+}
+
+.meesho-cart-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.meesho-cart-bar--drawer {
+  margin-top: auto;
+}
+
+.meesho-cart-bar--page {
+  position: fixed;
+  z-index: 40;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  box-shadow: 0 -4px 20px rgb(0 0 0 / 0.08);
+}
+
+.meesho-cart-bar > div {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.meesho-cart-bar span {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.meesho-cart-bar small {
+  font-size: 0.65rem;
+  color: var(--gold);
+}
+
+.meesho-place-order {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.25rem;
+  background: var(--peacock);
+  border: 1px solid var(--peacock);
+  color: var(--paper);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.meesho-cart-drawer {
+  display: flex;
+  flex-direction: column;
+}
+
+.v2-shop-preview .store-grid {
+  margin-bottom: 1.25rem;
 }

@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ProductGallery } from "@/components/store/ProductGallery";
 import { ProductReviews } from "@/components/store/ProductReviews";
 import { ProductCard } from "@/components/store/ProductCard";
 import { useCart } from "@/context/CartProvider";
 import { useStoreSettings } from "@/context/StoreSettingsProvider";
-import { formatInr, calculateCartPricing } from "@/lib/pricing";
+import { formatInr } from "@/lib/pricing";
 import { products, SIZES, type Product } from "@/lib/products";
 import { site } from "@/lib/site";
 
@@ -22,8 +22,8 @@ export function ProductDetailClient({
   inventoryMap?: Record<string, number>;
 }) {
   const router = useRouter();
-  const { addProduct, items } = useCart();
-  const { contact, combo3PriceInr } = useStoreSettings();
+  const { addProduct } = useCart();
+  const { contact, combo3PriceInr, unitPriceInr } = useStoreSettings();
   const [size, setSize] = useState<string>("M");
   const [quantity, setQuantity] = useState(1);
   const [sizeChartOpen, setSizeChartOpen] = useState(false);
@@ -37,21 +37,7 @@ export function ProductDetailClient({
       ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
       : 0;
 
-  const upsell = useMemo(() => {
-    const lines = [
-      ...items.map((item) => ({
-        slug: item.slug,
-        price: item.price,
-        quantity: item.quantity,
-      })),
-      { slug: product.slug, price: product.price, quantity },
-    ];
-    const pricing = calculateCartPricing(lines);
-    if (pricing.nextRule && pricing.itemsToNext > 0) {
-      return `Add ${pricing.itemsToNext} more to unlock ${pricing.nextRule.blurb}`;
-    }
-    return pricing.rule?.blurb ?? `₹399 each · 3 for ${formatInr(combo3PriceInr)} saves more`;
-  }, [items, product, quantity, combo3PriceInr]);
+  const lineTotal = product.price * quantity;
 
   useEffect(() => {
     if (!sizeChartOpen) return;
@@ -94,7 +80,7 @@ export function ProductDetailClient({
   };
 
   return (
-    <article className="product-detail">
+    <article className="product-detail meesho-product">
       <ProductGallery product={product} />
       <div className="product-detail-copy">
         <p className="eyebrow">Silk Room · {product.category === "design" ? "New design" : "Solid"}</p>
@@ -104,12 +90,14 @@ export function ProductDetailClient({
             {rating.toFixed(1)} ★ · {product.reviews.length} reviews · Verified buyers
           </p>
         ) : null}
-        <p className="product-detail-price">
+        <p className="product-detail-price meesho-product-price">
           {formatInr(product.price)}
-          <span>MRP for one polo</span>
+          {quantity > 1 ? <span>{formatInr(lineTotal)} for {quantity}</span> : null}
+        </p>
+        <p className="meesho-offer-badge">
+          {formatInr(unitPriceInr)} each · 3 for {formatInr(combo3PriceInr)} · COD available
         </p>
         <p>{product.blurb}</p>
-        <p className="store-product-upsell">{upsell}</p>
 
         <div className="product-trust-row" aria-label="Why buy here">
           <span>COD available</span>
@@ -186,14 +174,14 @@ export function ProductDetailClient({
           </button>
         </div>
 
-        <div className="product-buy-row">
+        <div className="product-buy-row product-buy-row--desktop">
           <button
             type="button"
             className="button button-primary product-buy-button"
             onClick={() => addToCart(true)}
             disabled={soldOut}
           >
-            {soldOut ? "Sold out in this size" : `Add to cart · ${formatInr(product.price * quantity)}`}
+            {soldOut ? "Sold out" : "Add to cart"}
           </button>
           <button
             type="button"
@@ -207,10 +195,6 @@ export function ProductDetailClient({
             Buy now
           </button>
         </div>
-        <p className="product-buy-hint">
-          After Add to cart you can still change size. Buy now takes you to address and payment.
-          WhatsApp is available if you want a person to help.
-        </p>
 
         <dl className="product-specs">
           <div>
@@ -337,11 +321,37 @@ export function ProductDetailClient({
           <h2 id="related-title">More colours from the room</h2>
           <div className="product-related-rail">
             {related.map((item) => (
-              <ProductCard key={item.slug} product={item} />
+              <ProductCard key={item.slug} product={item} compact />
             ))}
           </div>
         </section>
       ) : null}
+
+      <div className="meesho-sticky-buy" aria-label="Buy options">
+        <div className="meesho-sticky-buy-price">
+          <strong>{formatInr(lineTotal)}</strong>
+          <span>Size {size} · Qty {quantity}</span>
+        </div>
+        <button
+          type="button"
+          className="meesho-sticky-add"
+          onClick={() => addToCart(true)}
+          disabled={soldOut}
+        >
+          Add to cart
+        </button>
+        <button
+          type="button"
+          className="meesho-sticky-buy-now"
+          onClick={() => {
+            addToCart(false);
+            router.push("/checkout");
+          }}
+          disabled={soldOut}
+        >
+          Buy now
+        </button>
+      </div>
     </article>
   );
 }

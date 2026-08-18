@@ -10,7 +10,6 @@ const footerColumns = [
     links: [
       { href: "/shop", label: "All polos" },
       { href: "/shop?filter=new", label: "New designs" },
-      { href: "/shop#build-combo", label: "3 for ₹799 combo" },
       { href: "/track", label: "Track order" },
     ],
   },

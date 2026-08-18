@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ComboBuilder } from "@/components/store/ComboBuilder";
 import { ComboOfferBar } from "@/components/store/ComboOfferBar";
+import { ProductCard } from "@/components/store/ProductCard";
 import { UgcVideo } from "@/components/store/UgcVideo";
 import { StoreFooter } from "@/components/store/StoreFooter";
 import { StoreHeader } from "@/components/store/StoreHeader";
@@ -13,8 +13,8 @@ import type { Product } from "@/lib/products";
 import { site } from "@/lib/site";
 
 const faqs = [
-  ["What comes in the 3 for ₹799 offer?", "Choose any three polos from the colour edit, select a size, then add the bundle to your cart."],
-  ["Can I choose different colours?", "Yes. The combo builder is made for mixing colours across the edit."],
+  ["What comes in the 3 for ₹799 offer?", "Add any three polos to cart — the discount applies automatically at checkout."],
+  ["Can I choose different colours?", "Yes. Pick any three colours and sizes from the shop."],
   ["What size should I order?", "Use the size guide for measurements. The fit is relaxed regular, and exchanges are available within seven days."],
   ["Is cash on delivery available?", "Yes. Cash on delivery is available across India."],
   ["How long does delivery take?", "Metro deliveries usually take 3–6 business days. Other locations can take 5–8 business days."],
@@ -22,8 +22,8 @@ const faqs = [
 ] as const;
 
 const deliverySteps = [
-  ["01", "Pick", "Build any 3 or 5 colours in the combo builder, or shop singles."],
-  ["02", "Order", "Pay securely with Razorpay or choose COD (+₹49). WhatsApp stays available."],
+  ["01", "Pick", "Choose your colour and size from the shop."],
+  ["02", "Order", "Add to cart or buy now. Pay with UPI/card or choose COD."],
   ["03", "Dispatch", "We pack from Surat in 24–48 hours after confirmation."],
   ["04", "Delivered", "Metro 3–6 days with tracking. Wrong size? 7-day easy exchange."],
 ] as const;
@@ -75,11 +75,11 @@ export function V2Landing({
               Pay by UPI or cash on delivery.
             </p>
             <div className="v2-hero-actions">
-              <a className="v2-button v2-button--flame" href="#build">
-                Build your combo
-              </a>
-              <Link className="v2-button v2-button--ghost" href="/shop#build-combo">
-                Shop all colours
+              <Link className="v2-button v2-button--flame" href="/shop">
+                Shop now
+              </Link>
+              <Link className="v2-button v2-button--ghost" href="/shop">
+                Browse all colours
               </Link>
             </div>
           </div>
@@ -99,13 +99,20 @@ export function V2Landing({
           </ul>
         </section>
 
-        <section id="build" className="v2-section v2-builder-section" aria-labelledby="build-title">
+        <section id="shop-preview" className="v2-section v2-shop-preview" aria-labelledby="shop-preview-title">
           <div className="v2-section-heading">
-            <p className="v2-kicker">Build the edit</p>
-            <h2 id="build-title">Your colours. Your three.</h2>
-            <p>One fit, one price, a wardrobe that works harder.</p>
+            <p className="v2-kicker">Shop</p>
+            <h2 id="shop-preview-title">Tap Add, pick size, done.</h2>
+            <p>Simple like any app you already use. Combo savings apply automatically in cart.</p>
           </div>
-          <ComboBuilder products={products} />
+          <div className="store-grid meesho-grid">
+            {products.slice(0, 4).map((product, index) => (
+              <ProductCard key={product.slug} product={product} priority={index < 2} />
+            ))}
+          </div>
+          <Link className="v2-button v2-button--ghost" href="/shop">
+            View all polos
+          </Link>
         </section>
 
         <section className="v2-section v2-ugc" aria-labelledby="ugc-title">
@@ -130,9 +137,9 @@ export function V2Landing({
           <p className="v2-ugc-caption">
             Plays muted when you scroll into view. Tap unmute for sound.
           </p>
-          <a className="v2-button v2-button--ghost" href="#build">
-            Build your combo
-          </a>
+          <Link className="v2-button v2-button--ghost" href="/shop">
+            Shop now
+          </Link>
         </section>
 
         <section className="v2-section v2-product-3d" aria-labelledby="object-title">
@@ -235,7 +242,7 @@ export function V2Landing({
 
         <section className="v2-section v2-faq" aria-labelledby="faq-title">
           <p className="v2-kicker">Useful answers</p>
-          <h2 id="faq-title">Before you build.</h2>
+          <h2 id="faq-title">Before you order.</h2>
           <div>
             {faqs.map(([question, answer]) => (
               <details key={question}>
@@ -249,7 +256,9 @@ export function V2Landing({
         <section className="v2-final-cta" aria-labelledby="final-title">
           <p className="v2-kicker">The three-piece edit</p>
           <h2 id="final-title">Three colours. ₹799. Start with the one you reach for first.</h2>
-          <a className="v2-button v2-button--paper" href="#build">Build your combo <span aria-hidden="true">↑</span></a>
+          <Link className="v2-button v2-button--paper" href="/shop">
+            Shop all polos
+          </Link>
         </section>
       </main>
       <StoreFooter />
