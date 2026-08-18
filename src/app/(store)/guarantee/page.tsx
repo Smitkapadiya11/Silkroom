@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { createPageMetadata } from "@/lib/metadata";
+import { resolveStoreContact } from "@/lib/store-contact";
+import { getStoreSettings } from "@/lib/store-settings";
 import { site } from "@/lib/site";
 import { formatInr } from "@/lib/pricing";
 
@@ -10,7 +12,9 @@ export const metadata = createPageMetadata({
   path: "/guarantee",
 });
 
-export default function GuaranteePage() {
+export default async function GuaranteePage() {
+  const contact = resolveStoreContact(await getStoreSettings());
+
   return (
     <article className="policy-page">
       <header className="store-page-header">
@@ -64,9 +68,9 @@ export default function GuaranteePage() {
       <section aria-labelledby="people-title">
         <h2 id="people-title">A real person replies</h2>
         <p>
-          Orders and questions go to WhatsApp {site.whatsappDisplay} or{" "}
-          <a href={`mailto:${site.email}`}>{site.email}</a> during{" "}
-          {site.responseHours}. No bots — we confirm stock, size, and payment ourselves.
+          Orders and questions go to WhatsApp {contact.phone} or{" "}
+          <a href={`mailto:${contact.email}`}>{contact.email}</a> during{" "}
+          {contact.responseHours}. No bots — we confirm stock, size, and payment ourselves.
         </p>
       </section>
     </article>

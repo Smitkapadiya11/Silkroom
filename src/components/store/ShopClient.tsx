@@ -2,10 +2,13 @@
 
 import { useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ComboBuilder } from "@/components/store/ComboBuilder";
+import { ComboProgressBanner } from "@/components/store/ComboProgressBanner";
 import { ProductCard } from "@/components/store/ProductCard";
 import { TrustStrip } from "@/components/store/TrustStrip";
+import { useStoreSettings } from "@/context/StoreSettingsProvider";
 import { formatInr } from "@/lib/pricing";
-import { getAllColorNames, products, SIZES, type Product } from "@/lib/products";
+import { getAllColorNames, SIZES, type Product } from "@/lib/products";
 
 type ShopFilter = "all" | "new" | "design" | "solid";
 
@@ -13,6 +16,7 @@ export function ShopClient({ catalog }: { catalog: Product[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { combo3PriceInr, unitPriceInr } = useStoreSettings();
   const filter = (searchParams.get("filter") as ShopFilter | null) ?? "all";
   const color = searchParams.get("color") ?? "All";
   const size = searchParams.get("size") ?? "All";
@@ -51,15 +55,29 @@ export function ShopClient({ catalog }: { catalog: Product[] }) {
 
   return (
     <div className="shop-page">
-      <header className="store-page-header">
+      <header className="store-page-header shop-page-header">
         <p className="eyebrow">Shop</p>
         <h1>Every polo in the room</h1>
         <p>
-          {filtered.length} polo{filtered.length === 1 ? "" : "s"} · {formatInr(products[0]?.price ?? 399)} each ·
-          3 for ₹799
+          {filtered.length} polo{filtered.length === 1 ? "" : "s"} · {formatInr(unitPriceInr)} each ·
+          3 for {formatInr(combo3PriceInr)} — savings apply automatically in cart
         </p>
       </header>
+
+      <ComboProgressBanner />
       <TrustStrip />
+
+      <section id="build-combo" className="shop-combo-section" aria-labelledby="shop-combo-title">
+        <div className="shop-combo-intro">
+          <p className="eyebrow">Combo offer</p>
+          <h2 id="shop-combo-title">Pick any 3 colours — pay {formatInr(combo3PriceInr)}</h2>
+          <p>
+            Mix colours and sizes. Add singles from the grid below, or use the builder to lock your
+            combo before checkout.
+          </p>
+        </div>
+        <ComboBuilder products={catalog} />
+      </section>
 
       <div className="shop-filters" role="search">
         <div className="shop-filter-row" aria-label="Product type">

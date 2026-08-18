@@ -1,5 +1,6 @@
 import { createPageMetadata } from "@/lib/metadata";
-import { site } from "@/lib/site";
+import { resolveStoreContact } from "@/lib/store-contact";
+import { getStoreSettings } from "@/lib/store-settings";
 
 export const metadata = createPageMetadata({
   title: "Privacy policy",
@@ -7,7 +8,9 @@ export const metadata = createPageMetadata({
   path: "/privacy",
 });
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const contact = resolveStoreContact(await getStoreSettings());
+
   return (
     <article className="policy-page prose-page">
       <header className="store-page-header">
@@ -15,7 +18,7 @@ export default function PrivacyPage() {
       </header>
       <p>Last updated: August 2026</p>
       <p>
-        When you order on WhatsApp or email {site.email}, we collect your name, phone,
+        When you order online or email {contact.email}, we collect your name, phone,
         and delivery address to fulfil the order. We do not sell your data.
       </p>
       <p>

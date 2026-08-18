@@ -160,6 +160,16 @@
   color: var(--admin-ink);
 }
 
+.admin-success {
+  color: #0f5e5c;
+  font-size: 0.9rem;
+}
+
+.admin-error {
+  color: #b42318;
+  font-size: 0.9rem;
+}
+
 .admin-login {
   min-height: 100dvh;
   display: grid;

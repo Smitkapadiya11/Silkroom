@@ -78,7 +78,7 @@ export function V2Landing({
               <a className="v2-button v2-button--flame" href="#build">
                 Build your combo
               </a>
-              <Link className="v2-button v2-button--ghost" href="/shop">
+              <Link className="v2-button v2-button--ghost" href="/shop#build-combo">
                 Shop all colours
               </Link>
             </div>

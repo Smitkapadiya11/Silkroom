@@ -1,5 +1,6 @@
 import { createPageMetadata } from "@/lib/metadata";
-import { site } from "@/lib/site";
+import { resolveStoreContact } from "@/lib/store-contact";
+import { getStoreSettings } from "@/lib/store-settings";
 
 export const metadata = createPageMetadata({
   title: "About Silk Room",
@@ -8,7 +9,9 @@ export const metadata = createPageMetadata({
   path: "/about",
 });
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const contact = resolveStoreContact(await getStoreSettings());
+
   return (
     <article className="policy-page about-page">
       <header className="store-page-header">
@@ -31,8 +34,8 @@ export default function AboutPage() {
           </p>
           <p>
             If you have a question before ordering, reach us on WhatsApp or{" "}
-            <a href={`mailto:${site.email}`}>{site.email}</a>. A real person replies
-            during {site.responseHours}.
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>. A real person replies
+            during {contact.responseHours}.
           </p>
         </div>
       </div>

@@ -2,17 +2,22 @@ import Link from "next/link";
 import { createPageMetadata } from "@/lib/metadata";
 import { WhatsAppOrderLink } from "@/components/store/WhatsAppOrderLink";
 import { orderBrowseMessage } from "@/lib/order";
+import { resolveStoreContact } from "@/lib/store-contact";
+import { getStoreSettings } from "@/lib/store-settings";
 import { site } from "@/lib/site";
 import { formatInr } from "@/lib/pricing";
 
 export const metadata = createPageMetadata({
   title: "How to order",
   description:
-    "How to buy Silk Room polos — cart, WhatsApp checkout, COD, and combo pricing.",
+    "How to buy Silk Room polos — cart, checkout, COD, and combo pricing.",
   path: "/how-to-order",
 });
 
-export default function HowToOrderPage() {
+export default async function HowToOrderPage() {
+  const settings = await getStoreSettings();
+  const contact = resolveStoreContact(settings);
+
   return (
     <article className="policy-page">
       <header className="store-page-header">
@@ -24,22 +29,22 @@ export default function HowToOrderPage() {
       <ol className="policy-list how-to-order-steps">
         <li>
           <strong>Pick your polos.</strong> Browse{" "}
-          <Link href="/shop">Shop</Link> or ready{" "}
-          <Link href="/combos">Combos</Link>. Choose size on each product.
+          <Link href="/shop">Shop</Link> — use the combo builder or add singles from the
+          grid. Choose size on each product.
         </li>
         <li>
           <strong>Add to cart.</strong> Mix any colours — 3 polos for{" "}
-          {formatInr(799)}, 5 for {formatInr(1299)}. The cart applies the best tier
-          automatically.
+          {formatInr(settings.combo3PriceInr)}, 5 for {formatInr(settings.combo5PriceInr)}.
+          The cart shows how many more you need for the offer.
         </li>
         <li>
-          <strong>Checkout on WhatsApp.</strong> Open the cart and tap order. We confirm
-          stock, address, and payment (
-          {site.codAvailable ? "COD or prepaid" : "prepaid"}).
+          <strong>Checkout online.</strong> Enter your address, then pay with UPI/card or
+          choose COD ({site.codAvailable ? "available on most pincodes" : "where offered"}).
         </li>
         <li>
-          <strong>Track on the same chat.</strong> Tracking arrives when we ship. Reply
-          anytime during {site.responseHours}.
+          <strong>Track your order.</strong> Use the order number on{" "}
+          <Link href="/track">Track</Link> or message us on WhatsApp during{" "}
+          {contact.responseHours}.
         </li>
       </ol>
 
@@ -51,7 +56,7 @@ export default function HowToOrderPage() {
         </p>
         <p>
           <WhatsAppOrderLink message={orderBrowseMessage()}>
-            Message {site.whatsappDisplay}
+            Message {contact.phone}
           </WhatsAppOrderLink>
         </p>
       </section>

@@ -7,6 +7,7 @@ import { ProductGallery } from "@/components/store/ProductGallery";
 import { ProductReviews } from "@/components/store/ProductReviews";
 import { ProductCard } from "@/components/store/ProductCard";
 import { useCart } from "@/context/CartProvider";
+import { useStoreSettings } from "@/context/StoreSettingsProvider";
 import { formatInr, calculateCartPricing } from "@/lib/pricing";
 import { products, SIZES, type Product } from "@/lib/products";
 import { site } from "@/lib/site";
@@ -22,6 +23,7 @@ export function ProductDetailClient({
 }) {
   const router = useRouter();
   const { addProduct, items } = useCart();
+  const { contact, combo3PriceInr } = useStoreSettings();
   const [size, setSize] = useState<string>("M");
   const [quantity, setQuantity] = useState(1);
   const [sizeChartOpen, setSizeChartOpen] = useState(false);
@@ -48,8 +50,8 @@ export function ProductDetailClient({
     if (pricing.nextRule && pricing.itemsToNext > 0) {
       return `Add ${pricing.itemsToNext} more to unlock ${pricing.nextRule.blurb}`;
     }
-    return pricing.rule?.blurb ?? `₹399 each · 3 for ₹799 saves ₹398`;
-  }, [items, product, quantity]);
+    return pricing.rule?.blurb ?? `₹399 each · 3 for ${formatInr(combo3PriceInr)} saves more`;
+  }, [items, product, quantity, combo3PriceInr]);
 
   useEffect(() => {
     if (!sizeChartOpen) return;
@@ -255,7 +257,7 @@ export function ProductDetailClient({
             <summary>Shipping & returns</summary>
             <p>
               Free delivery above ₹799. {site.exchangeWindowDays}-day exchange on unworn polos with
-              tags intact. Message {site.phone} if the size is wrong.
+              tags intact. Message {contact.phone} if the size is wrong.
             </p>
           </details>
           <details>

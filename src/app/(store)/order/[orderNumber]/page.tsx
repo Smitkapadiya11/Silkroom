@@ -7,7 +7,8 @@ import { createPageMetadata } from "@/lib/metadata";
 import { hasOrderAccess } from "@/lib/order-access";
 import { formatInr } from "@/lib/pricing";
 import { whatsappUrl } from "@/lib/order";
-import { site } from "@/lib/site";
+import { resolveStoreContact } from "@/lib/store-contact";
+import { getStoreSettings } from "@/lib/store-settings";
 
 type Props = { params: Promise<{ orderNumber: string }> };
 
@@ -71,6 +72,7 @@ export default async function OrderPage({ params }: Props) {
   const wa = whatsappUrl(
     `Hello Silk Room, I placed order ${order.orderNumber}. Total ${formatInr(order.totalInr)}.`,
   );
+  const contact = resolveStoreContact(await getStoreSettings());
 
   return (
     <article className="policy-page checkout-page">
@@ -118,8 +120,8 @@ export default async function OrderPage({ params }: Props) {
             Message us about this order
           </a>
         ) : (
-          <a className="v2-button v2-button--ink" href={`mailto:${site.email}`}>
-            Email {site.email}
+          <a className="v2-button v2-button--ink" href={`mailto:${contact.email}`}>
+            Email {contact.email}
           </a>
         )}
       </p>

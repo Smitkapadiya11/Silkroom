@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { animate, createScope, stagger } from "animejs";
 import { useCart } from "@/context/CartProvider";
-import { site } from "@/lib/site";
+import { useStoreSettings } from "@/context/StoreSettingsProvider";
 
 const links = [
   { href: "/shop", label: "Shop" },
-  { href: "/combos", label: "Combos" },
+  { href: "/shop#build-combo", label: "3 for ₹799" },
   { href: "/track", label: "Track" },
   { href: "/size-guide", label: "Size guide" },
   { href: "/shipping-returns", label: "Shipping" },
@@ -23,6 +23,7 @@ export function MobileNav({
   onClose: () => void;
 }) {
   const root = useRef<HTMLDivElement>(null);
+  const { contact } = useStoreSettings();
 
   useEffect(() => {
     if (!open || !root.current) return;
@@ -73,11 +74,15 @@ export function MobileNav({
         </ul>
       </nav>
       <div className="mobile-nav-contact">
-        <Link className="mobile-nav-link" href="/combos" onClick={onClose}>
+        <Link className="mobile-nav-link" href="/shop#build-combo" onClick={onClose}>
           Build 3 for ₹799
         </Link>
-        <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
-        <a href={`https://wa.me/${site.phoneTel.replace("+", "")}`} target="_blank" rel="noreferrer">
+        <a href={`tel:${contact.phoneTel}`}>{contact.phone}</a>
+        <a
+          href={`https://wa.me/${contact.phoneTel.replace("+", "")}`}
+          target="_blank"
+          rel="noreferrer"
+        >
           WhatsApp us
         </a>
       </div>
@@ -89,6 +94,7 @@ export function StoreHeader({ variant = "store" }: { variant?: "store" | "landin
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { count, openCart } = useCart();
+  const { contact } = useStoreSettings();
 
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 8);
@@ -111,10 +117,10 @@ export function StoreHeader({ variant = "store" }: { variant?: "store" | "landin
           ))}
         </nav>
         <div className="store-header-actions">
-          <a className="store-header-phone" href={`tel:${site.phoneTel}`}>
-            {site.phone}
+          <a className="store-header-phone" href={`tel:${contact.phoneTel}`}>
+            {contact.phone}
           </a>
-          <Link className="store-header-cta" href="/combos">
+          <Link className="store-header-cta" href="/shop#build-combo">
             3 for ₹799
           </Link>
           <button type="button" className="store-cart-button" onClick={openCart}>

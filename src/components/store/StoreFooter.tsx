@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useStoreSettings } from "@/context/StoreSettingsProvider";
 import { site } from "@/lib/site";
 
 const footerColumns = [
@@ -7,7 +10,7 @@ const footerColumns = [
     links: [
       { href: "/shop", label: "All polos" },
       { href: "/shop?filter=new", label: "New designs" },
-      { href: "/combos", label: "3 for ₹799 combos" },
+      { href: "/shop#build-combo", label: "3 for ₹799 combo" },
       { href: "/track", label: "Track order" },
     ],
   },
@@ -34,6 +37,8 @@ const footerColumns = [
 ];
 
 export function StoreFooter() {
+  const { contact } = useStoreSettings();
+
   return (
     <footer className="store-footer">
       <div className="store-footer-trust">
@@ -68,16 +73,20 @@ export function StoreFooter() {
         <details className="store-footer-accordion" open>
           <summary className="store-footer-heading">Talk to us</summary>
           <address className="store-footer-contact">
-            <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
-            <a href={`mailto:${site.email}`}>{site.email}</a>
-            <a href={`https://wa.me/${site.phoneTel.replace("+", "")}`} target="_blank" rel="noreferrer">
+            <a href={`tel:${contact.phoneTel}`}>{contact.phone}</a>
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>
+            <a
+              href={`https://wa.me/${contact.phoneTel.replace("+", "")}`}
+              target="_blank"
+              rel="noreferrer"
+            >
               WhatsApp a person
             </a>
             <a href={site.instagramUrl} target="_blank" rel="noreferrer">
               {site.instagramHandle}
             </a>
-            <span>{site.address}</span>
-            <span>{site.responseHours}</span>
+            <span>{contact.address}</span>
+            <span>{contact.responseHours}</span>
           </address>
         </details>
       </div>

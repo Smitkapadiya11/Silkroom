@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Geist, JetBrains_Mono } from "next/font/google";
 import { CartProvider } from "@/context/CartProvider";
+import { StoreSettingsProvider } from "@/context/StoreSettingsProvider";
 import { organizationJsonLd } from "@/lib/metadata";
+import { resolveStoreContact } from "@/lib/store-contact";
+import { getStoreSettings } from "@/lib/store-settings";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -50,19 +53,34 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const settings = await getStoreSettings();
+  const contact = resolveStoreContact(settings);
+
   return (
     <html lang="en-IN" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationJsonLd()),
+            __html: JSON.stringify(organizationJsonLd(contact)),
           }}
         />
-        <CartProvider>{children}</CartProvider>
+        <StoreSettingsProvider
+          value={{
+            contact,
+            announcementEnabled: Boolean(settings.announcementEnabled),
+            announcementText: String(settings.announcementText ?? ""),
+            combo3PriceInr: Number(settings.combo3PriceInr),
+            combo5PriceInr: Number(settings.combo5PriceInr),
+            unitPriceInr: Number(settings.unitPriceInr),
+            freeDeliveryThresholdInr: Number(settings.freeDeliveryThresholdInr),
+          }}
+        >
+          <CartProvider>{children}</CartProvider>
+        </StoreSettingsProvider>
       </body>
     </html>
   );

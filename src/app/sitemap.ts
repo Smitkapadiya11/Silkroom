@@ -4,7 +4,6 @@ import { site } from "@/lib/site";
 
 const staticRoutes = [
   "/shop",
-  "/combos",
   "/cart",
   "/checkout",
   "/track",

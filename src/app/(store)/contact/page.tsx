@@ -1,6 +1,8 @@
 import { createPageMetadata } from "@/lib/metadata";
 import { WhatsAppOrderLink } from "@/components/store/WhatsAppOrderLink";
 import { orderBrowseMessage } from "@/lib/order";
+import { resolveStoreContact } from "@/lib/store-contact";
+import { getStoreSettings } from "@/lib/store-settings";
 import { site } from "@/lib/site";
 
 export const metadata = createPageMetadata({
@@ -10,35 +12,38 @@ export const metadata = createPageMetadata({
   path: "/contact",
 });
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getStoreSettings();
+  const contact = resolveStoreContact(settings);
+
   return (
     <article className="policy-page contact-page">
       <header className="store-page-header">
         <p className="eyebrow">Contact</p>
         <h1>Talk to a person</h1>
-        <p>Response hours: {site.responseHours}</p>
+        <p>Response hours: {contact.responseHours}</p>
       </header>
 
       <ul className="contact-list">
         <li>
           <strong>WhatsApp</strong>
           <WhatsAppOrderLink message={orderBrowseMessage()}>
-            {site.whatsappDisplay}
+            {contact.phone}
           </WhatsAppOrderLink>
         </li>
-        {site.phone ? (
+        {contact.phone ? (
           <li>
             <strong>Phone</strong>
-            <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
+            <a href={`tel:${contact.phoneTel}`}>{contact.phone}</a>
           </li>
         ) : null}
         <li>
           <strong>Email</strong>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <a href={`mailto:${contact.email}`}>{contact.email}</a>
         </li>
         <li>
           <strong>Address</strong>
-          <address>{site.address}</address>
+          <address>{contact.address}</address>
         </li>
         <li>
           <strong>Instagram</strong>

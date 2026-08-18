@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { StoreContact } from "@/lib/store-contact";
 import { site } from "@/lib/site";
 
 const baseUrl = site.url;
@@ -88,17 +89,21 @@ export function productJsonLd(product: {
   };
 }
 
-export function organizationJsonLd() {
+export function organizationJsonLd(contact?: StoreContact) {
+  const email = contact?.email ?? site.email;
+  const phone = contact?.phone ?? site.phone;
+  const address = contact?.address ?? site.address;
+
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: site.name,
     url: baseUrl,
-    email: site.email,
-    ...(site.phone ? { telephone: site.phone } : {}),
+    email,
+    ...(phone ? { telephone: phone } : {}),
     address: {
       "@type": "PostalAddress",
-      addressLocality: site.address,
+      addressLocality: address,
       addressCountry: "IN",
     },
     sameAs: [site.instagramUrl],
