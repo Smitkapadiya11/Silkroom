@@ -18,6 +18,7 @@ type CartContextValue = {
     size: string,
     color: string,
     quantity?: number,
+    options?: { open?: boolean },
   ) => void;
   setQuantity: (id: string, quantity: number) => void;
   removeItem: (id: string) => void;

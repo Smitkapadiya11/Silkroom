@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
   const order = await insertOrder({
     paymentMethod: "prepaid",
-    status: "pending",
+    status: "awaiting_payment",
     address: address.data,
     items: validated.items,
     subtotalInr: validated.pricing.subtotal,

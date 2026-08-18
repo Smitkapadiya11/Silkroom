@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import type { Product } from "@/lib/products";
 
 const BLUR =
@@ -31,33 +31,48 @@ export function ProductGallery({ product }: { product: Product }) {
 
   return (
     <div className="product-gallery">
-      <div className="product-gallery-viewport" ref={emblaRef}>
-        <div className="product-gallery-track">
-          {images.map((src, imageIndex) => (
-            <figure key={src} className="product-gallery-slide aspect-product">
-              <button
-                type="button"
-                className={zoomed && index === imageIndex ? "is-zoomed" : undefined}
-                aria-label={zoomed ? "Zoom out" : "Zoom in"}
-                onClick={() => setZoomed((current) => (index === imageIndex ? !current : true))}
-              >
-                <Image
-                  src={src}
-                  alt={`${product.name} — view ${imageIndex + 1}`}
-                  fill
-                  priority={imageIndex === 0}
-                  sizes="(min-width: 1024px) 45vw, 100vw"
-                  placeholder="blur"
-                  blurDataURL={BLUR}
-                />
-              </button>
-            </figure>
+      {images.length > 1 ? (
+        <div className="product-gallery-thumbs" aria-label="Product views">
+          {images.map((src, thumbIndex) => (
+            <button
+              key={src}
+              type="button"
+              className={thumbIndex === index ? "is-active" : undefined}
+              aria-label={`View ${thumbIndex + 1}`}
+              onClick={() => emblaApi?.scrollTo(thumbIndex)}
+            >
+              <Image src={src} alt="" fill sizes="80px" placeholder="blur" blurDataURL={BLUR} />
+            </button>
           ))}
         </div>
-      </div>
+      ) : null}
 
-      {images.length > 1 ? (
-        <>
+      <div className="product-gallery-main">
+        <div className="product-gallery-viewport" ref={emblaRef}>
+          <div className="product-gallery-track">
+            {images.map((src, imageIndex) => (
+              <figure key={src} className="product-gallery-slide aspect-product">
+                <button
+                  type="button"
+                  className={zoomed && index === imageIndex ? "is-zoomed" : undefined}
+                  aria-label={zoomed ? "Zoom out" : "Zoom in"}
+                  onClick={() => setZoomed((current) => (index === imageIndex ? !current : true))}
+                >
+                  <Image
+                    src={src}
+                    alt={`${product.name} — view ${imageIndex + 1}`}
+                    fill
+                    priority={imageIndex === 0}
+                    sizes="(min-width: 1024px) 48vw, 100vw"
+                    placeholder="blur"
+                    blurDataURL={BLUR}
+                  />
+                </button>
+              </figure>
+            ))}
+          </div>
+        </div>
+        {images.length > 1 ? (
           <div className="product-gallery-dots" aria-hidden="true">
             {images.map((src, dotIndex) => (
               <button
@@ -69,21 +84,8 @@ export function ProductGallery({ product }: { product: Product }) {
               />
             ))}
           </div>
-          <div className="product-gallery-thumbs" aria-label="Product views">
-            {images.map((src, thumbIndex) => (
-              <button
-                key={src}
-                type="button"
-                className={thumbIndex === index ? "is-active" : undefined}
-                aria-label={`Thumbnail ${thumbIndex + 1}`}
-                onClick={() => emblaApi?.scrollTo(thumbIndex)}
-              >
-                <Image src={src} alt="" fill sizes="72px" placeholder="blur" blurDataURL={BLUR} />
-              </button>
-            ))}
-          </div>
-        </>
-      ) : null}
+        ) : null}
+      </div>
     </div>
   );
 }

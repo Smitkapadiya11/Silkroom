@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/store/ProductCard";
+import { TrustStrip } from "@/components/store/TrustStrip";
 import { formatInr } from "@/lib/pricing";
 import { getAllColorNames, products, SIZES, type Product } from "@/lib/products";
 
@@ -18,7 +19,12 @@ export function ShopClient({ catalog }: { catalog: Product[] }) {
   const colors = useMemo(() => ["All", ...getAllColorNames()], []);
   const productTypes = useMemo(
     () =>
-      (["all", ...(catalog.some((product) => product.isNew) ? ["new"] : []), ...(catalog.some((product) => product.category === "design") ? ["design"] : []), "solid"] as const),
+      ([
+        "all",
+        ...(catalog.some((product) => product.isNew) ? ["new"] : []),
+        ...(catalog.some((product) => product.category === "design") ? ["design"] : []),
+        "solid",
+      ] as const),
     [catalog],
   );
 
@@ -35,9 +41,7 @@ export function ShopClient({ catalog }: { catalog: Product[] }) {
     if (filter === "design") list = list.filter((product) => product.category === "design");
     if (filter === "solid") list = list.filter((product) => product.category === "solid");
     if (color !== "All") {
-      list = list.filter((product) =>
-        product.colors.some((item) => item.name === color),
-      );
+      list = list.filter((product) => product.colors.some((item) => item.name === color));
     }
     if (size !== "All") {
       list = list.filter((product) => product.sizes.includes(size));
@@ -50,8 +54,12 @@ export function ShopClient({ catalog }: { catalog: Product[] }) {
       <header className="store-page-header">
         <p className="eyebrow">Shop</p>
         <h1>Every polo in the room</h1>
-        <p>{filtered.length} polo{filtered.length === 1 ? "" : "s"} · {formatInr(products[0]?.price ?? 399)} each</p>
+        <p>
+          {filtered.length} polo{filtered.length === 1 ? "" : "s"} · {formatInr(products[0]?.price ?? 399)} each ·
+          3 for ₹799
+        </p>
       </header>
+      <TrustStrip />
 
       <div className="shop-filters" role="search">
         <div className="shop-filter-row" aria-label="Product type">
@@ -106,7 +114,9 @@ export function ShopClient({ catalog }: { catalog: Product[] }) {
       ) : (
         <div className="shop-empty">
           <p>No polos in that combination.</p>
-          <button type="button" onClick={() => router.replace(pathname)}>Clear filters</button>
+          <button type="button" onClick={() => router.replace(pathname)}>
+            Clear filters
+          </button>
         </div>
       )}
     </div>

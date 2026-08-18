@@ -64,6 +64,7 @@ export async function POST(request: Request) {
     !storedOrder ||
     storedOrder.paymentMethod !== "prepaid" ||
     (storedOrder.status !== "pending" &&
+      storedOrder.status !== "awaiting_payment" &&
       storedOrder.status !== "paid" &&
       storedOrder.status !== "confirmed")
   ) {

@@ -8,6 +8,7 @@ import { UgcVideo } from "@/components/store/UgcVideo";
 import { StoreFooter } from "@/components/store/StoreFooter";
 import { StoreHeader } from "@/components/store/StoreHeader";
 import { TrustStrip } from "@/components/store/TrustStrip";
+import { PoloHero } from "@/components/three/PoloHero";
 import type { Product } from "@/lib/products";
 import { site } from "@/lib/site";
 
@@ -65,30 +66,38 @@ export function V2Landing({
       <main>
         <section className="v2-hero" aria-labelledby="hero-title">
           <div className="v2-hero-copy">
-            <p className="v2-kicker">The everyday polo edit</p>
+            <p className="v2-kicker">Cut in Surat. Worn across India.</p>
             <h1 id="hero-title">
               3 FOR <span>₹799</span>
             </h1>
             <p className="v2-hero-lede">
-              <span className="is-flame">₹399 each · save ₹398</span>
-              <br />
-              Five for ₹1,299. Free delivery over ₹799. COD available.
+              Ribbed zip polos with a real price. ₹399 each, or three colours for ₹799.
+              Pay by UPI or cash on delivery.
             </p>
             <div className="v2-hero-actions">
               <a className="v2-button v2-button--flame" href="#build">
                 Build your combo
               </a>
               <Link className="v2-button v2-button--ghost" href="/shop">
-                Shop all polos
+                Shop all colours
               </Link>
             </div>
           </div>
-          <div className="v2-hero-image">
-            <Image src={heroProduct.image} alt={heroProduct.name} fill priority sizes="(min-width: 900px) 50vw, 100vw" />
+          <div className="v2-hero-stage" aria-hidden="true">
+            <PoloHero images={products.slice(0, 3).map((item) => item.image)} />
           </div>
         </section>
 
         <TrustStrip className="trust-strip--landing" />
+
+        <section className="v2-section v2-proof" aria-label="Why people order">
+          <ul>
+            <li><strong>₹799</strong><span>for any 3 polos</span></li>
+            <li><strong>COD</strong><span>pay at your door</span></li>
+            <li><strong>7 days</strong><span>easy size exchange</span></li>
+            <li><strong>24–48 hrs</strong><span>pack from Surat</span></li>
+          </ul>
+        </section>
 
         <section id="build" className="v2-section v2-builder-section" aria-labelledby="build-title">
           <div className="v2-section-heading">
@@ -124,6 +133,24 @@ export function V2Landing({
           <a className="v2-button v2-button--ghost" href="#build">
             Build your combo
           </a>
+        </section>
+
+        <section className="v2-section v2-product-3d" aria-labelledby="object-title">
+          <div className="v2-section-heading">
+            <p className="v2-kicker">Turn it in your hand</p>
+            <h2 id="object-title">The polo, as an object.</h2>
+            <p>Drag slowly. Lighting stays studio-quiet so the rib and zip stay readable.</p>
+          </div>
+          <PoloHero
+            className="v2-product-3d-stage"
+            orbit
+            images={[heroProduct.image, products[1]?.image ?? heroProduct.image]}
+          />
+          <ul className="v2-product-callouts">
+            <li><strong>220 GSM rib</strong> Holds shape after wash.</li>
+            <li><strong>Brass quarter-zip</strong> Closes clean at the collar.</li>
+            <li><strong>Relaxed regular</strong> Easy through the chest, not oversized.</li>
+          </ul>
         </section>
 
         <section className="v2-section v2-low-price" aria-labelledby="low-price-title">

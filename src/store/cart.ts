@@ -18,7 +18,13 @@ type CartStore = {
   openCart: () => void;
   closeCart: () => void;
   toggleCart: () => void;
-  addProduct: (product: Product, size: string, color: string, quantity?: number) => void;
+  addProduct: (
+    product: Product,
+    size: string,
+    color: string,
+    quantity?: number,
+    options?: { open?: boolean },
+  ) => void;
   setQuantity: (id: string, quantity: number) => void;
   removeItem: (id: string) => void;
   clearCart: () => void;
@@ -32,10 +38,10 @@ export const useCartStore = create<CartStore>()(
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
-      addProduct: (product, size, color, quantity = 1) =>
+      addProduct: (product, size, color, quantity = 1, options) =>
         set((state) => ({
           items: mergeCartItem(state.items, productToCartItem(product, size, color, quantity)),
-          isOpen: true,
+          isOpen: options?.open !== false,
         })),
       setQuantity: (id, quantity) =>
         set((state) => ({ items: updateCartQuantity(state.items, id, quantity) })),

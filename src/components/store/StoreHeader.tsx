@@ -9,11 +9,10 @@ import { site } from "@/lib/site";
 const links = [
   { href: "/shop", label: "Shop" },
   { href: "/combos", label: "Combos" },
-  { href: "/about", label: "About" },
-  { href: "/track", label: "Track order" },
+  { href: "/track", label: "Track" },
   { href: "/size-guide", label: "Size guide" },
   { href: "/shipping-returns", label: "Shipping" },
-  { href: "/contact", label: "Contact" },
+  { href: "/contact", label: "Help" },
 ];
 
 export function MobileNav({
@@ -27,11 +26,8 @@ export function MobileNav({
 
   useEffect(() => {
     if (!open || !root.current) return;
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) return;
-
     const scope = createScope({ root });
     scope.add(() => {
       animate(".mobile-nav-link", {
@@ -39,7 +35,7 @@ export function MobileNav({
         opacity: [0, 1],
         duration: 520,
         ease: "outExpo",
-        delay: stagger(60),
+        delay: stagger(50),
       });
     });
     return () => scope.revert();
@@ -77,6 +73,9 @@ export function MobileNav({
         </ul>
       </nav>
       <div className="mobile-nav-contact">
+        <Link className="mobile-nav-link" href="/combos" onClick={onClose}>
+          Build 3 for ₹799
+        </Link>
         <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
         <a href={`https://wa.me/${site.phoneTel.replace("+", "")}`} target="_blank" rel="noreferrer">
           WhatsApp us
@@ -105,13 +104,19 @@ export function StoreHeader({ variant = "store" }: { variant?: "store" | "landin
           Silk Room
         </Link>
         <nav className="store-nav" aria-label="Primary">
-          {links.slice(0, 3).map((link) => (
+          {links.slice(0, 4).map((link) => (
             <Link key={link.href} href={link.href}>
               {link.label}
             </Link>
           ))}
         </nav>
         <div className="store-header-actions">
+          <a className="store-header-phone" href={`tel:${site.phoneTel}`}>
+            {site.phone}
+          </a>
+          <Link className="store-header-cta" href="/combos">
+            3 for ₹799
+          </Link>
           <button type="button" className="store-cart-button" onClick={openCart}>
             Cart
             {count > 0 ? <span className="store-cart-count">{count}</span> : null}

@@ -209,7 +209,10 @@ export async function markOrderPaid(input: {
   if (existing.status === "confirmed" || existing.status === "paid") {
     return existing.razorpayPaymentId === input.razorpayPaymentId ? existing : null;
   }
-  if (existing.paymentMethod !== "prepaid" || existing.status !== "pending") {
+  if (
+    existing.paymentMethod !== "prepaid" ||
+    (existing.status !== "pending" && existing.status !== "awaiting_payment")
+  ) {
     return null;
   }
 
@@ -225,7 +228,7 @@ export async function markOrderPaid(input: {
     .where(
       and(
         eq(orders.id, existing.id),
-        eq(orders.status, "pending"),
+        sql`${orders.status} in ('pending', 'awaiting_payment')`,
         eq(orders.paymentMethod, "prepaid"),
       ),
     )

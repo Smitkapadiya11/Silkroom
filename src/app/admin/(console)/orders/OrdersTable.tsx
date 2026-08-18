@@ -68,7 +68,13 @@ export function OrdersTable({ rows }: { rows: AdminOrderRow[] }) {
       { accessorKey: "customerName", header: "Customer" },
       { accessorKey: "phoneMasked", header: "Phone" },
       { accessorKey: "status", header: "Status" },
-      { accessorKey: "paymentMethod", header: "Payment" },
+      {
+        header: "Payment",
+        cell: ({ row }) =>
+          row.original.status === "awaiting_payment"
+            ? "Prepaid · unpaid"
+            : row.original.paymentMethod,
+      },
       {
         header: "Total",
         cell: ({ row }) => money.format(row.original.totalInr),
@@ -103,7 +109,11 @@ export function OrdersTable({ rows }: { rows: AdminOrderRow[] }) {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ orderNumbers: selected }),
     });
-    if (!response.ok) return;
+    if (!response.ok) {
+      const data = (await response.json().catch(() => null)) as { error?: string } | null;
+      window.alert(data?.error ?? "Could not download the file. Select paid/COD orders and try again.");
+      return;
+    }
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -134,7 +144,7 @@ export function OrdersTable({ rows }: { rows: AdminOrderRow[] }) {
           onChange={(event) => update({ status: event.target.value || undefined })}
         >
           <option value="">All statuses</option>
-          {["pending", "confirmed", "packed", "dispatched", "delivered", "cancelled", "rto"].map(
+          {["pending", "awaiting_payment", "confirmed", "packed", "dispatched", "delivered", "cancelled", "rto"].map(
             (status) => (
               <option key={status} value={status}>
                 {status}

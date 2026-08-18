@@ -19,9 +19,12 @@ async function barcodePng(orderNumber: string) {
   const png = await bwipjs.toBuffer({
     bcid: "code128",
     text: orderNumber,
-    scale: 3,
-    height: 12,
-    includetext: false,
+    scale: 4,
+    height: 18,
+    includetext: true,
+    textsize: 11,
+    textxalign: "center",
+    backgroundcolor: "FFFFFF",
   });
   return `data:image/png;base64,${png.toString("base64")}`;
 }
@@ -48,22 +51,28 @@ async function loadOrders(orderNumbers: string[]) {
 }
 
 const labelStyles = StyleSheet.create({
-  page: { padding: 16, fontSize: 9, fontFamily: "Helvetica" },
+  page: {
+    padding: 10,
+    fontSize: 9,
+    fontFamily: "Helvetica",
+  },
   banner: {
-    backgroundColor: "#000",
+    backgroundColor: "#111",
     color: "#fff",
     textAlign: "center",
-    padding: 6,
-    marginBottom: 10,
-    fontSize: 11,
+    padding: 8,
+    marginBottom: 8,
+    fontSize: 14,
     fontWeight: 700,
   },
-  section: { marginBottom: 8 },
-  title: { fontSize: 10, fontWeight: 700, marginBottom: 4 },
-  mono: { fontFamily: "Courier", fontSize: 10 },
-  pincode: { fontSize: 16, fontWeight: 700 },
-  barcode: { width: 180, height: 40, marginTop: 6, marginBottom: 4 },
+  section: { marginBottom: 6, borderBottom: "1 solid #ddd", paddingBottom: 6 },
+  title: { fontSize: 8, fontWeight: 700, marginBottom: 3, letterSpacing: 0.6 },
+  name: { fontSize: 12, fontWeight: 700 },
+  mono: { fontFamily: "Courier", fontSize: 11 },
+  pincode: { fontSize: 22, fontWeight: 700, marginTop: 2 },
+  barcode: { width: 250, height: 64, marginTop: 4, marginBottom: 2 },
   small: { fontSize: 8, color: "#333" },
+  row: { fontSize: 9, marginBottom: 2 },
 });
 
 function LabelDoc({
@@ -93,17 +102,13 @@ function LabelDoc({
         createElement(
           View,
           { style: labelStyles.section },
-          createElement(Text, { style: labelStyles.title }, "TO"),
-          createElement(Text, null, order.customerName),
+          createElement(Text, { style: labelStyles.title }, "TO / SHIP TO"),
+          createElement(Text, { style: labelStyles.name }, order.customerName),
           createElement(Text, null, order.addressLine1),
           order.addressLine2 ? createElement(Text, null, order.addressLine2) : null,
-          createElement(
-            Text,
-            null,
-            `${order.city}, ${order.state}`,
-          ),
-          createElement(Text, { style: labelStyles.pincode }, order.pincode),
-          createElement(Text, null, order.phone),
+          createElement(Text, null, `${order.city}, ${order.state}`),
+          createElement(Text, { style: labelStyles.pincode }, `PIN ${order.pincode}`),
+          createElement(Text, { style: labelStyles.mono }, order.phone),
         ),
         createElement(
           View,
@@ -116,7 +121,7 @@ function LabelDoc({
         createElement(
           View,
           { style: labelStyles.section },
-          createElement(Text, { style: labelStyles.title }, "ORDER REFERENCE (not courier AWB)"),
+          createElement(Text, { style: labelStyles.title }, "ORDER BARCODE"),
           createElement(Image, { style: labelStyles.barcode, src: barcodes[order.orderNumber] }),
           createElement(Text, { style: labelStyles.mono }, order.orderNumber),
         ),
@@ -127,8 +132,8 @@ function LabelDoc({
           ...orderItemRows.map((item) =>
             createElement(
               Text,
-              { key: item.id },
-              `${item.quantity}× ${item.color} / ${item.size}`,
+              { key: item.id, style: labelStyles.row },
+              `${item.quantity}× ${item.productName} · ${item.color} / ${item.size}`,
             ),
           ),
         ),

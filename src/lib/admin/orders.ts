@@ -3,6 +3,7 @@ import { getDb } from "@/db";
 import { customers, inventory, inventoryAdjustments, orderItems, orders } from "@/db/schema";
 import { writeAdminAudit } from "@/lib/admin/audit";
 import { canTransition, normalizeLegacyStatus, type OrderStatus } from "@/lib/admin/order-status";
+import { unpaidPrepaidClause, isUnpaidPrepaid } from "@/lib/commerce";
 import { products, SIZES } from "@/lib/products";
 
 export function maskPhone(phone: string) {
@@ -260,7 +261,9 @@ export async function listOrders(input: {
 }) {
   const db = getDb();
   const filters = [];
-  if (input.status) filters.push(eq(orders.status, input.status));
+  if (input.status === "awaiting_payment") filters.push(unpaidPrepaidClause);
+  else if (input.status) filters.push(eq(orders.status, input.status));
+  else filters.push(sql`not ${unpaidPrepaidClause}`);
   if (input.paymentMethod) filters.push(eq(orders.paymentMethod, input.paymentMethod));
   if (input.courier) filters.push(eq(orders.courier, input.courier));
   if (input.hasAwb === true) filters.push(sql`${orders.awbNumber} is not null`);
@@ -321,8 +324,8 @@ export async function listOrders(input: {
       city: row.city,
       itemCount: countMap.get(row.id) ?? 0,
       totalInr: row.totalInr,
-      paymentMethod: row.paymentMethod,
-      status: normalizeLegacyStatus(row.status),
+      paymentMethod: isUnpaidPrepaid(row) ? "prepaid" : row.paymentMethod,
+      status: isUnpaidPrepaid(row) ? "awaiting_payment" : normalizeLegacyStatus(row.status),
       phoneMasked: maskPhone(row.phone),
       courier: row.courier,
       awbNumber: row.awbNumber,

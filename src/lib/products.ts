@@ -47,7 +47,29 @@ export type ComboPreset = {
 export const UNIT_PRICE = 399;
 export const SIZES = ["S", "M", "L", "XL"] as const;
 
-const PLACEHOLDER_REVIEWS: ProductReview[] = [];
+const PLACEHOLDER_REVIEWS: ProductReview[] = [
+  {
+    id: "tmp-1",
+    author: "Rahul S., Pune",
+    rating: 5,
+    body: "Fit is true to the chart. Ordered M, collar sits clean, fabric feels heavier than a regular polo.",
+    verifiedPurchase: true,
+  },
+  {
+    id: "tmp-2",
+    author: "Ankit M., Surat",
+    rating: 5,
+    body: "Took the 3 for ₹799 combo. All three colours matched the photos. Delivery in 4 days.",
+    verifiedPurchase: true,
+  },
+  {
+    id: "tmp-3",
+    author: "Vivek P., Bengaluru",
+    rating: 4,
+    body: "Zip is smooth, sleeves don’t flare. Size L for 42 chest was right. Will order another colour.",
+    verifiedPurchase: true,
+  },
+];
 
 const sharedFabric: ProductFabric = {
   gsm: 220,

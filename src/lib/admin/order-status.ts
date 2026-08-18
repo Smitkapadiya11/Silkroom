@@ -1,5 +1,6 @@
 export const ORDER_STATUSES = [
   "pending",
+  "awaiting_payment",
   "confirmed",
   "packed",
   "dispatched",
@@ -13,6 +14,7 @@ export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
 const TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
   pending: ["confirmed", "cancelled"],
+  awaiting_payment: ["confirmed", "cancelled"],
   confirmed: ["packed", "cancelled"],
   packed: ["dispatched", "cancelled"],
   dispatched: ["delivered", "rto"],
@@ -31,6 +33,7 @@ export function canTransition(from: string, to: string) {
 export function normalizeLegacyStatus(status: string): OrderStatus {
   if (status === "paid") return "confirmed";
   if (status === "cod_pending") return "pending";
+  if (status === "awaiting_payment") return "awaiting_payment";
   if ((ORDER_STATUSES as readonly string[]).includes(status)) {
     return status as OrderStatus;
   }
