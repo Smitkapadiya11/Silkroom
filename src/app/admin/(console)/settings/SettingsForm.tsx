@@ -27,7 +27,6 @@ export function SettingsForm({
         "combo3PriceInr",
         "combo5PriceInr",
         "unitPriceInr",
-        "codFeeInr",
         "prepaidDiscountInr",
         "freeDeliveryThresholdInr",
         "packageWeightGrams",
@@ -75,7 +74,6 @@ export function SettingsForm({
       {input("combo3PriceInr", "3-piece price", "number")}
       {input("combo5PriceInr", "5-piece price", "number")}
       {input("unitPriceInr", "Unit price", "number")}
-      {input("codFeeInr", "COD fee", "number")}
       <label>
         <input
           type="checkbox"

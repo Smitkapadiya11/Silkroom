@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { CLEAN_ANNOUNCEMENT, scrubCodCopy } from "@/lib/copy";
 
 export function ComboOfferBar({ text }: { text?: string }) {
   const [dismissed, setDismissed] = useState(true);
@@ -16,7 +17,7 @@ export function ComboOfferBar({ text }: { text?: string }) {
     <div className="combo-offer-bar" role="region" aria-label="Current offer">
       <p>
         <Link href="/shop">
-          {text ?? "3 polos ₹799 · 5 for ₹1,299 · Free delivery over ₹799 · Secure prepaid checkout"}
+          {scrubCodCopy(text ?? CLEAN_ANNOUNCEMENT)}
         </Link>
       </p>
       <button

@@ -73,7 +73,9 @@ export function OrdersTable({ rows }: { rows: AdminOrderRow[] }) {
         cell: ({ row }) =>
           row.original.status === "awaiting_payment"
             ? "Prepaid · unpaid"
-            : row.original.paymentMethod,
+            : row.original.paymentMethod === "prepaid"
+              ? "Prepaid"
+              : "Unpaid · collect",
       },
       {
         header: "Total",
@@ -111,7 +113,7 @@ export function OrdersTable({ rows }: { rows: AdminOrderRow[] }) {
     });
     if (!response.ok) {
       const data = (await response.json().catch(() => null)) as { error?: string } | null;
-      window.alert(data?.error ?? "Could not download the file. Select paid/COD orders and try again.");
+      window.alert(data?.error ?? "Could not download the file. Select paid orders and try again.");
       return;
     }
     const blob = await response.blob();
@@ -157,7 +159,6 @@ export function OrdersTable({ rows }: { rows: AdminOrderRow[] }) {
           onChange={(event) => update({ paymentMethod: event.target.value || undefined })}
         >
           <option value="">All payments</option>
-          <option value="cod">COD</option>
           <option value="prepaid">Prepaid</option>
         </select>
         <button className="admin-button" type="submit">

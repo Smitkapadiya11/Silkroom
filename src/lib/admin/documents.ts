@@ -92,9 +92,9 @@ function LabelDoc({
     ...orderRows.map((order) => {
       const orderItemRows = items.filter((item) => item.orderId === order.id);
       const banner =
-        order.paymentMethod === "cod"
-          ? `COD — COLLECT ${formatInr(order.totalInr)}`
-          : "PREPAID — DO NOT COLLECT";
+        order.paymentMethod === "prepaid"
+          ? "PREPAID — DO NOT COLLECT"
+          : `COLLECT ${formatInr(order.totalInr)}`;
       return createElement(
         Page,
         { key: order.id, size: [288, 432], style: labelStyles.page },
@@ -188,9 +188,9 @@ function SlipDoc({
         createElement(
           Text,
           { style: { marginTop: 12, fontWeight: 700 } },
-          order.paymentMethod === "cod"
-            ? `COD due: ${formatInr(order.totalInr)}`
-            : `Paid: ${formatInr(order.totalInr)}`,
+          order.paymentMethod === "prepaid"
+            ? `Paid: ${formatInr(order.totalInr)}`
+            : `Collect: ${formatInr(order.totalInr)}`,
         ),
         createElement(
           Text,

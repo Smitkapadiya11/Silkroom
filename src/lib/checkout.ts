@@ -3,7 +3,6 @@ import { getDb, isDatabaseConfigured } from "@/db";
 import { orderCounters, orderItems, orders } from "@/db/schema";
 import {
   checkoutItemSchema,
-  COD_FEE_INR,
   type CheckoutAddress,
   type CheckoutItemInput,
 } from "@/lib/checkout-shared";
@@ -15,7 +14,6 @@ import { getStoreSettings } from "@/lib/store-settings";
 export {
   checkoutAddressSchema,
   checkoutItemSchema,
-  COD_FEE_INR,
   type CheckoutAddress,
   type CheckoutItemInput,
 } from "@/lib/checkout-shared";
@@ -105,18 +103,7 @@ export async function validateCheckoutItems(items: CheckoutItemInput[]) {
   return { items: validated, pricing, settings };
 }
 
-export function computePayableTotal(
-  pricingTotal: number,
-  method: "prepaid" | "cod",
-  codFeeInr = COD_FEE_INR,
-) {
-  if (method === "cod") {
-    return {
-      feeInr: codFeeInr,
-      prepaidDiscountInr: 0,
-      totalInr: pricingTotal + codFeeInr,
-    };
-  }
+export function computePayableTotal(pricingTotal: number) {
   return {
     feeInr: 0,
     prepaidDiscountInr: 0,

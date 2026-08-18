@@ -105,7 +105,7 @@ export default async function AdminOverview() {
           </div>
         ))}
       </div>
-      <h2>Revenue (Asia/Kolkata, paid and COD only)</h2>
+      <h2>Revenue (Asia/Kolkata, paid orders)</h2>
       <div className="admin-grid">
         <div className="admin-card">
           <span>Today</span>

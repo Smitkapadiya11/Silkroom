@@ -37,6 +37,6 @@ export function paymentLabel(order: {
   razorpayPaymentId?: string | null;
 }) {
   if (isUnpaidPrepaid(order)) return "Prepaid · unpaid";
-  if (order.paymentMethod === "cod") return "COD";
-  return "Prepaid · paid";
+  if (order.paymentMethod === "prepaid") return "Prepaid · paid";
+  return "Unpaid · collect";
 }

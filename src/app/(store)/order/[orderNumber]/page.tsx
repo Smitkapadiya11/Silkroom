@@ -66,9 +66,9 @@ export default async function OrderPage({ params }: Props) {
 
   const items = await db.select().from(orderItems).where(eq(orderItems.orderId, order.id));
   const dispatchNote =
-    order.paymentMethod === "cod"
-      ? "We will confirm COD and dispatch in 24–48 hours."
-      : "Payment received. We pack and dispatch in 24–48 hours.";
+    order.paymentMethod === "prepaid"
+      ? "Payment received. We pack and dispatch in 24–48 hours."
+      : "We will confirm stock and dispatch in 24–48 hours.";
   const wa = whatsappUrl(
     `Hello Silk Room, I placed order ${order.orderNumber}. Total ${formatInr(order.totalInr)}.`,
   );
@@ -87,7 +87,7 @@ export default async function OrderPage({ params }: Props) {
       <dl className="v2-receipt">
         <div>
           <dt>Payment</dt>
-          <dd>{order.paymentMethod === "cod" ? "Cash on delivery" : "Prepaid (Razorpay)"}</dd>
+          <dd>{order.paymentMethod === "prepaid" ? "Prepaid (Razorpay)" : "To be confirmed"}</dd>
         </div>
         <div>
           <dt>Total</dt>

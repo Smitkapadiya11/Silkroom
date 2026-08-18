@@ -31,7 +31,11 @@ export function ShippingSticker({
     maximumFractionDigits: 0,
   }).format(totalInr);
   const banner =
-    paymentMethod === "cod" ? `COD — COLLECT ${money}` : paid ? "PREPAID — DO NOT COLLECT" : "UNPAID PREPAID";
+    paymentMethod === "prepaid"
+      ? paid
+        ? "PREPAID — DO NOT COLLECT"
+        : "UNPAID PREPAID"
+      : `COLLECT ${money}`;
 
   return (
     <article className="meesho-sticker">

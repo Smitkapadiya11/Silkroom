@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: validated.error }, { status: 400 });
   }
 
-  const payable = computePayableTotal(validated.pricing.total, "prepaid");
+  const payable = computePayableTotal(validated.pricing.total);
   const razorpay = new Razorpay({ key_id: keyId, key_secret: keySecret });
   const rzOrder = await razorpay.orders.create({
     amount: payable.totalInr * 100,

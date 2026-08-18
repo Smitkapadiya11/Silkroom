@@ -89,7 +89,7 @@ export default async function OrderPage({ params }: Props) {
           </div>
           <div className="admin-card">
             <h2>Payment</h2>
-            <p>{unpaid ? "Prepaid · unpaid" : order.paymentMethod}</p>
+            <p>{unpaid ? "Prepaid · unpaid" : order.paymentMethod === "prepaid" ? "Prepaid · paid" : "Unpaid · collect"}</p>
             {order.razorpayPaymentId ? (
               <a
                 href={`https://dashboard.razorpay.com/app/payments/${order.razorpayPaymentId}`}
