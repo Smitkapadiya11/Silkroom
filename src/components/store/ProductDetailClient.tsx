@@ -11,6 +11,7 @@ import { useStoreSettings } from "@/context/StoreSettingsProvider";
 import { formatInr } from "@/lib/pricing";
 import { products, SIZES, type Product } from "@/lib/products";
 import { site } from "@/lib/site";
+import { trackMeta } from "@/lib/meta-pixel";
 
 export function ProductDetailClient({
   product,
@@ -38,6 +39,16 @@ export function ProductDetailClient({
       : 0;
 
   const lineTotal = product.price * quantity;
+
+  useEffect(() => {
+    trackMeta("ViewContent", {
+      content_ids: [product.slug],
+      content_name: product.name,
+      content_type: "product",
+      value: product.price,
+      currency: "INR",
+    });
+  }, [product.name, product.price, product.slug]);
 
   useEffect(() => {
     if (!sizeChartOpen) return;

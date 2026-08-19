@@ -6,6 +6,7 @@ import { organizationJsonLd } from "@/lib/metadata";
 import { resolveStoreContact } from "@/lib/store-contact";
 import { getStoreSettings } from "@/lib/store-settings";
 import { site } from "@/lib/site";
+import { MetaPixel } from "@/components/store/MetaPixel";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({
@@ -62,6 +63,7 @@ export default async function RootLayout({
   return (
     <html lang="en-IN" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body>
+        <MetaPixel />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

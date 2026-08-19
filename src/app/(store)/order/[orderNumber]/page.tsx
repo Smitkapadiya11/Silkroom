@@ -6,6 +6,7 @@ import { orderItems, orders } from "@/db/schema";
 import { createPageMetadata } from "@/lib/metadata";
 import { hasOrderAccess } from "@/lib/order-access";
 import { formatInr } from "@/lib/pricing";
+import { MetaPurchase } from "@/components/store/MetaPurchase";
 import { whatsappUrl } from "@/lib/order";
 import { resolveStoreContact } from "@/lib/store-contact";
 import { getStoreSettings } from "@/lib/store-settings";
@@ -76,6 +77,17 @@ export default async function OrderPage({ params }: Props) {
 
   return (
     <article className="policy-page checkout-page">
+      {order.paymentMethod === "prepaid" && order.status !== "awaiting_payment" ? (
+        <MetaPurchase
+          orderNumber={order.orderNumber}
+          value={order.totalInr}
+          items={items.map((item) => ({
+            slug: item.productSlug,
+            quantity: item.quantity,
+            price: item.unitPriceInr,
+          }))}
+        />
+      ) : null}
       <header className="store-page-header">
         <p className="eyebrow">Order confirmed</p>
         <h1>{order.orderNumber}</h1>

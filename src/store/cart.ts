@@ -11,6 +11,7 @@ import {
   type CartItem,
 } from "@/lib/cart";
 import type { Product } from "@/lib/products";
+import { metaContents, trackMeta } from "@/lib/meta-pixel";
 
 type CartStore = {
   items: CartItem[];
@@ -38,11 +39,20 @@ export const useCartStore = create<CartStore>()(
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
-      addProduct: (product, size, color, quantity = 1, options) =>
+      addProduct: (product, size, color, quantity = 1, options) => {
+        trackMeta("AddToCart", {
+          content_ids: [product.slug],
+          content_name: product.name,
+          content_type: "product",
+          value: product.price * quantity,
+          currency: "INR",
+          contents: metaContents([{ slug: product.slug, quantity, price: product.price }]),
+        });
         set((state) => ({
           items: mergeCartItem(state.items, productToCartItem(product, size, color, quantity)),
           isOpen: options?.open !== false,
-        })),
+        }));
+      },
       setQuantity: (id, quantity) =>
         set((state) => ({ items: updateCartQuantity(state.items, id, quantity) })),
       removeItem: (id) => set((state) => ({ items: removeCartItem(state.items, id) })),

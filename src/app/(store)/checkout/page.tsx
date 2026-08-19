@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,11 +12,23 @@ import {
   checkoutAddressSchema,
   type CheckoutAddress,
 } from "@/lib/checkout-shared";
+import { metaContents, trackMeta } from "@/lib/meta-pixel";
 import { formatInr } from "@/lib/pricing";
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, pricing } = useCart();
+
+  useEffect(() => {
+    if (!items.length) return;
+    trackMeta("InitiateCheckout", {
+      value: pricing.total,
+      currency: "INR",
+      num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+      content_ids: items.map((item) => item.slug),
+      contents: metaContents(items),
+    });
+  }, [items, pricing.total]);
   const form = useForm<CheckoutAddress>({
     resolver: zodResolver(checkoutAddressSchema),
     defaultValues: {
