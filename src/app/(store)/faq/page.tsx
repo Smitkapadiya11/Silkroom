@@ -3,7 +3,7 @@ import { createPageMetadata, faqJsonLd } from "@/lib/metadata";
 export const metadata = createPageMetadata({
   title: "FAQ",
   description:
-    "Fabric, fit, wash care, secure checkout, exchanges, delivery, and order tracking for Silk Room polos.",
+    "Fabric, fit, silkroom.shop, men's polo t-shirts, exchanges, delivery, and order tracking.",
   path: "/faq",
 });
 
@@ -68,6 +68,16 @@ const faqs = [
     question: "What if the fabric feels different than expected?",
     answer:
       "Every polo is 220 GSM cotton-elastane rib. Follow Fabric care for wash instructions, or message us within the exchange window.",
+  },
+  {
+    question: "Is silkroom.shop the official Silk Room website?",
+    answer:
+      "Yes. silkroom.shop is the official Silk Room store. Search Silk Room, Silkroom, or silkroom.shop to reach us. We do not sell men's polo t-shirts on other marketplaces.",
+  },
+  {
+    question: "Do you sell men's polo t-shirts and men's clothes?",
+    answer:
+      "Silk Room is a men's clothing brand focused on polo t-shirts — ribbed zip polos and waffle zip polos in S–XL, made in Surat and shipped across India.",
   },
   {
     question: "Is there a quality guarantee?",

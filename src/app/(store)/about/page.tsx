@@ -3,10 +3,11 @@ import { resolveStoreContact } from "@/lib/store-contact";
 import { getStoreSettings } from "@/lib/store-settings";
 
 export const metadata = createPageMetadata({
-  title: "About Silk Room",
+  title: "About Silk Room | silkroom.shop",
   description:
-    "Silk Room makes ribbed zip polos in Surat — quiet structure, honest fabric, shipped across India.",
+    "Silk Room is a Surat men's clothing brand. We make polo t-shirts and ribbed zip polos, sell them at silkroom.shop, and ship across India.",
   path: "/about",
+  keywords: ["Silk Room", "Silkroom", "silkroom.shop", "Surat polo", "mens clothing brand india"],
 });
 
 export default async function AboutPage() {
@@ -15,17 +16,17 @@ export default async function AboutPage() {
   return (
     <article className="policy-page about-page">
       <header className="store-page-header">
-        <p className="eyebrow">About</p>
-        <h1>The room after daylight</h1>
+        <p className="eyebrow">Silk Room · silkroom.shop</p>
+        <h1>About Silk Room</h1>
       </header>
 
       <div className="about-grid">
         <div className="about-copy">
           <p>
-            I started Silk Room because I wanted a polo that felt considered — not loud,
-            not disposable. We cut ribbed quarter-zips in Surat, work with a small team
-            that cares about collar shape and zip weight, and ship directly to you across
-            India.
+            Silk Room (also written Silkroom or silkroom.shop) started because I wanted a men&apos;s
+            polo t-shirt that felt considered — not loud, not disposable. We cut ribbed quarter-zips
+            in Surat, work with a small team that cares about collar shape and zip weight, and ship
+            directly across India from this official store.
           </p>
           <p>
             Every polo is 220 GSM cotton-elastane, pre-shrunk, and priced honestly at

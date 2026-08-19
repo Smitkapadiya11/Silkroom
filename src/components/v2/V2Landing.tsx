@@ -16,7 +16,7 @@ const faqs = [
   ["What comes in the 3 for ₹799 offer?", "Add any three polos to cart — the discount applies automatically at checkout."],
   ["Can I choose different colours?", "Yes. Pick any three colours and sizes from the shop."],
   ["What size should I order?", "Use the size guide for measurements. The fit is relaxed regular, and exchanges are available within seven days."],
-  ["How do I pay?", "Secure prepaid checkout via Razorpay — UPI, cards, netbanking, and wallets."],
+  ["Is this the official Silk Room website?", "Yes. silkroom.shop is the official Silk Room store for men's polo t-shirts in India."],
   ["How long does delivery take?", "Metro deliveries usually take 3–6 business days. Other locations can take 5–8 business days."],
   ["How do I start an exchange?", "Send us your order details on WhatsApp within seven days of delivery and we will help with the next step."],
 ] as const;
@@ -66,13 +66,13 @@ export function V2Landing({
       <main>
         <section className="v2-hero" aria-labelledby="hero-title">
           <div className="v2-hero-copy">
-            <p className="v2-kicker">Cut in Surat. Worn across India.</p>
+            <p className="v2-kicker">Silk Room · silkroom.shop · Made in Surat, India</p>
             <h1 id="hero-title">
-              3 FOR <span>₹799</span>
+              Men&apos;s polo t-shirts. 3 for <span>₹799</span>
             </h1>
             <p className="v2-hero-lede">
-              Ribbed zip polos with a real price. ₹399 each, or three colours for ₹799.
-              Pay securely with UPI, card, or netbanking.
+              Silk Room men&apos;s polo t-shirts — ribbed zip polos from Surat. ₹399 each, or any
+              three colours for ₹799. Shop silkroom.shop with prepaid delivery across India.
             </p>
             <div className="v2-hero-actions">
               <Link className="v2-button v2-button--flame" href="/shop">
@@ -102,8 +102,8 @@ export function V2Landing({
         <section id="shop-preview" className="v2-section v2-shop-preview" aria-labelledby="shop-preview-title">
           <div className="v2-section-heading">
             <p className="v2-kicker">Shop</p>
-            <h2 id="shop-preview-title">Tap Add, pick size, done.</h2>
-            <p>Simple like any app you already use. Combo savings apply automatically in cart.</p>
+            <h2 id="shop-preview-title">Shop men&apos;s polo t-shirts</h2>
+            <p>Official Silk Room colours. Combo savings apply automatically in cart.</p>
           </div>
           <div className="store-grid meesho-grid">
             {products.slice(0, 4).map((product, index) => (
@@ -240,6 +240,22 @@ export function V2Landing({
           </div>
         </section>
 
+        <section className="v2-section" aria-labelledby="seo-brand-title">
+          <div className="v2-section-heading">
+            <p className="v2-kicker">silkroom.shop</p>
+            <h2 id="seo-brand-title">The official Silk Room store for men&apos;s clothes.</h2>
+            <p>
+              Silk Room — also searched as Silkroom and Silkroom.shop — is a Surat label for
+              men&apos;s polo t-shirts. We cut 220 GSM ribbed zip polos, ship prepaid across India,
+              and keep one honest price: ₹399, or 3 for ₹799. This website is the only official shop.
+            </p>
+            <p>
+              <Link href="/mens-polo-tshirts">Men&apos;s polo t-shirts in India</Link>
+              {" · "}
+              <Link href="/about">About the brand</Link>
+            </p>
+          </div>
+        </section>
         <section className="v2-section v2-faq" aria-labelledby="faq-title">
           <p className="v2-kicker">Useful answers</p>
           <h2 id="faq-title">Before you order.</h2>

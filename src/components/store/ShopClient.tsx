@@ -54,10 +54,11 @@ export function ShopClient({ catalog }: { catalog: Product[] }) {
   return (
     <div className="shop-page meesho-shop">
       <header className="store-page-header shop-page-header">
-        <p className="eyebrow">Shop</p>
-        <h1>All polos</h1>
+        <p className="eyebrow">Silk Room shop · silkroom.shop</p>
+        <h1>Men&apos;s polo t-shirts</h1>
         <p>
-          {filtered.length} styles · {formatInr(unitPriceInr)} each · 3 for {formatInr(combo3PriceInr)} auto-applied in cart
+          {filtered.length} men&apos;s polo t-shirts · {formatInr(unitPriceInr)} each · 3 for{" "}
+          {formatInr(combo3PriceInr)} auto-applied in cart. Official Silk Room store.
         </p>
       </header>
 

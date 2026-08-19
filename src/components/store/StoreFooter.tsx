@@ -9,6 +9,7 @@ const footerColumns = [
     title: "Shop",
     links: [
       { href: "/shop", label: "All polos" },
+      { href: "/mens-polo-tshirts", label: "Men's polo t-shirts" },
       { href: "/shop?filter=new", label: "New designs" },
       { href: "/track", label: "Track order" },
     ],

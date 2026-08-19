@@ -4575,3 +4575,43 @@ a:focus-visible,
   }
 }
 
+.breadcrumbs {
+  padding: 0.75rem 0 0;
+  font-size: 0.78rem;
+  color: var(--ash);
+}
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumbs li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.5rem;
+  color: var(--line);
+}
+
+.breadcrumbs a {
+  color: var(--ash);
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+.seo-hub-grid {
+  margin: 1.25rem 0 2rem;
+}
+
+.shop-page .breadcrumbs,
+.meesho-product + .breadcrumbs {
+  padding-inline: 0;
+}
+
